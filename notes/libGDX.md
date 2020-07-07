@@ -59,8 +59,11 @@ Logging is provided
 
 The following features may be useful for developing a VN game:
 
-- File handling
-- 2D Animation
-- Sprites
-- Orthographic Camera 
-- 
+- File handling: would be useful for script reading
+- 2D Animation: Basic animation. For extra details 
+- Sprites: Sprites for characters, background, textbox etc
+- Viewport: Dimensions of what can be seen from the camera
+- Orthographic Camera: Movable camera. rotate, zoom effects.
+- ViewPort: handles aspect ratios, in case window is resized
+- Continuous Rendering: disabling this would be more efficient as not much rendering is required for VNs
+- Asset Manager: would be useful for loading assets and destroying assets. also capable of asynchronous loading screens
