@@ -5,6 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Constants;
 import com.mygdx.game.novel1.entities.Button;
@@ -12,44 +15,61 @@ import com.mygdx.game.novel1.entities.Button;
 public class MainMenu implements Screen {
 
     final NovelOne game;
-    private OrthographicCamera camera;
+    private Stage stage;
     private Texture background;
-    private Button start;
-    private Button load;
-    private Button options;
-
+    private Texture buttonSkin;
+    private Batch batch;
+    private Button startButton;
 
     //implement menu as stage instead of using sprite batch on it own
     public MainMenu (final NovelOne game){
-        background = new Texture(Constants.IMAGE_PATH+"menu/title_page.png");
 
-        start = new Button(Constants.IMAGE_PATH+"menu/button.png", "Start");
-        load = new Button(Constants.IMAGE_PATH+"menu/button.png", "Load");
-        options = new Button(Constants.IMAGE_PATH+"menu/button.png", "Options");
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.game = game;
+        this.stage = new Stage(this.game.viewport);
+
     }
+
+    @Override
+    public void show(){
+
+        this.background = new Texture(Constants.IMAGE_PATH+"menu/title_page.png");
+        this.batch = this.stage.getBatch();
+        this.buttonSkin = new Texture(Constants.IMAGE_PATH +"menu/button.png");
+        Gdx.input.setInputProcessor(stage);
+        this.startButton = new Button(buttonSkin, "start button");
+        this.startButton.spritePos(200,200);
+
+        this.stage.addActor(this.startButton);
+    }
+
+
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.batch.draw(background,0,0,camera.viewportWidth, camera.viewportHeight);
-        game.font.draw(game.batch, "Hubby Simulator", 100,150);
-        game.font.draw(game.batch, "Click anywhere to begin!", 100, 100);
+        batch.begin();
+        batch.draw(background,0,0);
+        batch.end();
 
-        game.batch.end();
+        stage.draw();
 
-        if(Gdx.input.isTouched()){
-            game.setScreen(new InGame(game));
-        }
+//        camera.update();
+//        game.batch.setProjectionMatrix(camera.combined);
+//
+//        game.batch.begin();
+//        game.batch.draw(background,0,0,camera.viewportWidth, camera.viewportHeight);
+//        game.font.draw(game.batch, "Hubby Simulator", 100,150);
+//        game.font.draw(game.batch, "Click anywhere to begin!", 100, 100);
+//
+//        game.batch.end();
+//
+//        if(Gdx.input.isTouched()){
+//            game.setScreen(new InGame(game));
+//        }
     }
 
     @Override
@@ -69,15 +89,11 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
-    }
-    @Override
-    public void show() {
-
+        this.game.viewport.update(width, height, true);
     }
 
     @Override
     public void dispose() {
-
+        this.stage.dispose();
     }
 }
