@@ -8,20 +8,28 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.flow.InGame;
 
 public class Button extends Actor {
 
     private Sprite sprite;
+    private NovelOne game;
 
-    public Button(Texture texture, final String name){
+    public Button(Texture texture, final NovelOne game, final String name){
         sprite = new Sprite(texture);
         spritePos(sprite.getX(), sprite.getY());
         setTouchable(Touchable.enabled);
+        this.game = game;
 
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("touched", "again");
+
+                Gdx.app.log( name, "again");
+
+                game.setScreen(new InGame(game));
+
                 return true;
             }
         });

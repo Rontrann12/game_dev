@@ -3,13 +3,11 @@ package com.mygdx.game.novel1.flow;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.Constants;
+import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.entities.Button;
 
 public class MainMenu implements Screen {
@@ -32,11 +30,11 @@ public class MainMenu implements Screen {
     @Override
     public void show(){
 
-        this.background = new Texture(Constants.IMAGE_PATH+"menu/title_page.png");
+        this.background = new Texture(Paths.IMAGE_PATH+"menu/title_page.png");
         this.batch = this.stage.getBatch();
-        this.buttonSkin = new Texture(Constants.IMAGE_PATH +"menu/button.png");
+        this.buttonSkin = new Texture(Paths.IMAGE_PATH +"menu/button.png");
         Gdx.input.setInputProcessor(stage);
-        this.startButton = new Button(buttonSkin, "start button");
+        this.startButton = new Button(buttonSkin, this.game,  "start button");
         this.startButton.spritePos(200,200);
 
         this.stage.addActor(this.startButton);
@@ -52,7 +50,7 @@ public class MainMenu implements Screen {
 
 
         batch.begin();
-        batch.draw(background,0,0);
+        batch.draw(background,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
         stage.draw();
