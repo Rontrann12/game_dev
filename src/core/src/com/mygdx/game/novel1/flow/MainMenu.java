@@ -5,39 +5,49 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.entities.Button;
+import com.mygdx.game.novel1.entities.buttons.LoadButton;
+import com.mygdx.game.novel1.entities.buttons.StartButton;
 
 public class MainMenu implements Screen {
 
     final NovelOne game;
     private Stage stage;
     private Texture background;
-    private Texture buttonSkin;
+    private Texture buttonTexture;
     private Batch batch;
-    private Button startButton;
+    private StartButton startButton;
+    private LoadButton loadButton;
+    private Group buttonGroup;
 
-    //implement menu as stage instead of using sprite batch on it own
     public MainMenu (final NovelOne game){
 
         this.game = game;
         this.stage = new Stage(this.game.viewport);
-
+        this.buttonGroup = new Group();
+        batch = this.stage.getBatch();
     }
 
     @Override
     public void show(){
 
-        this.background = new Texture(Paths.IMAGE_PATH+"menu/title_page.png");
-        this.batch = this.stage.getBatch();
-        this.buttonSkin = new Texture(Paths.IMAGE_PATH +"menu/button.png");
+        background = new Texture(Paths.IMAGE_PATH+"menu/title_page.png");
+        buttonTexture = new Texture(Paths.IMAGE_PATH +"menu/button.png");
         Gdx.input.setInputProcessor(stage);
-        this.startButton = new Button(buttonSkin, this.game,  "start button");
-        this.startButton.spritePos(200,200);
+        startButton = new StartButton(buttonTexture, game,  "start button");
+        loadButton = new LoadButton(buttonTexture, game, "load button");
 
-        this.stage.addActor(this.startButton);
+
+        startButton.spritePos(Gdx.graphics.getWidth()/2- buttonTexture.getWidth()/2,200);
+        loadButton.spritePos(Gdx.graphics.getWidth()/2 - buttonTexture.getWidth()/2, 100);
+
+        buttonGroup.addActor(startButton);
+        buttonGroup.addActor(loadButton);
+
+        this.stage.addActor(this.buttonGroup);
     }
 
 
@@ -55,19 +65,6 @@ public class MainMenu implements Screen {
 
         stage.draw();
 
-//        camera.update();
-//        game.batch.setProjectionMatrix(camera.combined);
-//
-//        game.batch.begin();
-//        game.batch.draw(background,0,0,camera.viewportWidth, camera.viewportHeight);
-//        game.font.draw(game.batch, "Hubby Simulator", 100,150);
-//        game.font.draw(game.batch, "Click anywhere to begin!", 100, 100);
-//
-//        game.batch.end();
-//
-//        if(Gdx.input.isTouched()){
-//            game.setScreen(new InGame(game));
-//        }
     }
 
     @Override
