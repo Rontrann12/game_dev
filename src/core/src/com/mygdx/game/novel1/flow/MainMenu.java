@@ -2,15 +2,22 @@ package com.mygdx.game.novel1.flow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.entities.buttons.LoadButton;
 import com.mygdx.game.novel1.entities.buttons.StartButton;
+import com.mygdx.game.novel1.entities.buttons.TestButton;
+
+/**
+ * TODO - make the menu look nicer, add some music. after that basic main menu is done
+ */
 
 public class MainMenu implements Screen {
 
@@ -22,6 +29,7 @@ public class MainMenu implements Screen {
     private StartButton startButton;
     private LoadButton loadButton;
     private Group buttonGroup;
+    private TestButton settingsButton;
 
     public MainMenu (final NovelOne game){
 
@@ -33,17 +41,26 @@ public class MainMenu implements Screen {
 
     @Override
     public void show(){
+        AssetManager assets = new AssetManager();
+        assets.load("img/menu/button.png", Texture.class);
+        assets.load("img/menu/title_page.png", Texture.class);
+        assets.finishLoading();
+        background = assets.get("img/menu/title_page.png");
+        buttonTexture = assets.get("img/menu/button.png");
 
-        background = new Texture(Paths.IMAGE_PATH+"menu/title_page.png");
-        buttonTexture = new Texture(Paths.IMAGE_PATH +"menu/button.png");
+//        background = new Texture(Paths.IMAGE_PATH+"menu/title_page.png");
+//        buttonTexture = new Texture(Paths.IMAGE_PATH +"menu/button.png");
         Gdx.input.setInputProcessor(stage);
         startButton = new StartButton(buttonTexture, game,  "start button");
         loadButton = new LoadButton(buttonTexture, game, "load button");
 
+//        settingsButton = new TestButton("Settings");
 
         startButton.spritePos(Gdx.graphics.getWidth()/2- buttonTexture.getWidth()/2,200);
         loadButton.spritePos(Gdx.graphics.getWidth()/2 - buttonTexture.getWidth()/2, 100);
+//        settingsButton.setCoordinates(Gdx.graphics.getWidth()/2 - buttonTexture.getWidth()/2, 0);
 
+//        buttonGroup.addActor(settingsButton.getTextButton());
         buttonGroup.addActor(startButton);
         buttonGroup.addActor(loadButton);
 

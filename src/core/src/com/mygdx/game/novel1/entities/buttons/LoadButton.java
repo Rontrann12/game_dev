@@ -26,7 +26,6 @@ public class LoadButton extends BaseButton{
 
     }
 
-
     @Override
     public void action(NovelOne game ){
         game.setScreen(new Load(game));
