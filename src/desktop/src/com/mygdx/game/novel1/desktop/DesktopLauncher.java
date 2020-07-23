@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.title = "Hubby Simulator";
 		config.useGL30 = true;
 		config.height = 900;
-		config.width = 1600;
+		config.width = 1440;
 		config.resizable = false;
 		new LwjglApplication(new NovelOne(), config);
 	}

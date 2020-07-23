@@ -23,19 +23,11 @@ public class NovelOne extends Game {
 	public SpriteBatch batch;
 	public Texture img;
 	public BitmapFont font;
-	private Stage stage;
 	public Viewport viewport;
 
 	public void create () {
 
         this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	    //this.stage = new Stage(viewport);
-
-	    //Gdx.input.setInputProcessor(stage);
-//		//1.6
-//		Gdx.graphics.setWindowedMode(1000, 625);
-//		Gdx.graphics.setResizable(false);
-//		batch = new SpriteBatch();
 		font = new BitmapFont();
 		this.setScreen(new MainMenu(this));
 
@@ -49,6 +41,7 @@ public class NovelOne extends Game {
 	public void dispose () {
 		batch.dispose();
 		img.dispose();
+		font.dispose();
 	}
 
 }
