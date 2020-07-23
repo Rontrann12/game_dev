@@ -1,0 +1,26 @@
+menu_better.png
+size: 768, 64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+base_button_hover
+  rotate: false
+  xy: 0, 0
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+base_button_idle
+  rotate: false
+  xy: 256, 0
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+title
+  rotate: false
+  xy: 512, 0
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
