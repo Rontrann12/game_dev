@@ -6,6 +6,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -38,6 +40,8 @@ public class MainMenu implements Screen {
     private TextureRegion titleTexture;
     private Texture sheet;
     private AssetManager assets;
+    private Group group;
+    private Sprite sprite;
 
     public MainMenu (final NovelOne game){
 
@@ -45,7 +49,9 @@ public class MainMenu implements Screen {
         this.stage = new Stage(this.game.viewport);
         this.buttonGroup = new Group();
         batch = this.stage.getBatch();
+        //this.batch = new SpriteBatch();
         this.assets = new AssetManager();
+
     }
 
     @Override
@@ -56,10 +62,12 @@ public class MainMenu implements Screen {
         TextureRegion idleTexture = new TextureRegion(sheet, 256, 0, 256, 64);
         TextureRegion hoverTexture = new TextureRegion(sheet, 0, 0, 256, 64);
         this.titleTexture = new TextureRegion(sheet, 512, 0, 256, 64);
+        this.sprite = new Sprite(this.background);
         Gdx.input.setInputProcessor(stage);
 
         StartButton startButton = new StartButton(idleTexture, hoverTexture, game, "start button");
         LoadButton loadButton = new LoadButton(idleTexture, hoverTexture, game, "load button");
+
 
         positionEntities(startButton, loadButton);
 
@@ -75,9 +83,9 @@ public class MainMenu implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
 
         batch.begin();
-        batch.draw(background,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(this.titleTexture, Gdx.graphics.getWidth()/2, (Gdx.graphics.getHeight()*3)/4);
+        this.sprite.draw(batch);
         batch.end();
+
         stage.draw();
     }
 

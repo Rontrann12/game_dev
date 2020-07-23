@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.useGL30 = true;
 		config.height = 900;
 		config.width = 1440;
-		config.resizable = false;
+		config.resizable = true;
 		new LwjglApplication(new NovelOne(), config);
 	}
 }
