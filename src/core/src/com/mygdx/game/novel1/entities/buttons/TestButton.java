@@ -20,12 +20,13 @@ public class TestButton {
 
     public TestButton(final String name){
         this.assets = new AssetManager();
-        this.assets.load("menu/button.png", Skin.class);
+        this.assets.load("img/menu/button.png", Skin.class);
+        this.assets.finishLoading();
 //        this.handler = new FileHandle(
 //                new File("./badlogic.jpg")
 //        );
 //        this.skin = new Skin(this.handler);
-        this.skin = this.assets.get( "menu/button.png", Skin.class);
+        this.skin = this.assets.get( "img/menu/button.png", Skin.class);
 
         this.textButton = new TextButton(name, this.skin);
 
