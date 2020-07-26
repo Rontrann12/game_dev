@@ -1,4 +1,4 @@
-package com.mygdx.game.novel1.flow;
+package com.mygdx.game.novel1.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.flow.Load;
+import com.mygdx.game.novel1.screens.Load;
 
 /**
  * Action of this button will change the screen to LoadScreen
