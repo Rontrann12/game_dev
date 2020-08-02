@@ -67,3 +67,6 @@ The following features may be useful for developing a VN game:
 - ViewPort: handles aspect ratios, in case window is resized
 - Continuous Rendering: disabling this would be more efficient as not much rendering is required for VNs
 - Asset Manager: would be useful for loading assets and destroying assets. also capable of asynchronous loading screens
+
+
+<h2> 6. Notes to self </h2>
