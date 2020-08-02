@@ -1,16 +1,17 @@
 package com.mygdx.game.novel1.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.LayoutOptions;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.ui.UILayout;
+import static com.badlogic.gdx.Input.Keys.*;
 
 public class InGame implements Screen {
 
@@ -41,7 +42,9 @@ public class InGame implements Screen {
         batch.draw(monikaLoad,0,-300);
         batch.end();
 
+
         this.stage.draw();
+
     }
 
     @Override
@@ -49,11 +52,16 @@ public class InGame implements Screen {
         this.uiHandler.generateUI(this.stage, this.game, LayoutOptions.IN_GAME);
         this.monikaLoad = new Texture(Paths.IMAGE_PATH+"Mon2.png");
         this.monikaSprite = new Sprite(this.monikaLoad);
-        Gdx.input.setInputProcessor(this.stage);
+        //Gdx.input.setInputProcessor(this.stage);
 
         Integer numActors = this.stage.getActors().size;
 
         Gdx.app.log("Getting actors from stage", numActors.toString());
+
+
+        Gdx.input.setInputProcessor(uiHandler.getMultiplexer());
+
+
 
     }
 

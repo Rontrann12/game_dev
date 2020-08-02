@@ -2,6 +2,8 @@ package com.mygdx.game.novel1.ui;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +20,8 @@ import com.mygdx.game.novel1.ui.textbox.Dialogue;
 
 import java.awt.*;
 
+import static com.badlogic.gdx.Input.Keys.SPACE;
+
 public class UILayout {
 
     private Texture uiTexture;
@@ -25,6 +29,7 @@ public class UILayout {
     private Group group;
     private String path = null;
     private Texture texture = null;
+    private InputMultiplexer multiplexer;
 
     public UILayout() {
 
@@ -124,6 +129,16 @@ public class UILayout {
      */
     private void inGameLayout(Stage stage, NovelOne game) {
 
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == SPACE) {
+                    Gdx.app.log("In Game", "Space was pressed");
+                }
+                return true;
+            }
+        });
+
         //get the UI components
         Group miniButtons = new Group();
         Group choiceButtons = new Group();
@@ -138,7 +153,7 @@ public class UILayout {
         TextureRegion mainHover = new TextureRegion(texture, 852, 0, 100, 26);
         TextureRegion saveImage = new TextureRegion(texture, 310, 0, 62, 20);
         TextureRegion settingsImage = new TextureRegion(texture, 772, 0, 80, 26);
-        TextureRegion buttonIdle = new TextureRegion(texture, 900,26, 900, 64);
+        TextureRegion buttonIdle = new TextureRegion(texture, 900, 26, 900, 64);
         TextureRegion buttonHover = new TextureRegion(texture, 0, 26, 900, 64);
 
 
@@ -156,7 +171,7 @@ public class UILayout {
 
         choice1.spritePos(0, 80);
         choiceButtons.setX(400);
-        choiceButtons.setY(Gdx.graphics.getHeight() /2 );
+        choiceButtons.setY(Gdx.graphics.getHeight() / 2);
         choiceButtons.addActor(choice1);
         choiceButtons.addActor(choice2);
 
@@ -165,13 +180,30 @@ public class UILayout {
         miniButtons.addActor(mainButton);
 
 
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new InputAdapter() {
+                                     @Override
+                                     public boolean keyDown(int keyCode) {
+                                         if (keyCode == SPACE) {
+                                             Gdx.app.log("In Game", "Space was pressed");
+                                         }
+                                         return true;
+                                     }
+                                 }
+        );
+
+
         //draw buttons
         stage.addActor(box);
         stage.addActor(miniButtons);
         stage.addActor(choiceButtons);
 
 
+    }
 
+    public InputMultiplexer getMultiplexer() {
+        return this.multiplexer;
     }
 
     private void loadLayout() {
