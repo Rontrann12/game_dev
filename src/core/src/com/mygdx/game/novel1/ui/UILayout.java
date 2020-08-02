@@ -10,10 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.LayoutOptions;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.ui.buttons.ChoiceButton;
 import com.mygdx.game.novel1.ui.buttons.LoadButton;
 import com.mygdx.game.novel1.ui.buttons.MainMenuButton;
 import com.mygdx.game.novel1.ui.buttons.StartButton;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
+
+import java.awt.*;
 
 public class UILayout {
 
@@ -123,6 +126,7 @@ public class UILayout {
 
         //get the UI components
         Group miniButtons = new Group();
+        Group choiceButtons = new Group();
         texture = getAssets();
 
         TextureRegion textboxImage = new TextureRegion(texture, 0, 90, 1600, 300);
@@ -134,6 +138,8 @@ public class UILayout {
         TextureRegion mainHover = new TextureRegion(texture, 852, 0, 100, 26);
         TextureRegion saveImage = new TextureRegion(texture, 310, 0, 62, 20);
         TextureRegion settingsImage = new TextureRegion(texture, 772, 0, 80, 26);
+        TextureRegion buttonIdle = new TextureRegion(texture, 900,26, 900, 64);
+        TextureRegion buttonHover = new TextureRegion(texture, 0, 26, 900, 64);
 
 
         //create the objects (buttons, textbox)
@@ -141,19 +147,28 @@ public class UILayout {
         box.setAlpha((float) 0.8);
         LoadButton loadButton = new LoadButton(loadIdle, loadHover, game, null);
         MainMenuButton mainButton = new MainMenuButton(mainIdle, mainHover, game, null);
+        ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
+        ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
 
         mainButton.spritePos(100, -5);
         miniButtons.setX(150);
         miniButtons.setY(15);
+
+        choice1.spritePos(0, 80);
+        choiceButtons.setX(400);
+        choiceButtons.setY(Gdx.graphics.getHeight() /2 );
+        choiceButtons.addActor(choice1);
+        choiceButtons.addActor(choice2);
+
         //draw option icons in the textbox
         miniButtons.addActor(loadButton);
-
         miniButtons.addActor(mainButton);
 
 
         //draw buttons
         stage.addActor(box);
         stage.addActor(miniButtons);
+        stage.addActor(choiceButtons);
 
 
 
