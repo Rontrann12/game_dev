@@ -1,0 +1,124 @@
+uicomponents.png
+size: 1800, 390
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back_hover
+  rotate: false
+  xy: 0, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+back_idle
+  rotate: false
+  xy: 62, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+base_hover
+  rotate: false
+  xy: 0, 26
+  size: 900, 64
+  orig: 900, 64
+  offset: 0, 0
+  index: -1
+button_idle
+  rotate: false
+  xy: 900, 26
+  size: 900, 64
+  orig: 900, 64
+  offset: 0, 0
+  index: -1
+history_hover
+  rotate: false
+  xy: 372, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+history_idle
+  rotate: false
+  xy: 452, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+load_hover
+  rotate: false
+  xy: 124, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+load_idle
+  rotate: false
+  xy: 186, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+main_hover
+  rotate: false
+  xy: 852, 0
+  size: 100, 26
+  orig: 100, 26
+  offset: 0, 0
+  index: -1
+main_idle
+  rotate: false
+  xy: 952, 0
+  size: 100, 26
+  orig: 100, 26
+  offset: 0, 0
+  index: -1
+return_hover
+  rotate: false
+  xy: 532, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+return_idle
+  rotate: false
+  xy: 612, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+save_hover
+  rotate: false
+  xy: 248, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+save_idle
+  rotate: false
+  xy: 310, 0
+  size: 62, 20
+  orig: 62, 20
+  offset: 0, 0
+  index: -1
+settings_hover
+  rotate: false
+  xy: 692, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+settings_idle
+  rotate: false
+  xy: 772, 0
+  size: 80, 26
+  orig: 80, 26
+  offset: 0, 0
+  index: -1
+textbox
+  rotate: false
+  xy: 0, 90
+  size: 1600, 300
+  orig: 1600, 300
+  offset: 0, 0
+  index: -1

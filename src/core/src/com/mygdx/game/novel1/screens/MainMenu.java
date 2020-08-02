@@ -7,14 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.LayoutOptions;
-import com.mygdx.game.novel1.entities.UILayout;
-import com.mygdx.game.novel1.entities.buttons.LoadButton;
-import com.mygdx.game.novel1.entities.buttons.StartButton;
+import com.mygdx.game.novel1.ui.UILayout;
+
 
 /**
  * Main menu screen. Allows the player to start a new game, load existing game, or change settings
@@ -26,19 +24,17 @@ public class MainMenu implements Screen {
     private final Stage stage;
     private Texture background;
     private final Batch batch;
-    private final Group buttonGroup;
-    private AssetManager assets;
+    private final AssetManager assets;
 
-    private Sprite sprite;
+    private Sprite titleSprite;
+    private Sprite backgroundSprite;
     private UILayout uiHandler;
 
     public MainMenu(final NovelOne game) {
 
         this.game = game;
         this.stage = new Stage(this.game.viewport);
-        this.buttonGroup = new Group();
         batch = this.stage.getBatch();
-        //this.batch = new SpriteBatch();
         this.assets = new AssetManager();
         uiHandler = new UILayout();
 
@@ -52,11 +48,19 @@ public class MainMenu implements Screen {
     public void show() {
 
         uiHandler.generateUI(this.stage, this.game, LayoutOptions.MENU);
-        assets.load("img/menu/title_page.png", Texture.class);
+        assets.load("img/test_titlepage.png", Texture.class);
+        assets.load("img/title.png", Texture.class);
         assets.finishLoading();
-        this.background = assets.get("img/menu/title_page.png");
-        this.sprite = new Sprite(this.background);
+        Texture title = assets.get("img/title.png");
+        this.background = assets.get("img/test_titlepage.png");
+        this.backgroundSprite = new Sprite(this.background);
+        this.titleSprite = new Sprite(title);
+        this.titleSprite.setX(500);
+        this.titleSprite.setY(700);
         Gdx.input.setInputProcessor(stage);
+
+        Integer numActors = this.stage.getActors().size;
+        Gdx.app.log("checking number of actors in stage (menu)", numActors.toString());
     }
 
     @Override
@@ -66,7 +70,8 @@ public class MainMenu implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
 
         batch.begin();
-        this.sprite.draw(batch);
+        this.backgroundSprite.draw(batch);
+        this.titleSprite.draw(batch);
         batch.end();
 
         stage.draw();
