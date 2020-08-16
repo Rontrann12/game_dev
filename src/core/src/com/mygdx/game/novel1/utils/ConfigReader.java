@@ -81,7 +81,7 @@ public class ConfigReader {
 
         ArrayDeque<String> characters = new ArrayDeque<>();
         boolean characterMode = false;
-        String separator = Separators.KEYVALUE;
+        String separator = Separators.KEYVALUE + Separators.SPACE;
 
         try {
             File file = new File(Paths.TEST_CONFIG_PATH);
@@ -120,10 +120,10 @@ public class ConfigReader {
 
     private static String[] parseDataField(String data) {
 
-        int separatorIndex = data.indexOf(Separators.KEYVALUE);
+        int separatorIndex = data.indexOf(Separators.KEYVALUE + Separators.SPACE);
         String dataField = data.substring(separatorIndex);
 
-        int dataSeparatorIndex = dataField.indexOf(Separators.DATAFIELDS);
+        int dataSeparatorIndex = dataField.indexOf(Separators.DATAFIELDS + Separators.SPACE);
         String field1 = dataField.substring(2,dataSeparatorIndex).replace(Separators.SPACE, Separators.EMPTY);
         String field2 = dataField.substring(dataSeparatorIndex+1).replace(Separators.SPACE, Separators.EMPTY);
 

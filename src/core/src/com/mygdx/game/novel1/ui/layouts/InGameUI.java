@@ -14,14 +14,13 @@ import com.mygdx.game.novel1.ui.textbox.Dialogue;
 
 public class InGameUI extends BaseLayout{
 
-    private String dialogue = "Hi rondadT";
+    private String line;
     private Dialogue box;
     private TextureRegion textBoxImage;
 
-    public InGameUI(Stage stage, NovelOne game) {
+    public InGameUI(Stage stage, NovelOne game, String initialLine) {
         super(stage, game);
-
-
+        this.line = initialLine;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class InGameUI extends BaseLayout{
         Group choiceButtons = new Group();
 
         this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
-        this.box = new Dialogue(this.textBoxImage, dialogue);
+        this.box = new Dialogue(this.textBoxImage, line);
 
         TextureRegion backImage = new TextureRegion(texture, 0, 0, 62, 20);
         TextureRegion historyImage = new TextureRegion(texture, 452, 0, 80, 26);
@@ -76,7 +75,7 @@ public class InGameUI extends BaseLayout{
 
     public void nextLine(String line) {
         Gdx.app.log("In game" , "updating textbox dialog");
-        this.dialogue = line;
+        this.line = line;
         this.box.updateLine(line);
     }
 }

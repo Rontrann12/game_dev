@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 import static com.mygdx.game.novel1.constants.Paths.CHARACTERS_PATH;
-import static com.mygdx.game.novel1.utils.StringBuilder.generateFileName;
+import static com.mygdx.game.novel1.utils.StringUtilities.generateFileName;
 
 
 /**
