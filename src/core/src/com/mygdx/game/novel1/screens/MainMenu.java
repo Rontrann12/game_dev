@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.LayoutOptions;
-import com.mygdx.game.novel1.ui.UILayout;
+import com.mygdx.game.novel1.ui.layouts.MainMenuUI;
 
 
 /**
@@ -28,7 +26,7 @@ public class MainMenu implements Screen {
 
     private Sprite titleSprite;
     private Sprite backgroundSprite;
-    private UILayout uiHandler;
+    private MainMenuUI menuLayout;
 
     public MainMenu(final NovelOne game) {
 
@@ -36,7 +34,7 @@ public class MainMenu implements Screen {
         this.stage = new Stage(this.game.viewport);
         batch = this.stage.getBatch();
         this.assets = new AssetManager();
-        uiHandler = new UILayout();
+        menuLayout = new MainMenuUI(stage, game);
 
     }
 
@@ -47,7 +45,7 @@ public class MainMenu implements Screen {
     @Override
     public void show() {
 
-        uiHandler.generateUI(this.stage, this.game, LayoutOptions.MENU);
+        menuLayout.generateUI();
         assets.load("img/test_titlepage.png", Texture.class);
         assets.load("img/title.png", Texture.class);
         assets.finishLoading();

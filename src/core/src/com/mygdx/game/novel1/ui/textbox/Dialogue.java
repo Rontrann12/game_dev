@@ -18,7 +18,12 @@ public class Dialogue extends BaseTextBox {
     }
 
     public void setAlpha(float alpha) {
+
         super.textBoxImage.setAlpha(alpha);
+    }
+
+    public void updateLine(String line) {
+        super.dialogue = line;
     }
 
 }
