@@ -1,0 +1,26 @@
+Yuri.png
+size: 1920, 1920
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Yuri_scared
+  rotate: false
+  xy: 0, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Yuri_shy
+  rotate: false
+  xy: 960, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Yuri_talking
+  rotate: false
+  xy: 0, 960
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1

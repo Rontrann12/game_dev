@@ -1,0 +1,19 @@
+Monika.png
+size: 1920, 960
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Monika_smile1
+  rotate: false
+  xy: 0, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Monika_turn_away
+  rotate: false
+  xy: 960, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
