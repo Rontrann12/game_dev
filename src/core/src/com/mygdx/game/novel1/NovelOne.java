@@ -26,6 +26,7 @@ public class NovelOne extends Game {
 
 	public void create () {
 
+		Gdx.graphics.setContinuousRendering(false);
         this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		font = new BitmapFont();
 		this.setScreen(new MainMenu(this));

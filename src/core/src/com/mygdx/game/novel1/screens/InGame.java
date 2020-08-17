@@ -10,11 +10,9 @@ import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.AssetReader;
+import com.mygdx.game.novel1.utils.StringUtilities;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
@@ -75,10 +73,11 @@ public class InGame implements Screen {
         String line = this.script.pop();
 
         if (line.contains(Separators.KEYVALUE)) {
+
+            removeDuplicateCharacters(StringUtilities.getCharacterName(line));
             String sprite = line.substring(0, line.indexOf(Separators.KEYVALUE));
             Gdx.app.log("InGame::processScriptLine", "Adding sprite on screen: " + sprite);
             onScreenCharacters.put(sprite, sprites.get(sprite));
-            onScreenOrder.add(sprite);
             line = this.script.pop();
         }
 
@@ -86,16 +85,40 @@ public class InGame implements Screen {
         return line;
     }
 
+    private void removeDuplicateCharacters(String name) {
+        Gdx.app.log("InGame::removeDuplicateCharacter", "inside method with name: " + name);
+        Iterator iterator = onScreenCharacters.entrySet().iterator();
+        String target = null;
+
+        while(iterator.hasNext()){
+            Map.Entry<String, TextureRegion> next = (Map.Entry) iterator.next();
+            String key = next.getKey();
+            if(key.contains(name)) {
+                target = key;
+                break;
+            }
+        }
+
+        if(target != null) {
+            Gdx.app.log("InGame::removeDuplicateCharacter", "removing dublicate: " + target);
+            this.onScreenCharacters.remove(target);
+        }
+
+
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
-        Iterator iterator = onScreenOrder.iterator();
+        Iterator iterator = onScreenCharacters.entrySet().iterator();
 
         batch.begin();
         while (iterator.hasNext()) {
-            batch.draw(onScreenCharacters.get(iterator.next()), 0, -100);
+            Map.Entry pair = (Map.Entry) iterator.next();
+            //Gdx.app.log("InGame::render", "sprite to be drawn on screen: " + pair.getKey());
+            batch.draw(onScreenCharacters.get(pair.getKey()), 0, -100);
         }
         batch.end();
 
