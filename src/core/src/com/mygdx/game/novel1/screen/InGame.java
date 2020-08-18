@@ -1,16 +1,21 @@
-package com.mygdx.game.novel1.screens;
+package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.AssetReader;
+import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.utils.StringUtilities;
+import com.mygdx.game.novel1.screen.etc.Character;
 
 import java.util.*;
 
@@ -20,26 +25,28 @@ import static com.badlogic.gdx.Input.Keys.SPACE;
 public class InGame implements Screen {
 
     private final NovelOne game;
-    private LinkedHashMap<String, TextureRegion> onScreenCharacters;
-    private ArrayDeque<String> onScreenOrder;
-    private Batch batch;
-    private Stage stage;
-    private InGameUI uiHandler;
-    private AssetsDTO assetsDTO;
-    private AssetReader reader;
+    private final LinkedHashMap<String, Sprite> onScreenCharacters;
+    private final Batch batch;
+    private final Stage stage;
+    private final InGameUI uiHandler;
+    private final String path = Paths.TEST_CONFIG_PATH;
+    private ArrayDeque<Character> charactersInScene;
     private ArrayDeque<String> script;
-    private HashMap<String, TextureRegion> sprites;
 
     public InGame(final NovelOne game) {
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
-        this.reader = new AssetReader();
-        this.assetsDTO = this.reader.getAssets();
-        this.onScreenCharacters = new LinkedHashMap<String, TextureRegion>();
-        this.onScreenOrder = new ArrayDeque<String>();
-        disassembleDTO(this.assetsDTO);
+        this.onScreenCharacters = new LinkedHashMap();
+        charactersInScene = new ArrayDeque<>();
+        configure();
         this.uiHandler = new InGameUI(stage, game, processScriptLine());
+
+
+        Character temp = charactersInScene.pop();
+        temp.setExpression("Monika_smile1");
+        temp.spritePos(300,0);
+        this.stage.addActor(temp);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -74,10 +81,8 @@ public class InGame implements Screen {
 
         if (line.contains(Separators.KEYVALUE)) {
 
-            removeDuplicateCharacters(StringUtilities.getCharacterName(line));
-            String sprite = line.substring(0, line.indexOf(Separators.KEYVALUE));
-            Gdx.app.log("InGame::processScriptLine", "Adding sprite on screen: " + sprite);
-            onScreenCharacters.put(sprite, sprites.get(sprite));
+            //removeDuplicateCharacters(StringUtilities.getCharacterName(line));
+            //String sprite = line.substring(0, line.indexOf(Separators.KEYVALUE));
             line = this.script.pop();
         }
 
@@ -90,17 +95,17 @@ public class InGame implements Screen {
         Iterator iterator = onScreenCharacters.entrySet().iterator();
         String target = null;
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<String, TextureRegion> next = (Map.Entry) iterator.next();
             String key = next.getKey();
-            if(key.contains(name)) {
+            if (key.contains(name)) {
                 target = key;
                 break;
             }
         }
 
-        if(target != null) {
-            Gdx.app.log("InGame::removeDuplicateCharacter", "removing dublicate: " + target);
+        if (target != null) {
+            Gdx.app.log("InGame::removeDuplicateCharacter", "removing duplicate: " + target);
             this.onScreenCharacters.remove(target);
         }
 
@@ -112,14 +117,14 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
-        Iterator iterator = onScreenCharacters.entrySet().iterator();
+        //Iterator iterator = onScreenCharacters.entrySet().iterator();
 
         batch.begin();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) iterator.next();
-            //Gdx.app.log("InGame::render", "sprite to be drawn on screen: " + pair.getKey());
-            batch.draw(onScreenCharacters.get(pair.getKey()), 0, -100);
-        }
+//        while (iterator.hasNext()) {
+//            Map.Entry pair = (Map.Entry) iterator.next();
+//            //Gdx.app.log("InGame::render", "sprite to be drawn on screen: " + pair.getKey());
+//            batch.draw(onScreenCharacters.get(pair.getKey()), 0, -50);
+//        }
         batch.end();
 
         this.stage.draw();
@@ -163,9 +168,19 @@ public class InGame implements Screen {
 
     }
 
-    private void disassembleDTO(AssetsDTO dto) {
-        this.script = dto.getScript();
-        this.sprites = dto.getSprites();
-    }
+    private void configure() {
 
+        ArrayDeque<String> cast = ConfigReader.readCastList(path);
+        AssetsDTO assets = AssetReader.getAllAssets(cast);
+
+        this.script = assets.getScript();
+        HashMap<String, Texture> textures = assets.getTextures();
+
+        for (Map.Entry<String, Texture> stringTextureEntry : textures.entrySet()) {
+            Map.Entry<String, Texture> pair = stringTextureEntry;
+            Gdx.app.log("InGame::configure", "adding character texture: " + pair.getKey());
+            charactersInScene.add(new Character(pair.getKey(), pair.getValue()));
+        }
+
+    }
 }

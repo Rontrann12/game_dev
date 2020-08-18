@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.screens.MainMenu;
+import com.mygdx.game.novel1.screen.MainMenu;
 
 public class MainMenuButton extends BaseButton {
     public MainMenuButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name){

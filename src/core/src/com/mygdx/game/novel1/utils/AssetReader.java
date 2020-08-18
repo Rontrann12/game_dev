@@ -3,7 +3,6 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.dto.AssetsDTO;
@@ -20,7 +19,7 @@ import static com.mygdx.game.novel1.utils.StringUtilities.generateFileName;
  */
 public class AssetReader {
 
-    private String scriptsPath;
+    private static String scriptsPath = Paths.TEST_SCRIPT_PATH;
 
 
     public AssetReader() {
@@ -32,35 +31,47 @@ public class AssetReader {
      *
      * @return
      */
-    public AssetsDTO getAssets() {
+    public static AssetsDTO getAllAssets(ArrayDeque<String> cast) {
 
-        HashMap<String, TextureRegion> cast = getCharacterExpressions();
-        ArrayDeque script = readScriptTextFile();
+        HashMap<String, Texture> characters = loadCharacterTextures(cast);
+        ArrayDeque<String> script = readScriptTextFile();
 
-        return new AssetsDTO(script, cast);
+        return new AssetsDTO(script, characters);
     }
 
-    private HashMap<String, TextureRegion> getCharacterExpressions() {
-        HashMap<String, Texture> textures = loadCharacterTextures();
-        HashMap<String, TextureRegion> expressionMappings = new HashMap<String, TextureRegion>();
-        Iterator it = textures.entrySet().iterator();
+    /**
+     * Given a texture containing all expressions for one character, method determines
+     * all regions of each sprite and returns a hashmap to map the name and the sprite
+     * TODO - DEPRECIATED
+     * @return
+     */
+//    public HashMap<String, TextureRegion> getCharacterExpressions() {
+//        HashMap<String, Texture> textures = loadCharacterTextures();
+//        HashMap<String, TextureRegion> expressionMappings = new HashMap<String, TextureRegion>();
+//        Iterator it = textures.entrySet().iterator();
+//
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry) it.next();
+//            Gdx.app.log("AssetReader::getCharacterExpressions", "Getting data from file: " + pair.getKey() + ".txt");
+//            String path = generateFileName(CHARACTERS_PATH, pair.getKey().toString(), FileTypes.TEXT);
+//
+//            HashMap<String, TextureRegion> tmp = ConfigReader.mapSprites(path, (Texture) pair.getValue());
+//            tmp.keySet().removeAll(expressionMappings.keySet());
+//            expressionMappings.putAll(tmp);
+//        }
+//
+//        Gdx.app.log("AssetReader::getCharacterExpressions", "total number of sprites for all characters: " + expressionMappings.size());
+//        return expressionMappings;
+//    }
 
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            Gdx.app.log("AssetReader::getCharacterExpressions", "Getting data from file: " + pair.getKey() + ".txt");
-            String path = generateFileName(CHARACTERS_PATH, pair.getKey().toString(), FileTypes.TEXT);
 
-            HashMap<String, TextureRegion> tmp = ConfigReader.mapSprites(path, (Texture) pair.getValue());
-            tmp.keySet().removeAll(expressionMappings.keySet());
-            expressionMappings.putAll(tmp);
-        }
-
-        Gdx.app.log("AssetReader::getCharacterExpressions", "total number of sprites for all characters: " + expressionMappings.size());
-        return expressionMappings;
-    }
-
-    private HashMap<String, Texture> loadCharacterTextures() {
-        ArrayDeque<String> cast = ConfigReader.readCastList();
+    /**
+     * Given a character name, method will search for the png file
+     * and load the image in as a texture
+     *
+     * @return
+     */
+    public static HashMap<String, Texture> loadCharacterTextures(ArrayDeque<String> cast) {
         AssetManager manager = new AssetManager();
         HashMap<String, Texture> characterTextures = new HashMap<String, Texture>();
         int limit = 10;
@@ -87,9 +98,9 @@ public class AssetReader {
     }
 
 
-    private ArrayDeque readScriptTextFile() {
+    private static ArrayDeque<String> readScriptTextFile() {
 
-        ArrayDeque script = new ArrayDeque();
+        ArrayDeque<String> script = new ArrayDeque();
 
         try {
             File file = new File(scriptsPath);

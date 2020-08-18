@@ -1,13 +1,39 @@
+MC:
+    "A Year has passed and school has started up again"
+    "Someone familiar is coming up to me"
 Monika_smile1:
-    "Hi Ronald."
-    "Nice to meet you!"
-Monika_turn_away:
-    "I cant wait until you finish the game."
-    "You can do it."
+    "Hi Ronald!"
+    "I am really happy to see you again"
+    "I'd love to stay and catch up with you,"
+    "but I've gotta run"
+    "See you soon!"
+Monika (exit)
+MC:
+    "Okay, talk to you later"
 Yuri_talking:
-    "Yes, it is nice to meet you Ronald"
+    "So you are back"
+    "Indeed, it is nice to see you again"
+MC:
+    "Yuri!"
+    "You're not dead?!"
 Yuri_scared:
-    "I can't believe you just said that"
+    "W-What?"
+    "You still remembered that?"
+Yuri_Shy:
+    "..."
+    "I am sorry you had to see that, that day"
+MC:
+    "Geez, I thought you were gone"
+    "What even happened?"
 Yuri_shy:
-    "O-Ok... This is my first time"
-    "Be gentle"
+    "It.. was..."
+    "A prank"
+MC:
+    "That was..."
+    "Mean"
+    "Anyways, looks like we got class"
+Yuri_scared:
+MC:
+    "Come on"
+    "Let's go!"
+**Scene 2

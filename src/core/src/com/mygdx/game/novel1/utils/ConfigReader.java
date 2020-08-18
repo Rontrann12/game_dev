@@ -15,7 +15,8 @@ import static com.mygdx.game.novel1.constants.ConfigKeys.CHARACTER_MODE;
 public class ConfigReader {
 
     /**
-     * adds new mappings of every sprite for a single character to the hashmap
+     * Reads a config file specifying the location and dimensinons of each sprite in a
+     * texture region and maps it with its name.
      *
      * @param configPath
      */
@@ -77,14 +78,14 @@ public class ConfigReader {
      *
      * @return
      */
-    public static ArrayDeque<String> readCastList() {
+    public static ArrayDeque<String> readCastList(String path) {
 
         ArrayDeque<String> characters = new ArrayDeque<>();
         boolean characterMode = false;
         String separator = Separators.KEYVALUE + Separators.SPACE;
 
         try {
-            File file = new File(Paths.TEST_CONFIG_PATH);
+            File file = new File(path);
             Scanner reader = new Scanner(file);
 
             while (reader.hasNextLine()) {
