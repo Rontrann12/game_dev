@@ -1,39 +1,54 @@
 MC:
     "A Year has passed and school has started up again"
     "Someone familiar is coming up to me"
-Monika_smile1:
+
+Monika: Monika_smile1
     "Hi Ronald!"
     "I am really happy to see you again"
     "I'd love to stay and catch up with you,"
     "but I've gotta run"
+
+Monika: Monika_turn_away
     "See you soon!"
-Monika (exit)
+
+Monika: Exit
+
 MC:
     "Okay, talk to you later"
-Yuri_talking:
+
+Yuri: Yuri_talking
     "So you are back"
     "Indeed, it is nice to see you again"
+
 MC:
     "Yuri!"
     "You're not dead?!"
-Yuri_scared:
+
+Yuri: Yuri_scared
     "W-What?"
     "You still remembered that?"
-Yuri_Shy:
+
+Yuri: Yuri_shy
     "..."
     "I am sorry you had to see that, that day"
+
 MC:
     "Geez, I thought you were gone"
     "What even happened?"
-Yuri_shy:
+
+Yuri: Yuri_shy
     "It.. was..."
     "A prank"
+
 MC:
     "That was..."
     "Mean"
     "Anyways, looks like we got class"
-Yuri_scared:
+
+Yuri: Yuri_scared
+
 MC:
     "Come on"
     "Let's go!"
+
 **Scene 2

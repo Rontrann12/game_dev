@@ -10,6 +10,7 @@ import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.utils.StringUtilities;
+
 import java.util.HashMap;
 
 public class Character extends Actor {
@@ -19,26 +20,33 @@ public class Character extends Actor {
     private Sprite currentExpression;
 
 
-    public Character (String name, Texture sheet) {
+    public Character(String name, Texture sheet) {
         this.name = name;
-        this.expressions = ConfigReader.mapSprites(StringUtilities.generateFileName(Paths.CHARACTERS_PATH,name, FileTypes.TEXT), sheet);
+        this.expressions = ConfigReader.mapSprites(StringUtilities.generateFileName(Paths.CHARACTERS_PATH, name, FileTypes.TEXT), sheet);
     }
 
     public void setExpression(String expression) {
         currentExpression = new Sprite(expressions.get(expression));
     }
 
-    public void spritePos(float x, float y){
+    public void spritePos(float x, float y) {
         currentExpression.setPosition(x, y);
         setBounds(currentExpression.getX(), currentExpression.getY(), currentExpression.getWidth(), currentExpression.getHeight());
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
+
     public Sprite getCurrentExpression() {
+
         return new Sprite(currentExpression);
     }
+
+    public void updateExpression(String expression) {
+
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         currentExpression.draw(batch);

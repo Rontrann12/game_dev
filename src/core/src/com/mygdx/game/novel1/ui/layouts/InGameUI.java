@@ -49,18 +49,18 @@ public class InGameUI extends BaseLayout{
         box.setAlpha((float) 0.8);
         LoadButton loadButton = new LoadButton(loadIdle, loadHover, game, null);
         MainMenuButton mainButton = new MainMenuButton(mainIdle, mainHover, game, null);
-        ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
-        ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
+        //ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
+        //ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
 
         mainButton.spritePos(100, -5);
         miniButtons.setX(150);
         miniButtons.setY(15);
 
-        choice1.spritePos(0, 80);
-        choiceButtons.setX(400);
-        choiceButtons.setY((Gdx.graphics.getHeight() / 2)- 100);
-        choiceButtons.addActor(choice1);
-        choiceButtons.addActor(choice2);
+//        choice1.spritePos(0, 80);
+//        choiceButtons.setX(400);
+//        choiceButtons.setY((Gdx.graphics.getHeight() / 2)- 100);
+//        choiceButtons.addActor(choice1);
+//        choiceButtons.addActor(choice2);
 
         //draw option icons in the textbox
         miniButtons.addActor(loadButton);
