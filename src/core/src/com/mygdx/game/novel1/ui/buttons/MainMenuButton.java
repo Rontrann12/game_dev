@@ -27,6 +27,7 @@ public class MainMenuButton extends BaseButton {
 
     @Override
     public void action(NovelOne game ){
+        game.getScreen().dispose();
         game.setScreen(new MainMenu(game));
     }
 

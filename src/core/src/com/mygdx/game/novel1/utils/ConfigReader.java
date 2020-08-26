@@ -8,13 +8,14 @@ import com.mygdx.game.novel1.constants.Separators;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import static com.mygdx.game.novel1.constants.ConfigKeys.BACKGROUND_MODE;
-import static com.mygdx.game.novel1.constants.ConfigKeys.CHARACTER_MODE;
+
+import static com.mygdx.game.novel1.constants.ConfigKeys.*;
 
 public class ConfigReader {
 
     private static ArrayDeque<String> backgrounds;
     private static ArrayDeque<String> castList;
+    private static ArrayDeque<String> music;
 
     /**
      * reads info on what assets should be loaded in the configuration for a scene
@@ -46,6 +47,9 @@ public class ConfigReader {
                 }
                 if(config.equals(BACKGROUND_MODE)) {
                     backgrounds = new ArrayDeque<>(dataList);
+                }
+                if(config.equals(BGM_MODE)) {
+                    music = new ArrayDeque<>(dataList);
                 }
             }
 
@@ -120,6 +124,7 @@ public class ConfigReader {
         return backgrounds;
     }
 
+    public static ArrayDeque<String> getMusicList(){ return music; }
     /**
      * TODO - decide if this should be moved to String utilities
      * @param data
