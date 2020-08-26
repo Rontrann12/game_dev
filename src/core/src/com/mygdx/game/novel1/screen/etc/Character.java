@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.utils.ConfigReader;
@@ -38,14 +37,6 @@ public class Character extends Actor {
         return name;
     }
 
-    public Sprite getCurrentExpression() {
-
-        return new Sprite(currentExpression);
-    }
-
-    public void updateExpression(String expression) {
-
-    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

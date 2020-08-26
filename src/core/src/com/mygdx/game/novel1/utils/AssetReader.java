@@ -6,11 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.dto.AssetsDTO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static com.mygdx.game.novel1.constants.Paths.CHARACTERS_PATH;
+import static com.mygdx.game.novel1.constants.Paths.*;
 import static com.mygdx.game.novel1.utils.StringUtilities.generateFileName;
 
 
@@ -31,72 +32,50 @@ public class AssetReader {
      *
      * @return
      */
-    public static AssetsDTO getAllAssets(ArrayDeque<String> cast) {
+    public static AssetsDTO getAllAssets(ArrayDeque<String> cast, ArrayDeque<String> backgroundList) {
 
-        HashMap<String, Texture> characters = loadCharacterTextures(cast);
+        HashMap<String, Texture> characters = loadTextures(cast, CHARACTERS_PATH);
+        HashMap<String, Texture> backgrounds = loadTextures(backgroundList, BACKGROUNDS_PATH);
         ArrayDeque<String> script = readScriptTextFile();
 
-        return new AssetsDTO(script, characters);
+        return new AssetsDTO(script, characters, backgrounds);
     }
 
-    /**
-     * Given a texture containing all expressions for one character, method determines
-     * all regions of each sprite and returns a hashmap to map the name and the sprite
-     * TODO - DEPRECIATED
-     * @return
-     */
-//    public HashMap<String, TextureRegion> getCharacterExpressions() {
-//        HashMap<String, Texture> textures = loadCharacterTextures();
-//        HashMap<String, TextureRegion> expressionMappings = new HashMap<String, TextureRegion>();
-//        Iterator it = textures.entrySet().iterator();
-//
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry) it.next();
-//            Gdx.app.log("AssetReader::getCharacterExpressions", "Getting data from file: " + pair.getKey() + ".txt");
-//            String path = generateFileName(CHARACTERS_PATH, pair.getKey().toString(), FileTypes.TEXT);
-//
-//            HashMap<String, TextureRegion> tmp = ConfigReader.mapSprites(path, (Texture) pair.getValue());
-//            tmp.keySet().removeAll(expressionMappings.keySet());
-//            expressionMappings.putAll(tmp);
-//        }
-//
-//        Gdx.app.log("AssetReader::getCharacterExpressions", "total number of sprites for all characters: " + expressionMappings.size());
-//        return expressionMappings;
-//    }
-
 
     /**
-     * Given a character name, method will search for the png file
-     * and load the image in as a texture
+     * given a list of items, the method will load in each item in the provided directory
      *
+     * @param list
+     * @param assetsPath
      * @return
      */
-    public static HashMap<String, Texture> loadCharacterTextures(ArrayDeque<String> cast) {
+    private static HashMap<String, Texture> loadTextures(ArrayDeque<String> list, String assetsPath){
+
         AssetManager manager = new AssetManager();
-        HashMap<String, Texture> characterTextures = new HashMap<String, Texture>();
+        HashMap<String, Texture> textures = new HashMap<String, Texture>();
         int limit = 10;
         int i = 0;
-        Iterator castIterator = cast.iterator();
+        Iterator listIterator = list.iterator();
 
-        while (castIterator.hasNext() && i < limit) {
-            String characterName = castIterator.next().toString();
-            Gdx.app.log("AssetReader::loadCharacterTextures", "loading character: " + characterName);
-            manager.load(generateFileName(CHARACTERS_PATH, characterName, FileTypes.PNG), Texture.class);
+        while (listIterator.hasNext() && i < limit) {
+            String name = listIterator.next().toString();
+            Gdx.app.log("AssetReader::loadTextures", "loading texture: " + name);
+            manager.load(generateFileName(assetsPath, name, FileTypes.PNG), Texture.class);
             i++;
         }
 
         manager.finishLoading();
 
-        while (!cast.isEmpty()) {
-            String characterName = cast.pop();
-            Texture texture = manager.get(generateFileName(CHARACTERS_PATH, characterName, FileTypes.PNG));
-            characterTextures.put(characterName, texture);
+        while (!list.isEmpty()) {
+            String name = list.pop();
+            Texture texture = manager.get(generateFileName(assetsPath, name, FileTypes.PNG));
+            textures.put(name, texture);
         }
 
-        Gdx.app.log("AssetReader::loadCharacterTextures", "loaded " + characterTextures.size() + " characters");
-        return characterTextures;
-    }
+        Gdx.app.log("AssetReader::loadTexture", "loaded " + textures.size() + " characters");
+        return textures;
 
+    }
 
     private static ArrayDeque<String> readScriptTextFile() {
 

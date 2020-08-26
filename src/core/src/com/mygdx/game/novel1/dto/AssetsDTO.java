@@ -8,14 +8,16 @@ import java.util.HashMap;
 
 public class AssetsDTO {
 
-    private HashMap<String, Texture> textures;
+    private HashMap<String, Texture> characterTextures;
     private ArrayDeque<String> script;
     private String[] soundFX;
     private String[] music;
+    private HashMap<String,Texture> backgrounds;
 
-    public AssetsDTO(ArrayDeque<String> script, HashMap<String, Texture> textures) {
+    public AssetsDTO(ArrayDeque<String> script, HashMap<String, Texture> textures, HashMap<String, Texture> backgrounds) {
         this.script = script;
-        this.textures = textures;
+        this.characterTextures = textures;
+        this.backgrounds = backgrounds;
     }
 
     public ArrayDeque<String> getScript() {
@@ -23,9 +25,12 @@ public class AssetsDTO {
         return this.script;
     }
 
-    public HashMap<String, Texture> getTextures() {
+    public HashMap<String, Texture> getCharacterTextures() {
+        return this.characterTextures;
+    }
 
-        return this.textures;
+    public HashMap<String, Texture> getBackgroundTextures() {
+        return this.backgrounds;
     }
 
 }

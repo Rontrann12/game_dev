@@ -4,11 +4,10 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.ConfigKeys;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
@@ -31,10 +30,9 @@ public class InGame implements Screen {
     private final InGameUI uiHandler;
     private final String path = Paths.TEST_CONFIG_PATH;
     private LinkedHashMap<String, Character> charactersInScene;
-    private HashMap<String,Character> charactersOnScreen;
     private ArrayDeque<String> script;
-    private Table table;
     private Group characterRenderGroup;
+    private HashMap<String, Texture> backgrounds;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -43,9 +41,7 @@ public class InGame implements Screen {
         charactersInScene = new LinkedHashMap<>();
         configure();
         this.uiHandler = new InGameUI(stage, game, processScriptLine());
-        this.table = new Table();
         characterRenderGroup = new Group();
-
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -55,20 +51,18 @@ public class InGame implements Screen {
                     public boolean keyDown(int keyCode) {
                         if (keyCode == SPACE) {
                             Gdx.app.log("in game", "space bar button down detected");
-                            try{
+                            try {
                                 uiHandler.nextLine(processScriptLine());
-                            }catch(EmptyStackException e) {
+                            } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
                         }
-
                         return true;
                     }
                 }
         );
 
         Gdx.input.setInputProcessor(multiplexer);
-
     }
 
     /**
@@ -79,7 +73,7 @@ public class InGame implements Screen {
     private String processScriptLine() throws EmptyStackException {
 
         int limit = 10;
-        for (int index = 0; index < limit; index++){
+        for (int index = 0; index < limit; index++) {
 
             String line = this.script.pop();
             if (line.contains(Separators.KEYVALUE)) {
@@ -87,50 +81,46 @@ public class InGame implements Screen {
                 String action = StringUtilities.getAction(line);
                 processAction(targetCharacter, action);
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            }
-            else if (StringUtilities.isDialogue(line)) {
+            } else if (StringUtilities.isDialogue(line)) {
                 return line;
             }
         }
         return null;
-
     }
 
-    private void processAction(String character, String action){
+    private void processAction(String character, String action) {
 
         Character target = charactersInScene.get(character);
-        try{
+        try {
 
-            if(!action.equals("Exit")) {
+            if (!action.equals("Exit")) {
                 Gdx.app.log("InGame::processAction", "adding " + character + " from screen");
                 target.setExpression(action);
                 characterRenderGroup.addActor(target);
-            }
-            else{
+            } else {
                 Gdx.app.log("InGame::processAction", "removing " + character + " from screen");
                 target.remove();
             }
-        }catch(NullPointerException e ) {
+        } catch (NullPointerException e) {
             Gdx.app.log("InGame::processAction", "no action found, skipping");
         }
-
     }
 
     private void configure() {
-
-        ArrayDeque<String> cast = ConfigReader.readCastList(path);
-        //ArrayDeque<String> backgrounds = ConfigReader.readBackgroundList(path);
-        AssetsDTO assets = AssetReader.getAllAssets(cast);
+        ConfigReader.configNewScene(path);
+        ArrayDeque<String> cast = ConfigReader.getCastList();
+        ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
+        AssetsDTO assets = AssetReader.getAllAssets(cast, backgroundsList);
 
         this.script = assets.getScript();
-        HashMap<String, Texture> textures = assets.getTextures();
+        this.backgrounds = assets.getBackgroundTextures();
+        HashMap<String, Texture> characters = assets.getCharacterTextures();
 
-        for (Map.Entry<String, Texture> stringTextureEntry : textures.entrySet()) {
+        for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
             Map.Entry<String, Texture> pair = stringTextureEntry;
             Gdx.app.log("InGame::configure", "adding character texture: " + pair.getKey());
             charactersInScene.put(pair.getKey(), new Character(pair.getKey(), pair.getValue()));
         }
-
     }
 
     @Override
@@ -138,19 +128,14 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
-
-        //Iterator iterator = onScreenCharacters.entrySet().iterator();
+        Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.begin();
-//        while (iterator.hasNext()) {
-//            Map.Entry pair = (Map.Entry) iterator.next();
-//            //Gdx.app.log("InGame::render", "sprite to be drawn on screen: " + pair.getKey());
-//            batch.draw(onScreenCharacters.get(pair.getKey()), 0, -50);
-//        }
+        backgroundSprite.draw(batch);
         batch.end();
 
         this.stage.draw();
-
     }
 
     @Override
@@ -161,8 +146,6 @@ public class InGame implements Screen {
         Integer numActors = this.stage.getActors().size;
 
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors.toString());
-
-
     }
 
     @Override
@@ -173,6 +156,7 @@ public class InGame implements Screen {
 
     @Override
     public void resize(int width, int height) {
+
         this.game.viewport.update(width, height, true);
     }
 
