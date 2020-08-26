@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.novel1.screens.MainMenu;
+import com.mygdx.game.novel1.screen.MainMenu;
 
 // Can use the Screen interface to implement difference screens for menu or game screens
 // helpful example: https://gist.github.com/sinistersnare/6367829
@@ -26,6 +26,7 @@ public class NovelOne extends Game {
 
 	public void create () {
 
+		Gdx.graphics.setContinuousRendering(false);
         this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		font = new BitmapFont();
 		this.setScreen(new MainMenu(this));

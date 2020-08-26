@@ -14,14 +14,13 @@ import com.mygdx.game.novel1.ui.textbox.Dialogue;
 
 public class InGameUI extends BaseLayout{
 
-    private String dialogue = "Hi rondadT";
+    private String line;
     private Dialogue box;
     private TextureRegion textBoxImage;
 
-    public InGameUI(Stage stage, NovelOne game) {
+    public InGameUI(Stage stage, NovelOne game, String initialLine) {
         super(stage, game);
-
-
+        this.line = initialLine;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class InGameUI extends BaseLayout{
         Group choiceButtons = new Group();
 
         this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
-        this.box = new Dialogue(this.textBoxImage, dialogue);
+        this.box = new Dialogue(this.textBoxImage, line);
 
         TextureRegion backImage = new TextureRegion(texture, 0, 0, 62, 20);
         TextureRegion historyImage = new TextureRegion(texture, 452, 0, 80, 26);
@@ -50,18 +49,18 @@ public class InGameUI extends BaseLayout{
         box.setAlpha((float) 0.8);
         LoadButton loadButton = new LoadButton(loadIdle, loadHover, game, null);
         MainMenuButton mainButton = new MainMenuButton(mainIdle, mainHover, game, null);
-        ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
-        ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
+        //ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
+        //ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
 
         mainButton.spritePos(100, -5);
         miniButtons.setX(150);
         miniButtons.setY(15);
 
-        choice1.spritePos(0, 80);
-        choiceButtons.setX(400);
-        choiceButtons.setY((Gdx.graphics.getHeight() / 2)- 100);
-        choiceButtons.addActor(choice1);
-        choiceButtons.addActor(choice2);
+//        choice1.spritePos(0, 80);
+//        choiceButtons.setX(400);
+//        choiceButtons.setY((Gdx.graphics.getHeight() / 2)- 100);
+//        choiceButtons.addActor(choice1);
+//        choiceButtons.addActor(choice2);
 
         //draw option icons in the textbox
         miniButtons.addActor(loadButton);
@@ -76,7 +75,7 @@ public class InGameUI extends BaseLayout{
 
     public void nextLine(String line) {
         Gdx.app.log("In game" , "updating textbox dialog");
-        this.dialogue = line;
+        this.line = line;
         this.box.updateLine(line);
     }
 }
