@@ -36,6 +36,7 @@ public class InGame implements Screen {
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
     private HashMap<String, Music> bgm;
+    private Music currentTrack;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -99,6 +100,9 @@ public class InGame implements Screen {
             } else if (StringUtilities.isDialogue(line)) {
                 return line;
             }
+//            else if( StringUtilities.isNewTrack()) {
+//                currentTrack = bgm.get(line);
+//            }
         }
         return null;
     }

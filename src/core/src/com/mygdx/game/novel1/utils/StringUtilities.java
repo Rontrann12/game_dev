@@ -46,6 +46,12 @@ public class StringUtilities {
         }
     }
 
+//    public static boolean isNewTrack(String line) {
+//        try{
+//            String underCheck = getContainedContent(line, "~")
+//        }
+//    }
+
     public static boolean isDialogue(String line) {
 
         try{
