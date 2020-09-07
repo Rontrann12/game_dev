@@ -1,6 +1,7 @@
 package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +20,7 @@ import com.mygdx.game.novel1.utils.StringUtilities;
 
 import java.util.*;
 
+import static com.badlogic.gdx.Input.Keys.LEFT;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
@@ -33,6 +35,8 @@ public class InGame implements Screen {
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
+    private HashMap<String, Music> bgm;
+    private Music currentTrack;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -48,9 +52,21 @@ public class InGame implements Screen {
         multiplexer.addProcessor(
                 new InputAdapter() {
                     @Override
+                    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                        try{
+                            Gdx.app.log("InGame::InGame", "mouse down detected");
+                            uiHandler.nextLine(processScriptLine());
+                        }catch( EmptyStackException e) {
+                            Gdx.app.log("InGame::InGame", e.getMessage());
+                        }
+
+                        return true;
+                    }
+
+                    @Override
                     public boolean keyDown(int keyCode) {
-                        if (keyCode == SPACE) {
-                            Gdx.app.log("in game", "space bar button down detected");
+                        if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
+                            Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
                                 uiHandler.nextLine(processScriptLine());
                             } catch (EmptyStackException e) {
@@ -84,6 +100,9 @@ public class InGame implements Screen {
             } else if (StringUtilities.isDialogue(line)) {
                 return line;
             }
+//            else if( StringUtilities.isNewTrack()) {
+//                currentTrack = bgm.get(line);
+//            }
         }
         return null;
     }
@@ -110,10 +129,12 @@ public class InGame implements Screen {
         ConfigReader.configNewScene(path);
         ArrayDeque<String> cast = ConfigReader.getCastList();
         ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
-        AssetsDTO assets = AssetReader.getAllAssets(cast, backgroundsList);
+        ArrayDeque<String> bgmList = ConfigReader.getMusicList();
+        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList);
 
         this.script = assets.getScript();
         this.backgrounds = assets.getBackgroundTextures();
+        this.bgm = assets.getTracks();
         HashMap<String, Texture> characters = assets.getCharacterTextures();
 
         for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
@@ -142,15 +163,15 @@ public class InGame implements Screen {
     public void show() {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
+        this.bgm.get("beneath_the_mask").play();
+        int numActors = this.stage.getActors().size;
 
-        Integer numActors = this.stage.getActors().size;
-
-        Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors.toString());
+        Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
     }
 
     @Override
     public void dispose() {
-
+        this.bgm.get("beneath_the_mask").dispose();
     }
 
 

@@ -1,3 +1,5 @@
+~beneath_the_mask~
+
 MC:
     "A Year has passed and school has started up again"
     "Someone familiar is coming up to me"
@@ -23,6 +25,8 @@ Yuri: Yuri_talking
 MC:
     "Yuri!"
     "You're not dead?!"
+
+~something_else~
 
 Yuri: Yuri_scared
     "W-What?"

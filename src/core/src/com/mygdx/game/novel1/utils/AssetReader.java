@@ -2,10 +2,13 @@ package com.mygdx.game.novel1.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.dto.AssetsDTO;
+import com.sun.tools.javac.code.Attribute;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,25 +23,53 @@ import static com.mygdx.game.novel1.utils.StringUtilities.generateFileName;
  */
 public class AssetReader {
 
-    private static String scriptsPath = Paths.TEST_SCRIPT_PATH;
-
-
-    public AssetReader() {
-        this.scriptsPath = Paths.TEST_SCRIPT_PATH;
-    }
 
     /**
      * returns a DTO containing required images and text as specified in the script
      *
      * @return
      */
-    public static AssetsDTO getAllAssets(ArrayDeque<String> cast, ArrayDeque<String> backgroundList) {
+    public static AssetsDTO getAllAssets(String scriptsPath, ArrayDeque<String> cast, ArrayDeque<String> backgroundList, ArrayDeque<String> musicList) {
 
         HashMap<String, Texture> characters = loadTextures(cast, CHARACTERS_PATH);
         HashMap<String, Texture> backgrounds = loadTextures(backgroundList, BACKGROUNDS_PATH);
-        ArrayDeque<String> script = readScriptTextFile();
+        HashMap<String, Music> bgm = loadMusic(musicList, BGM_PATH);
+        ArrayDeque<String> script = readScriptTextFile(scriptsPath);
 
-        return new AssetsDTO(script, characters, backgrounds);
+        return new AssetsDTO(script, characters, backgrounds, bgm);
+    }
+
+    /**
+     * given a lost of items, the method will load in each item in the provided directory
+     *
+     * @param list
+     * @param path
+     * @return
+     */
+    private static HashMap<String, Music> loadMusic(ArrayDeque<String> list, String path) {
+        HashMap<String, Music> allMusic = new HashMap<>();
+        AssetManager manager = new AssetManager();
+        int limit = 10;
+        int i = 0;
+        Iterator iterator = list.iterator();
+
+        while (iterator.hasNext() && i < limit) {
+            String name = iterator.next().toString();
+
+            Gdx.app.log("AssetReader::loadMusic", "loading track: " + name);
+            manager.load(generateFileName(path, name, FileTypes.AUDIO), Music.class);
+        }
+        manager.finishLoading();
+
+        while(!list.isEmpty()) {
+            String name = list.pop();
+            Music music = manager.get(generateFileName(path, name, FileTypes.AUDIO), Music.class);
+            allMusic.put(name, music);
+        }
+
+        Gdx.app.log("AssetReader::loadMusic", "loaded " + allMusic.size() + " tracks");
+        return allMusic;
+
     }
 
 
@@ -77,12 +108,12 @@ public class AssetReader {
 
     }
 
-    private static ArrayDeque<String> readScriptTextFile() {
+    private static ArrayDeque<String> readScriptTextFile(String path) {
 
         ArrayDeque<String> script = new ArrayDeque();
 
         try {
-            File file = new File(scriptsPath);
+            File file = new File(path);
             Scanner reader = new Scanner(file);
 
             while (reader.hasNextLine()) {
