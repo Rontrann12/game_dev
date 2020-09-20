@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
@@ -20,7 +21,6 @@ import com.mygdx.game.novel1.utils.StringUtilities;
 
 import java.util.*;
 
-import static com.badlogic.gdx.Input.Keys.LEFT;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
@@ -53,10 +53,10 @@ public class InGame implements Screen {
                 new InputAdapter() {
                     @Override
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                        try{
+                        try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
                             uiHandler.nextLine(processScriptLine());
-                        }catch( EmptyStackException e) {
+                        } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
 
@@ -97,12 +97,20 @@ public class InGame implements Screen {
                 String action = StringUtilities.getAction(line);
                 processAction(targetCharacter, action);
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            } else if (StringUtilities.isDialogue(line)) {
+            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
                 return line;
             }
-//            else if( StringUtilities.isNewTrack()) {
-//                currentTrack = bgm.get(line);
-//            }
+
+            // TODO - test this
+            else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+                if (currentTrack != null) {
+                    if(currentTrack.isPlaying()){
+                        currentTrack.dispose();
+                    }
+                }
+                currentTrack = bgm.get(StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER));
+                currentTrack.play();
+            }
         }
         return null;
     }
@@ -163,7 +171,7 @@ public class InGame implements Screen {
     public void show() {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        this.bgm.get("beneath_the_mask").play();
+        //this.bgm.get("beneath_the_mask").play();
         int numActors = this.stage.getActors().size;
 
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);

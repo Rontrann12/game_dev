@@ -46,18 +46,21 @@ public class StringUtilities {
         }
     }
 
-//    public static boolean isNewTrack(String line) {
-//        try{
-//            String underCheck = getContainedContent(line, "~")
-//        }
-//    }
 
-    public static boolean isDialogue(String line) {
-
-        try{
-            String underCheck = getContainedContent(line, '\"');
+    /**
+     * TODO - Need to test this
+     *
+     * checks that the containerCharacter contains a string
+     *
+      * @param line
+     * @param containerCharacter
+     * @return
+     */
+    public static boolean isContainer(String line, char containerCharacter) {
+        try {
+            String underCheck = getContainer(line, containerCharacter);
             Gdx.app.log("StringUtilities::isDialogue", "testing line: " + underCheck);
-            if ((underCheck.indexOf("\"") == 0) && (underCheck.lastIndexOf("\"") == underCheck.length()-1)){
+            if ((underCheck.indexOf(containerCharacter) == 0) && (underCheck.lastIndexOf(containerCharacter) == underCheck.length()-1)){
                 return true;
             }
             return false;
@@ -70,11 +73,20 @@ public class StringUtilities {
     }
 
 
-    public static String getContainedContent(String line, char container ) {
+
+    public static String getContainedContent(String line, char container) {
+        int firstChar = line.indexOf(container);
+        int secondChar = line.lastIndexOf(container);
+        String stripped = line.substring(firstChar +1 , secondChar);
+        Gdx.app.log("StringUtilities::getContainedContent", "stripped string from " + line + " to: " + stripped);
+        return stripped;
+    }
+
+    private static String getContainer(String line, char container) {
         int firstChar = line.indexOf(container);
         int secondChar = line.lastIndexOf(container);
         String stripped = line.substring(firstChar, secondChar+1);
-        Gdx.app.log("StringUtilities::getContainedContent", "stripped string from " + line + " to: " + stripped);
+        Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
         return stripped;
     }
 
