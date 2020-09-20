@@ -102,14 +102,20 @@ public class InGame implements Screen {
             }
 
             // TODO - test this
+            //TODO - may want separate this out into an audio handler
             else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+                String track = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
                 if (currentTrack != null) {
-                    if(currentTrack.isPlaying()){
+                    if (currentTrack.isPlaying()) {
                         currentTrack.dispose();
                     }
                 }
-                currentTrack = bgm.get(StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER));
-                currentTrack.play();
+
+                // TODO - remove string from logic
+                if (!track.equals("PAUSE")) {
+                    currentTrack = bgm.get(track);
+                    currentTrack.play();
+                }
             }
         }
         return null;
