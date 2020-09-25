@@ -29,14 +29,14 @@ public class AssetReader {
      *
      * @return
      */
-    public static AssetsDTO getAllAssets(String scriptsPath, ArrayDeque<String> cast, ArrayDeque<String> backgroundList, ArrayDeque<String> musicList) {
+    public static AssetsDTO getAllAssets(String scriptsPath, ArrayDeque<String> cast, ArrayDeque<String> backgroundList, ArrayDeque<String> musicList, ArrayDeque<String> sfxList) {
 
         HashMap<String, Texture> characters = loadTextures(cast, CHARACTERS_PATH);
         HashMap<String, Texture> backgrounds = loadTextures(backgroundList, BACKGROUNDS_PATH);
         HashMap<String, Music> bgm = loadMusic(musicList, BGM_PATH);
         ArrayDeque<String> script = readScriptTextFile(scriptsPath);
 
-        return new AssetsDTO(script, characters, backgrounds, bgm);
+        return new AssetsDTO(script, characters, backgrounds, bgm, null);
     }
 
     /**

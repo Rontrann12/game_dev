@@ -2,6 +2,7 @@ package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
@@ -36,7 +38,8 @@ public class InGame implements Screen {
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
     private HashMap<String, Music> bgm;
-    private Music currentTrack;
+    private HashMap<String, Sound> sfx;
+    private Music currentBgm;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -105,17 +108,22 @@ public class InGame implements Screen {
             //TODO - may want separate this out into an audio handler
             else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
                 String track = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-                if (currentTrack != null) {
-                    if (currentTrack.isPlaying()) {
-                        currentTrack.dispose();
+                if (currentBgm != null) {
+                    if (currentBgm.isPlaying()) {
+                        currentBgm.dispose();
                     }
                 }
 
                 // TODO - remove string from logic
-                if (!track.equals("PAUSE")) {
-                    currentTrack = bgm.get(track);
-                    currentTrack.play();
+                if (!track.equals(ScriptCues.PAUSE_MUSIC)) {
+                    currentBgm = bgm.get(track);
+                    currentBgm.play();
                 }
+            }
+            else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
+                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
+                sfx.get(sfxCue).play();
+
             }
         }
         return null;
@@ -144,11 +152,13 @@ public class InGame implements Screen {
         ArrayDeque<String> cast = ConfigReader.getCastList();
         ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
         ArrayDeque<String> bgmList = ConfigReader.getMusicList();
-        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList);
+        ArrayDeque<String> sfxList = ConfigReader.getSoundList();
+        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList,sfxList);
 
         this.script = assets.getScript();
         this.backgrounds = assets.getBackgroundTextures();
         this.bgm = assets.getTracks();
+        this.sfx = assets.getSounds();
         HashMap<String, Texture> characters = assets.getCharacterTextures();
 
         for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
@@ -163,6 +173,8 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
+
+        // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -177,12 +189,12 @@ public class InGame implements Screen {
     public void show() {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        //this.bgm.get("beneath_the_mask").play();
         int numActors = this.stage.getActors().size;
 
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
     }
 
+    // TODO - need to dispose of all sounds contained in sfx and bgm
     @Override
     public void dispose() {
         this.bgm.get("beneath_the_mask").dispose();

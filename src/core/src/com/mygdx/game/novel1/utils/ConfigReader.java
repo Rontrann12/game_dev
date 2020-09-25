@@ -16,6 +16,7 @@ public class ConfigReader {
     private static ArrayDeque<String> backgrounds;
     private static ArrayDeque<String> castList;
     private static ArrayDeque<String> music;
+    private static ArrayDeque<String> sounds;
 
     /**
      * reads info on what assets should be loaded in the configuration for a scene
@@ -114,6 +115,10 @@ public class ConfigReader {
         }
 
         return mapping;
+    }
+
+    public static ArrayDeque<String> getSoundList(){
+        return sounds;
     }
 
     public static ArrayDeque<String> getCastList() {
