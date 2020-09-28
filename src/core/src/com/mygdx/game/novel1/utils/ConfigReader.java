@@ -43,14 +43,23 @@ public class ConfigReader {
                 Gdx.app.log("ConfigReader::readCastList", "number of data points returned: " + dataArray.length);
                 dataList = Arrays.asList(dataArray);
 
-                if(config.equals(CHARACTER_MODE)) {
-                    castList = new ArrayDeque<>(dataList);
-                }
-                if(config.equals(BACKGROUND_MODE)) {
-                    backgrounds = new ArrayDeque<>(dataList);
-                }
-                if(config.equals(BGM_MODE)) {
-                    music = new ArrayDeque<>(dataList);
+                // TODO - make sure this still works
+                switch (config) {
+                    case CHARACTER_MODE:
+                        castList = new ArrayDeque<>(dataList);
+                        break;
+
+                    case BACKGROUND_MODE:
+                        backgrounds = new ArrayDeque<>(dataList);
+                        break;
+
+                    case BGM_MODE:
+                        music = new ArrayDeque<>(dataList);
+                        break;
+
+                    case SFX_MODE:
+                        sounds = new ArrayDeque<>(dataList);
+                        break;
                 }
             }
 
