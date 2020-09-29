@@ -22,7 +22,7 @@ public class StartButton extends BaseButton {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log(name, "Start button clicked");
-
+                pressedSound.play();
                 action(game);
 
                 return true;

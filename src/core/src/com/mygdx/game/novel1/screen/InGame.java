@@ -104,7 +104,6 @@ public class InGame implements Screen {
                 return line;
             }
 
-            // TODO - test this
             //TODO - may want separate this out into an audio handler
             else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
                 String track = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
@@ -114,7 +113,6 @@ public class InGame implements Screen {
                     }
                 }
 
-                // TODO - remove string from logic
                 if (!track.equals(ScriptCues.PAUSE_MUSIC)) {
                     currentBgm = bgm.get(track);
                     currentBgm.play();

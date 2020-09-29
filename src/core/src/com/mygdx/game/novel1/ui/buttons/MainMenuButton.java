@@ -16,7 +16,7 @@ public class MainMenuButton extends BaseButton {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log(name, "again");
-
+                pressedSound.play();
                 action(game);
 
                 return true;

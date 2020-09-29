@@ -15,12 +15,13 @@ public class LoadButton extends BaseButton{
 
     public LoadButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name){
         super(idleTexture, hoverTexture,game, name);
-
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log("Load Button", "Mouse entered bounds");
+
+                pressedSound.play();
 
                 action(game);
 
