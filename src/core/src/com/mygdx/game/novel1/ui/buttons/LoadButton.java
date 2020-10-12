@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Load;
+import com.mygdx.game.novel1.utils.AudioHandler;
 
 /**
  * Action of this button will change the screen to LoadScreen
@@ -21,7 +22,7 @@ public class LoadButton extends BaseButton{
 
                 Gdx.app.log("Load Button", "Mouse entered bounds");
 
-                pressedSound.play();
+                AudioHandler.playSound(buttonClick);
 
                 action(game);
 

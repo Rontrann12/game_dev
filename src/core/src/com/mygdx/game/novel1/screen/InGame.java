@@ -1,8 +1,6 @@
 package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.AssetReader;
+import com.mygdx.game.novel1.utils.AudioHandler;
 import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.screen.etc.Character;
 import com.mygdx.game.novel1.utils.StringUtilities;
@@ -37,9 +35,6 @@ public class InGame implements Screen {
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
-    private HashMap<String, Music> bgm;
-    private HashMap<String, Sound> sfx;
-    private Music currentBgm;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -102,25 +97,12 @@ public class InGame implements Screen {
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
             } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
                 return line;
-            }
-
-            //TODO - may want separate this out into an audio handler
-            else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-                String track = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-                if (currentBgm != null) {
-                    if (currentBgm.isPlaying()) {
-                        currentBgm.dispose();
-                    }
-                }
-
-                if (!track.equals(ScriptCues.PAUSE_MUSIC)) {
-                    currentBgm = bgm.get(track);
-                    currentBgm.play();
-                }
-            }
-            else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
+            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
+                AudioHandler.handleMusicCommand(audioCommand);
+            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
                 String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
-                sfx.get(sfxCue).play();
+                AudioHandler.playSound(sfxCue);
 
             }
         }
@@ -151,13 +133,14 @@ public class InGame implements Screen {
         ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
         ArrayDeque<String> bgmList = ConfigReader.getMusicList();
         ArrayDeque<String> sfxList = ConfigReader.getSoundList();
-        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList,sfxList);
+        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
 
         this.script = assets.getScript();
         this.backgrounds = assets.getBackgroundTextures();
-        this.bgm = assets.getTracks();
-        this.sfx = assets.getSounds();
+        AudioHandler.addSound(assets.getSounds());
+        AudioHandler.addMusic(assets.getTracks());
         HashMap<String, Texture> characters = assets.getCharacterTextures();
+
 
         for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
             Map.Entry<String, Texture> pair = stringTextureEntry;
@@ -192,10 +175,10 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
     }
 
-    // TODO - need to dispose of all sounds contained in sfx and bgm
     @Override
     public void dispose() {
-        this.bgm.get("beneath_the_mask").dispose();
+        AudioHandler.clearMusic();
+        AudioHandler.clearSounds();
     }
 
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.utils.AudioHandler;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
 
@@ -28,7 +29,7 @@ abstract class BaseButton extends Actor{
     public final NovelOne game;
     private final BitmapFont font;
     private final String label;
-    protected Sound pressedSound;
+    protected String buttonClick = "Click";
 
     public BaseButton(final TextureRegion idleButton, final TextureRegion hoverButton, final NovelOne game, final String name){
         this.idle = new Sprite(idleButton);
@@ -46,7 +47,8 @@ abstract class BaseButton extends Actor{
         String clickFilePath = StringUtilities.generateFileName(Paths.SFX_PATH, "click", FileTypes.AUDIO);
         manager.load(clickFilePath, Sound.class);
         manager.finishLoading();
-        this.pressedSound = manager.get(clickFilePath);
+//        this.pressedSound = manager.get(clickFilePath);
+        AudioHandler.addSound(buttonClick, (Sound) manager.get(clickFilePath));
 
         Gdx.app.log("Base Button", "in the base button constructor");
 
