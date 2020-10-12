@@ -15,6 +15,8 @@ Monika: Monika_turn_away
 
 Monika: Exit
 
+*footsteps_running*
+
 MC:
     "Okay, talk to you later"
 
@@ -26,7 +28,7 @@ MC:
     "Yuri!"
     "You're not dead?!"
 
-~something_else~
+~beneath_the_mask~
 
 Yuri: Yuri_scared
     "W-What?"
@@ -50,7 +52,7 @@ MC:
     "Anyways, looks like we got class"
 
 Yuri: Yuri_scared
-
+~PAUSE~
 MC:
     "Come on"
     "Let's go!"

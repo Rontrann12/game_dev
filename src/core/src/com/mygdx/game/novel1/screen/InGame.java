@@ -1,7 +1,6 @@
 package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,18 +8,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.dto.AssetsDTO;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.AssetReader;
+import com.mygdx.game.novel1.utils.AudioHandler;
 import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.screen.etc.Character;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
 import java.util.*;
 
-import static com.badlogic.gdx.Input.Keys.LEFT;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
@@ -35,8 +35,6 @@ public class InGame implements Screen {
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
-    private HashMap<String, Music> bgm;
-    private Music currentTrack;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -53,10 +51,10 @@ public class InGame implements Screen {
                 new InputAdapter() {
                     @Override
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                        try{
+                        try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
                             uiHandler.nextLine(processScriptLine());
-                        }catch( EmptyStackException e) {
+                        } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
 
@@ -97,12 +95,16 @@ public class InGame implements Screen {
                 String action = StringUtilities.getAction(line);
                 processAction(targetCharacter, action);
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            } else if (StringUtilities.isDialogue(line)) {
+            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
                 return line;
+            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
+                AudioHandler.handleMusicCommand(audioCommand);
+            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
+                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
+                AudioHandler.playSound(sfxCue);
+
             }
-//            else if( StringUtilities.isNewTrack()) {
-//                currentTrack = bgm.get(line);
-//            }
         }
         return null;
     }
@@ -130,12 +132,15 @@ public class InGame implements Screen {
         ArrayDeque<String> cast = ConfigReader.getCastList();
         ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
         ArrayDeque<String> bgmList = ConfigReader.getMusicList();
-        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList);
+        ArrayDeque<String> sfxList = ConfigReader.getSoundList();
+        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
 
         this.script = assets.getScript();
         this.backgrounds = assets.getBackgroundTextures();
-        this.bgm = assets.getTracks();
+        AudioHandler.addSound(assets.getSounds());
+        AudioHandler.addMusic(assets.getTracks());
         HashMap<String, Texture> characters = assets.getCharacterTextures();
+
 
         for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
             Map.Entry<String, Texture> pair = stringTextureEntry;
@@ -149,6 +154,8 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
+
+        // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -163,7 +170,6 @@ public class InGame implements Screen {
     public void show() {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        this.bgm.get("beneath_the_mask").play();
         int numActors = this.stage.getActors().size;
 
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
@@ -171,7 +177,8 @@ public class InGame implements Screen {
 
     @Override
     public void dispose() {
-        this.bgm.get("beneath_the_mask").dispose();
+        AudioHandler.clearMusic();
+        AudioHandler.clearSounds();
     }
 
 

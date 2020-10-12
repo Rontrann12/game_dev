@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Load;
+import com.mygdx.game.novel1.utils.AudioHandler;
 
 /**
  * Action of this button will change the screen to LoadScreen
@@ -15,12 +16,13 @@ public class LoadButton extends BaseButton{
 
     public LoadButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name){
         super(idleTexture, hoverTexture,game, name);
-
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log("Load Button", "Mouse entered bounds");
+
+                AudioHandler.playSound(buttonClick);
 
                 action(game);
 

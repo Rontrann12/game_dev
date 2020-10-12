@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.InGame;
+import com.mygdx.game.novel1.utils.AudioHandler;
 
 
 /**
@@ -22,7 +23,7 @@ public class StartButton extends BaseButton {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 Gdx.app.log(name, "Start button clicked");
-
+                AudioHandler.playSound(buttonClick);
                 action(game);
 
                 return true;

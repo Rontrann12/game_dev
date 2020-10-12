@@ -16,6 +16,7 @@ public class ConfigReader {
     private static ArrayDeque<String> backgrounds;
     private static ArrayDeque<String> castList;
     private static ArrayDeque<String> music;
+    private static ArrayDeque<String> sounds;
 
     /**
      * reads info on what assets should be loaded in the configuration for a scene
@@ -42,14 +43,23 @@ public class ConfigReader {
                 Gdx.app.log("ConfigReader::readCastList", "number of data points returned: " + dataArray.length);
                 dataList = Arrays.asList(dataArray);
 
-                if(config.equals(CHARACTER_MODE)) {
-                    castList = new ArrayDeque<>(dataList);
-                }
-                if(config.equals(BACKGROUND_MODE)) {
-                    backgrounds = new ArrayDeque<>(dataList);
-                }
-                if(config.equals(BGM_MODE)) {
-                    music = new ArrayDeque<>(dataList);
+                // TODO - make sure this still works
+                switch (config) {
+                    case CHARACTER_MODE:
+                        castList = new ArrayDeque<>(dataList);
+                        break;
+
+                    case BACKGROUND_MODE:
+                        backgrounds = new ArrayDeque<>(dataList);
+                        break;
+
+                    case BGM_MODE:
+                        music = new ArrayDeque<>(dataList);
+                        break;
+
+                    case SFX_MODE:
+                        sounds = new ArrayDeque<>(dataList);
+                        break;
                 }
             }
 
@@ -114,6 +124,10 @@ public class ConfigReader {
         }
 
         return mapping;
+    }
+
+    public static ArrayDeque<String> getSoundList(){
+        return sounds;
     }
 
     public static ArrayDeque<String> getCastList() {
