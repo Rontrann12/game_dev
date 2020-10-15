@@ -11,13 +11,10 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
-import com.mygdx.game.novel1.dto.AssetsDTO;
+import com.mygdx.game.novel1.typ.AssetsDTO;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
-import com.mygdx.game.novel1.utils.AssetReader;
-import com.mygdx.game.novel1.utils.AudioHandler;
-import com.mygdx.game.novel1.utils.ConfigReader;
+import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.screen.etc.Character;
-import com.mygdx.game.novel1.utils.StringUtilities;
 
 import java.util.*;
 
@@ -35,6 +32,7 @@ public class InGame implements Screen {
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
+    private ScriptTracker tracker;
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -42,7 +40,7 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new LinkedHashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, processScriptLine());
+        this.uiHandler = new InGameUI(stage, game, tracker.getNextLine().getDialogue());//processScriptLine());
         characterRenderGroup = new Group();
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -53,7 +51,7 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            uiHandler.nextLine(processScriptLine());
+                            //uiHandler.nextLine(processScriptLine());
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
@@ -66,7 +64,7 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                uiHandler.nextLine(processScriptLine());
+                                //uiHandler.nextLine(processScriptLine());
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
@@ -84,30 +82,30 @@ public class InGame implements Screen {
      *
      * @return
      */
-    private String processScriptLine() throws EmptyStackException {
-
-        int limit = 10;
-        for (int index = 0; index < limit; index++) {
-
-            String line = this.script.pop();
-            if (line.contains(Separators.KEYVALUE)) {
-                String targetCharacter = StringUtilities.getCharacterName(line);
-                String action = StringUtilities.getAction(line);
-                processAction(targetCharacter, action);
-                Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-                return line;
-            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-                AudioHandler.handleMusicCommand(audioCommand);
-            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
-                AudioHandler.playSound(sfxCue);
-
-            }
-        }
-        return null;
-    }
+//    private String processScriptLine() throws EmptyStackException {
+//
+//        int limit = 10;
+//        for (int index = 0; index < limit; index++) {
+//
+//            String line = this.script.pop();
+//            if (line.contains(Separators.KEYVALUE)) {
+//                String targetCharacter = StringUtilities.getCharacterName(line);
+//                String action = StringUtilities.getAction(line);
+//                processAction(targetCharacter, action);
+//                Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
+//            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
+//                return line;
+//            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+//                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
+//                AudioHandler.handleMusicCommand(audioCommand);
+//            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
+//                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
+//                AudioHandler.playSound(sfxCue);
+//
+//            }
+//        }
+//        return null;
+//    }
 
     private void processAction(String character, String action) {
 
@@ -135,7 +133,8 @@ public class InGame implements Screen {
         ArrayDeque<String> sfxList = ConfigReader.getSoundList();
         AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
 
-        this.script = assets.getScript();
+        //this.script = assets.getScript();
+        tracker = new ScriptTracker(assets.getScript());
         this.backgrounds = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());

@@ -6,8 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.novel1.constants.FileTypes;
-import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.dto.AssetsDTO;
+import com.mygdx.game.novel1.typ.AssetsDTO;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package com.mygdx.game.novel1.dto;
+package com.mygdx.game.novel1.typ;
 
 public class ScriptDTO {
 

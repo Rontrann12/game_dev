@@ -47,7 +47,6 @@ abstract class BaseButton extends Actor{
         String clickFilePath = StringUtilities.generateFileName(Paths.SFX_PATH, "click", FileTypes.AUDIO);
         manager.load(clickFilePath, Sound.class);
         manager.finishLoading();
-//        this.pressedSound = manager.get(clickFilePath);
         AudioHandler.addSound(buttonClick, (Sound) manager.get(clickFilePath));
 
         Gdx.app.log("Base Button", "in the base button constructor");
