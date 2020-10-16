@@ -50,7 +50,7 @@ public class AudioHandler {
      */
     public static void setCurrentTrack(String track) {
         Music music = musicList.get(track);
-        if (music != null) {
+        if (music != null && music != currentMusic) {
             if (currentMusic != null) {
                 currentMusic.dispose();
             }
@@ -85,7 +85,11 @@ public class AudioHandler {
      */
     public static void playSound(String key) {
         Gdx.app.log("AudioHandler::playSound", "playing sound: " + key);
-        soundsList.get(key).play(sfxVolume);
+
+        Sound sound = soundsList.get(key);
+        if(sound != null) {
+            sound.play();
+        }
     }
 
     /**

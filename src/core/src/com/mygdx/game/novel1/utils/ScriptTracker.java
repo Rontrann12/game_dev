@@ -3,13 +3,13 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.constants.StringWrappers;
-import com.mygdx.game.novel1.typ.ScriptLine;
+import com.mygdx.game.novel1.typ.SnapShot;
 
 import java.util.ArrayDeque;
 import java.util.EmptyStackException;
 
 public class ScriptTracker {
-    private ArrayDeque<ScriptLine> scriptLogger;
+    private ArrayDeque<SnapShot> scriptLogger;
     private ArrayDeque<String> script;
     private String currentMusic = null;
 
@@ -26,26 +26,27 @@ public class ScriptTracker {
      * TODO - make sure that snap shots are being logged when needed (should break whenever new dialogue is received?)
      * @return
      */
-    public ScriptLine getNextLine() {
-        ScriptLine snapshot = new ScriptLine();
+    public SnapShot getNextLine() {
+        SnapShot snapshot = new SnapShot();
         int limit = 10;
         for(int index = 0 ; index < limit; index ++) {
+            Gdx.app.log("ScriptTracker::getNextLine", "popping new line from script");
             String line = this.script.pop();
 
             if(line.contains(Separators.KEYVALUE)) {
                 snapshot.setCharacter(StringUtilities.getCharacterName(line));
-                snapshot.setAction(StringUtilities.getAction(line));
+                snapshot.setAction(StringUtilities.getAction(line));    //TODO - multiple actions for difference characters need to be handled
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + snapshot.getCharacter() + " action: " + snapshot.getAction());
-            }
-            else if(StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-                snapshot.setDialogue(line);
-                break;
             }
             else if(StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
                 currentMusic = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
             }
             else if(StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
                 snapshot.setSound(StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER));
+            }
+            else if(StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
+                snapshot.setDialogue(line);
+                break;
             }
         }
         snapshot.setMusic(currentMusic);
@@ -58,9 +59,9 @@ public class ScriptTracker {
     /**
      * adds a new event (sounds, music played, and line) at a given point in the script
      */
-    private void logScriptEvent(ScriptLine snapshot) {
+    private void logScriptEvent(SnapShot snapshot) {
         Gdx.app.log("ScriptTracker::logScriptEvent", "line: " + snapshot.getDialogue() +
-                ", music: " +snapshot.getMusic() +
+                ", music: " +snapshot.getBGMCommand() +
                 ", sound: " + snapshot.getSound() +
                 ", character: " + snapshot.getCharacter() +
                 ", action: " + snapshot.getAction());

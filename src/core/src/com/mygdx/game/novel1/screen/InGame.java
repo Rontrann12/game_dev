@@ -8,10 +8,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.typ.AssetsDTO;
+import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.screen.etc.Character;
@@ -40,7 +39,7 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new LinkedHashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, tracker.getNextLine().getDialogue());//processScriptLine());
+        this.uiHandler = new InGameUI(stage, game, stepForward());//processScriptLine());
         characterRenderGroup = new Group();
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -52,6 +51,7 @@ public class InGame implements Screen {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
                             //uiHandler.nextLine(processScriptLine());
+                            uiHandler.nextLine(stepForward());
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
@@ -65,6 +65,7 @@ public class InGame implements Screen {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
                                 //uiHandler.nextLine(processScriptLine());
+                                uiHandler.nextLine(stepForward());
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
@@ -77,39 +78,25 @@ public class InGame implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+
     /**
-     * This may occur when setting new onscreen sprite followed by animation of another sprite
+     * progresses the game and the script forward
      *
      * @return
      */
-//    private String processScriptLine() throws EmptyStackException {
-//
-//        int limit = 10;
-//        for (int index = 0; index < limit; index++) {
-//
-//            String line = this.script.pop();
-//            if (line.contains(Separators.KEYVALUE)) {
-//                String targetCharacter = StringUtilities.getCharacterName(line);
-//                String action = StringUtilities.getAction(line);
-//                processAction(targetCharacter, action);
-//                Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-//            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-//                return line;
-//            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-//                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-//                AudioHandler.handleMusicCommand(audioCommand);
-//            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-//                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
-//                AudioHandler.playSound(sfxCue);
-//
-//            }
-//        }
-//        return null;
-//    }
+    private String stepForward() {
+        SnapShot snapshot = tracker.getNextLine();
 
-    private void processAction(String character, String action) {
+        handleCastOnStage(snapshot.getCharacter(), snapshot.getAction());
+        AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
+        AudioHandler.playSound(snapshot.getSound());
+        return snapshot.getDialogue();
+    }
+
+    private void handleCastOnStage(String character, String action) {
 
         Character target = charactersInScene.get(character);
+        Gdx.app.log("InGame::setAction", "received new action " + action + " for character " + character);
         try {
 
             if (!action.equals("Exit")) {

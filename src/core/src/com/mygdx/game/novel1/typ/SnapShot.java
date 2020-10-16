@@ -1,13 +1,13 @@
 package com.mygdx.game.novel1.typ;
 
-public class ScriptLine {
+public class SnapShot {
     private String dialogue;
     private String music;
     private String sound;
     private String character;
     private String action;
 
-    public ScriptLine () {
+    public SnapShot() {
         this.dialogue = null;
         this.music = null;
         this.sound = null;
@@ -15,7 +15,7 @@ public class ScriptLine {
         this.action = null;
     }
 
-    public ScriptLine (String dialogue, String music, String sound, String character, String action) {
+    public SnapShot(String dialogue, String music, String sound, String character, String action) {
         this.dialogue = dialogue;
         this.music = music;
         this.sound = sound;
@@ -47,7 +47,7 @@ public class ScriptLine {
         return this.dialogue;
     }
 
-    public String getMusic() {
+    public String getBGMCommand() {
         return this.music;
     }
 
