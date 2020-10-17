@@ -9,11 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.typ.AssetsDTO;
+import com.mygdx.game.novel1.typ.CharacterActionMap;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
-import com.mygdx.game.novel1.screen.etc.Character;
+import com.mygdx.game.novel1.typ.Character;
 
 import java.util.*;
 
@@ -87,30 +89,53 @@ public class InGame implements Screen {
     private String stepForward() {
         SnapShot snapshot = tracker.getNextLine();
 
-        handleCastOnStage(snapshot.getCharacter(), snapshot.getAction());
+        handleCastOnStage(snapshot.getAction());
         AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
         AudioHandler.playSound(snapshot.getSound());
         return snapshot.getDialogue();
     }
 
-    private void handleCastOnStage(String character, String action) {
+    private void handleCastOnStage(ArrayDeque<CharacterActionMap> actionRequests) {
+        while (!actionRequests.isEmpty()) {
+            CharacterActionMap mapping = actionRequests.pop();
+            Character targetCharacter = charactersInScene.get(mapping.getCharacter());
+            String action = mapping.getAction();
 
-        Character target = charactersInScene.get(character);
-        Gdx.app.log("InGame::setAction", "received new action " + action + " for character " + character);
-        try {
+            Gdx.app.log("InGame::handleCastOnStage", "character: " + targetCharacter + " action: " + action);
 
-            if (!action.equals("Exit")) {
-                Gdx.app.log("InGame::processAction", "adding " + character + " from screen");
-                target.setExpression(action);
-                characterRenderGroup.addActor(target);
-            } else {
-                Gdx.app.log("InGame::processAction", "removing " + character + " from screen");
-                target.remove();
+            try {
+                if (!action.equals(ScriptCues.CHARACTER_EXIT)) {
+                    Gdx.app.log("InGame::handleCastOnStage", "adding " + targetCharacter + " to screen");
+                    targetCharacter.setExpression(action);
+                    characterRenderGroup.addActor(targetCharacter);
+                } else {
+                    Gdx.app.log("InGame::handleCastOnStage", "removing" + targetCharacter + " from screen");
+                    targetCharacter.remove();
+                }
+            } catch (NullPointerException e) {
+                Gdx.app.log("InGame::handleCastOnStage", e.getMessage());
             }
-        } catch (NullPointerException e) {
-            Gdx.app.log("InGame::processAction", "no action found, skipping");
         }
     }
+
+//    private void handleCastOnStage1(ArrayDeque<String> action) {
+//
+//        Character target = charactersInScene.get(character);
+//        Gdx.app.log("InGame::setAction", "received new action " + action + " for character " + character);
+//        try {
+//
+//            if (!action.equals("Exit")) {
+//                Gdx.app.log("InGame::processAction", "adding " + character + " from screen");
+//                target.setExpression(action);
+//                characterRenderGroup.addActor(target);
+//            } else {
+//                Gdx.app.log("InGame::processAction", "removing " + character + " from screen");
+//                target.remove();
+//            }
+//        } catch (NullPointerException e) {
+//            Gdx.app.log("InGame::processAction", "no action found, skipping");
+//        }
+//    }
 
     private void configure() {
         ConfigReader.configNewScene(path);

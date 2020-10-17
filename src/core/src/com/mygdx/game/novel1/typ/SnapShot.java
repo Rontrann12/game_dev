@@ -1,11 +1,14 @@
 package com.mygdx.game.novel1.typ;
 
+
+import java.util.ArrayDeque;
+
 public class SnapShot {
     private String dialogue;
     private String music;
     private String sound;
     private String character;
-    private String action;
+    private ArrayDeque<CharacterActionMap> action;
 
     public SnapShot() {
         this.dialogue = null;
@@ -15,7 +18,7 @@ public class SnapShot {
         this.action = null;
     }
 
-    public SnapShot(String dialogue, String music, String sound, String character, String action) {
+    public SnapShot(String dialogue, String music, String sound, String character, ArrayDeque<CharacterActionMap> action) {
         this.dialogue = dialogue;
         this.music = music;
         this.sound = sound;
@@ -39,7 +42,7 @@ public class SnapShot {
         this.character = character;
     }
 
-    public void setAction(String action) {
+    public void setAction(ArrayDeque<CharacterActionMap> action) {
         this.action = action;
     }
 
@@ -59,7 +62,7 @@ public class SnapShot {
         return this.character;
     }
 
-    public String getAction() {
+    public ArrayDeque<CharacterActionMap> getAction() {
         return this.action;
     }
 

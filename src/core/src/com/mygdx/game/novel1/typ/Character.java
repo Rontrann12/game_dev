@@ -1,4 +1,4 @@
-package com.mygdx.game.novel1.screen.etc;
+package com.mygdx.game.novel1.typ;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

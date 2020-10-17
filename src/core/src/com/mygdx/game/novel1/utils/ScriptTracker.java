@@ -3,6 +3,7 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.constants.StringWrappers;
+import com.mygdx.game.novel1.typ.CharacterActionMap;
 import com.mygdx.game.novel1.typ.SnapShot;
 
 import java.util.ArrayDeque;
@@ -28,14 +29,14 @@ public class ScriptTracker {
      */
     public SnapShot getNextLine() {
         SnapShot snapshot = new SnapShot();
+        ArrayDeque<CharacterActionMap> actionRequests = new ArrayDeque<>();
         int limit = 10;
         for(int index = 0 ; index < limit; index ++) {
             Gdx.app.log("ScriptTracker::getNextLine", "popping new line from script");
             String line = this.script.pop();
 
             if(line.contains(Separators.KEYVALUE)) {
-                snapshot.setCharacter(StringUtilities.getCharacterName(line));
-                snapshot.setAction(StringUtilities.getAction(line));    //TODO - multiple actions for difference characters need to be handled
+                actionRequests.push(new CharacterActionMap(StringUtilities.getCharacterName(line), StringUtilities.getAction(line)));
                 Gdx.app.log("InGame::processScriptLine", "target Character: " + snapshot.getCharacter() + " action: " + snapshot.getAction());
             }
             else if(StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
@@ -50,6 +51,7 @@ public class ScriptTracker {
             }
         }
         snapshot.setMusic(currentMusic);
+        snapshot.setAction(actionRequests);
 
         logScriptEvent(snapshot);
         return snapshot;
