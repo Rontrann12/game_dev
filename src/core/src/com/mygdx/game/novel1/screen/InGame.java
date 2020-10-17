@@ -118,25 +118,6 @@ public class InGame implements Screen {
         }
     }
 
-//    private void handleCastOnStage1(ArrayDeque<String> action) {
-//
-//        Character target = charactersInScene.get(character);
-//        Gdx.app.log("InGame::setAction", "received new action " + action + " for character " + character);
-//        try {
-//
-//            if (!action.equals("Exit")) {
-//                Gdx.app.log("InGame::processAction", "adding " + character + " from screen");
-//                target.setExpression(action);
-//                characterRenderGroup.addActor(target);
-//            } else {
-//                Gdx.app.log("InGame::processAction", "removing " + character + " from screen");
-//                target.remove();
-//            }
-//        } catch (NullPointerException e) {
-//            Gdx.app.log("InGame::processAction", "no action found, skipping");
-//        }
-//    }
-
     private void configure() {
         ConfigReader.configNewScene(path);
         ArrayDeque<String> cast = ConfigReader.getCastList();
