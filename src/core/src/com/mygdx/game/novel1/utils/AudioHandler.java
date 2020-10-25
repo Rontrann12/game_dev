@@ -8,8 +8,8 @@ import com.mygdx.game.novel1.constants.ScriptCues;
 import java.util.HashMap;
 
 public class AudioHandler {
-    private static float bgmVolume = 0.1f;
-    private static float sfxVolume = 0.9f;
+    private static float bgmVolume = 0.2f;
+    private static float sfxVolume = 1.0f;
     private static Music currentMusic;
     private static HashMap<String, Sound> soundsList = new HashMap();
     private static HashMap<String, Music> musicList = new HashMap();
@@ -50,7 +50,7 @@ public class AudioHandler {
      */
     public static void setCurrentTrack(String track) {
         Music music = musicList.get(track);
-        if (music != null) {
+        if (music != null && music != currentMusic) {
             if (currentMusic != null) {
                 currentMusic.dispose();
             }
@@ -85,7 +85,11 @@ public class AudioHandler {
      */
     public static void playSound(String key) {
         Gdx.app.log("AudioHandler::playSound", "playing sound: " + key);
-        soundsList.get(key).play(sfxVolume);
+
+        Sound sound = soundsList.get(key);
+        if(sound != null) {
+            sound.play();
+        }
     }
 
     /**

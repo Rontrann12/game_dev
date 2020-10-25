@@ -5,19 +5,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.StringWrappers;
 import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.constants.Separators;
-import com.mygdx.game.novel1.dto.AssetsDTO;
+import com.mygdx.game.novel1.typ.AssetsDTO;
+import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
-import com.mygdx.game.novel1.utils.AssetReader;
-import com.mygdx.game.novel1.utils.AudioHandler;
-import com.mygdx.game.novel1.utils.ConfigReader;
-import com.mygdx.game.novel1.screen.etc.Character;
-import com.mygdx.game.novel1.utils.StringUtilities;
+import com.mygdx.game.novel1.utils.*;
+import com.mygdx.game.novel1.typ.Character;
 
 import java.util.*;
 
@@ -35,6 +32,9 @@ public class InGame implements Screen {
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
+    private ScriptTracker tracker;
+    private LinkedHashMap<String, String> visibleCharacters;
+
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -42,7 +42,7 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new LinkedHashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, processScriptLine());
+        this.uiHandler = new InGameUI(stage, game, stepForward(), this);
         characterRenderGroup = new Group();
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -53,7 +53,8 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            uiHandler.nextLine(processScriptLine());
+                            //uiHandler.nextLine(processScriptLine());
+                            uiHandler.nextLine(stepForward());
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
@@ -66,7 +67,8 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                uiHandler.nextLine(processScriptLine());
+                                //uiHandler.nextLine(processScriptLine());
+                                uiHandler.nextLine(stepForward());
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
@@ -79,52 +81,32 @@ public class InGame implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+
     /**
-     * This may occur when setting new onscreen sprite followed by animation of another sprite
+     * progresses the game and the script forward
      *
      * @return
      */
-    private String processScriptLine() throws EmptyStackException {
+    private String stepForward() {
+        SnapShot snapshot = tracker.getNextLine();
+        visibleCharacters = snapshot.getAction();
+        AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
+        AudioHandler.playSound(snapshot.getSound());
+        return snapshot.getDialogue().getLine();
 
-        int limit = 10;
-        for (int index = 0; index < limit; index++) {
-
-            String line = this.script.pop();
-            if (line.contains(Separators.KEYVALUE)) {
-                String targetCharacter = StringUtilities.getCharacterName(line);
-                String action = StringUtilities.getAction(line);
-                processAction(targetCharacter, action);
-                Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-                return line;
-            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-                AudioHandler.handleMusicCommand(audioCommand);
-            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
-                AudioHandler.playSound(sfxCue);
-
-            }
-        }
-        return null;
     }
 
-    private void processAction(String character, String action) {
-
-        Character target = charactersInScene.get(character);
-        try {
-
-            if (!action.equals("Exit")) {
-                Gdx.app.log("InGame::processAction", "adding " + character + " from screen");
-                target.setExpression(action);
-                characterRenderGroup.addActor(target);
-            } else {
-                Gdx.app.log("InGame::processAction", "removing " + character + " from screen");
-                target.remove();
-            }
-        } catch (NullPointerException e) {
-            Gdx.app.log("InGame::processAction", "no action found, skipping");
-        }
+    /**
+     * Moves the game and the script back
+     *
+     * @return
+     */
+    public void stepBack() {
+        SnapShot previous = tracker.traceScriptBackwards();
+        uiHandler.nextLine(previous.getDialogue().getLine());
+        visibleCharacters = previous.getAction();
+        AudioHandler.handleMusicCommand(previous.getBGMCommand());
+        AudioHandler.playSound(previous.getSound());
     }
 
     private void configure() {
@@ -135,7 +117,8 @@ public class InGame implements Screen {
         ArrayDeque<String> sfxList = ConfigReader.getSoundList();
         AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
 
-        this.script = assets.getScript();
+        //this.script = assets.getScript();
+        tracker = new ScriptTracker(assets.getScript());
         this.backgrounds = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
@@ -154,6 +137,19 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
+
+        for (Actor entry : characterRenderGroup.getChildren()) {
+            Character character = (Character) entry;
+            if(!visibleCharacters.containsKey(character.getName())){
+                character.remove();
+            }
+        }
+
+        for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
+            Character targetCharacter = charactersInScene.get(entry.getKey());
+            targetCharacter.setExpression(entry.getValue());
+            characterRenderGroup.addActor(targetCharacter);
+        }
 
         // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));

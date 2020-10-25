@@ -1,4 +1,4 @@
-package com.mygdx.game.novel1.dto;
+package com.mygdx.game.novel1.typ;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
