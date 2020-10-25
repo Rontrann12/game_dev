@@ -1,74 +1,143 @@
 package com.mygdx.game.novel1.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.constants.StringWrappers;
-import com.mygdx.game.novel1.typ.CharacterActionMap;
 import com.mygdx.game.novel1.typ.SnapShot;
+import com.mygdx.game.novel1.typ.SpeakerMap;
 
-import java.util.ArrayDeque;
-import java.util.EmptyStackException;
+import java.util.*;
 
 public class ScriptTracker {
-    private ArrayDeque<SnapShot> scriptLogger;
+    private ArrayList<SnapShot> scriptLogger;
     private ArrayDeque<String> script;
     private String currentMusic = null;
+    private String currentSpeaker = null;
+    private int historyIndex;
+    private String currentAction = null;
+    private LinkedHashMap<String, String> activeCharacters;
 
     public ScriptTracker(ArrayDeque<String> script) {
-        this.scriptLogger = new ArrayDeque<>();
+        this.scriptLogger = new ArrayList<>();
         this.script = script;
+        this.historyIndex = -1;
+        this.activeCharacters = new LinkedHashMap<>();
     }
 
     /**
      * Return the next line of dialogue
-     *
-     * TODO - how should this handle the actions of multiple characters on screen? (create a new class to map character to action)
-     * TODO - how will the name of the speaker be displayed?
-     * TODO - make sure that snap shots are being logged when needed (should break whenever new dialogue is received?)
      * @return
      */
     public SnapShot getNextLine() {
-        SnapShot snapshot = new SnapShot();
-        ArrayDeque<CharacterActionMap> actionRequests = new ArrayDeque<>();
-        int limit = 10;
-        for(int index = 0 ; index < limit; index ++) {
-            Gdx.app.log("ScriptTracker::getNextLine", "popping new line from script");
-            String line = this.script.pop();
 
-            if(line.contains(Separators.KEYVALUE)) {
-                actionRequests.push(new CharacterActionMap(StringUtilities.getCharacterName(line), StringUtilities.getAction(line)));
-                Gdx.app.log("InGame::processScriptLine", "target Character: " + snapshot.getCharacter() + " action: " + snapshot.getAction());
-            }
-            else if(StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-                currentMusic = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-            }
-            else if(StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-                snapshot.setSound(StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER));
-            }
-            else if(StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-                snapshot.setDialogue(line);
-                break;
+        SnapShot snap;
+        if (historyIndex < scriptLogger.size() - 1) {
+            historyIndex++;
+            snap = scriptLogger.get(historyIndex);
+
+        } else {
+            snap = getNewLineFromScript();
+            logScriptEvent(snap);
+        }
+
+        return snap;
+
+    }
+
+    /**
+     * loads in a new line from the script
+     *
+     * @return
+     */
+    private SnapShot getNewLineFromScript() {
+
+        SpeakerMap dialogue = null;
+        String soundCue = null;
+
+        while (dialogue == null) {
+            String scriptLine = this.script.pop();
+            handleMusicChange(scriptLine);
+            soundCue = handleSoundCue(scriptLine, soundCue);
+            handleCharacterCue(scriptLine);
+            dialogue = handleDialogue(scriptLine);
+        }
+
+        LinkedHashMap<String, String> deepCopy = new LinkedHashMap<>();
+
+        for (Map.Entry<String, String> entry : activeCharacters.entrySet()) {
+            deepCopy.put(entry.getKey(), entry.getValue());
+        }
+
+        return new SnapShot(dialogue, this.currentMusic, soundCue, this.currentSpeaker, deepCopy);
+    }
+
+    private void handleCharacterCue(String line) {
+
+        if (line.contains(Separators.KEYVALUE)) {
+            this.currentSpeaker = StringUtilities.getCharacterName(line);
+            this.currentAction = StringUtilities.getAction(line);
+
+            try {
+                if (currentAction.equals(ScriptCues.CHARACTER_EXIT)) {
+                    Gdx.app.log("ScriptTracker::handleCharacterCue", "Character exited, removing " + currentSpeaker);
+                    activeCharacters.remove(this.currentSpeaker);
+
+                } else {
+                    activeCharacters.put(this.currentSpeaker,this.currentAction);
+                }
+            } catch (NullPointerException e) {
+                Gdx.app.log("ScriptTracker::handleCharacterCue", "No action found, no issue: " + e.getMessage());
             }
         }
-        snapshot.setMusic(currentMusic);
-        snapshot.setAction(actionRequests);
+    }
 
-        logScriptEvent(snapshot);
-        return snapshot;
+    private SpeakerMap handleDialogue(String line) {
+        if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
+            return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, StringWrappers.DIALOGUE_CONTAINER));
+        }
+        return null;
+    }
 
+    private String handleSoundCue(String line, String soundCue) {
+        if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
+            soundCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
+        }
+        return soundCue;
+    }
+
+    private String handleMusicChange(String line) {
+        if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
+            this.currentMusic = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
+        }
+        return this.currentMusic;
     }
 
     /**
      * adds a new event (sounds, music played, and line) at a given point in the script
      */
-    private void logScriptEvent(SnapShot snapshot) {
+    public void logScriptEvent(SnapShot snapshot) {
         Gdx.app.log("ScriptTracker::logScriptEvent", "line: " + snapshot.getDialogue() +
-                ", music: " +snapshot.getBGMCommand() +
+                ", music: " + snapshot.getBGMCommand() +
+                ", sound: " + snapshot.getSound() +
+                ", character: " + snapshot.getCharacter() +
+                ", action: " + snapshot.getAction().size());
+
+        SnapShot copy = new SnapShot(snapshot);
+        scriptLogger.add(copy);
+        historyIndex++;
+    }
+
+    public SnapShot traceScriptBackwards() {
+        historyIndex--;
+        SnapShot snapshot = scriptLogger.get(historyIndex);
+        Gdx.app.log("ScriptTracker::traceScriptBackwards", "line: " + snapshot.getDialogue() +
+                ", music: " + snapshot.getBGMCommand() +
                 ", sound: " + snapshot.getSound() +
                 ", character: " + snapshot.getCharacter() +
                 ", action: " + snapshot.getAction());
 
-        scriptLogger.push(snapshot);
+        return snapshot;
     }
 
     /**
@@ -77,33 +146,5 @@ public class ScriptTracker {
     public void getHistory() {
 
     }
-
-    private String processScriptLine() throws EmptyStackException {
-
-        int limit = 10;
-        for (int index = 0; index < limit; index++) {
-
-            String line = this.script.pop();
-            if (line.contains(Separators.KEYVALUE)) {
-                String targetCharacter = StringUtilities.getCharacterName(line);
-                String action = StringUtilities.getAction(line);
-                //processAction(targetCharacter, action);
-                Gdx.app.log("InGame::processScriptLine", "target Character: " + targetCharacter + " action: " + action);
-            } else if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-                return line;
-            } else if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-                String audioCommand = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
-                AudioHandler.handleMusicCommand(audioCommand);
-            } else if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-                String sfxCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
-                AudioHandler.playSound(sfxCue);
-
-            }
-        }
-        return null;
-    }
-
-
-
 }
 

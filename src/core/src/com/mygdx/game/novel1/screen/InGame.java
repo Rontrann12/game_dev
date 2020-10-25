@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.typ.AssetsDTO;
-import com.mygdx.game.novel1.typ.CharacterActionMap;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
@@ -34,6 +33,8 @@ public class InGame implements Screen {
     private Group characterRenderGroup;
     private HashMap<String, Texture> backgrounds;
     private ScriptTracker tracker;
+    private LinkedHashMap<String, String> visibleCharacters;
+
 
     public InGame(final NovelOne game) {
         this.game = game;
@@ -41,7 +42,7 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new LinkedHashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, stepForward());//processScriptLine());
+        this.uiHandler = new InGameUI(stage, game, stepForward(), this);
         characterRenderGroup = new Group();
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -88,34 +89,24 @@ public class InGame implements Screen {
      */
     private String stepForward() {
         SnapShot snapshot = tracker.getNextLine();
-
-        handleCastOnStage(snapshot.getAction());
+        visibleCharacters = snapshot.getAction();
         AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
         AudioHandler.playSound(snapshot.getSound());
-        return snapshot.getDialogue();
+        return snapshot.getDialogue().getLine();
+
     }
 
-    private void handleCastOnStage(ArrayDeque<CharacterActionMap> actionRequests) {
-        while (!actionRequests.isEmpty()) {
-            CharacterActionMap mapping = actionRequests.pop();
-            Character targetCharacter = charactersInScene.get(mapping.getCharacter());
-            String action = mapping.getAction();
-
-            Gdx.app.log("InGame::handleCastOnStage", "character: " + targetCharacter + " action: " + action);
-
-            try {
-                if (!action.equals(ScriptCues.CHARACTER_EXIT)) {
-                    Gdx.app.log("InGame::handleCastOnStage", "adding " + targetCharacter + " to screen");
-                    targetCharacter.setExpression(action);
-                    characterRenderGroup.addActor(targetCharacter);
-                } else {
-                    Gdx.app.log("InGame::handleCastOnStage", "removing" + targetCharacter + " from screen");
-                    targetCharacter.remove();
-                }
-            } catch (NullPointerException e) {
-                Gdx.app.log("InGame::handleCastOnStage", e.getMessage());
-            }
-        }
+    /**
+     * Moves the game and the script back
+     *
+     * @return
+     */
+    public void stepBack() {
+        SnapShot previous = tracker.traceScriptBackwards();
+        uiHandler.nextLine(previous.getDialogue().getLine());
+        visibleCharacters = previous.getAction();
+        AudioHandler.handleMusicCommand(previous.getBGMCommand());
+        AudioHandler.playSound(previous.getSound());
     }
 
     private void configure() {
@@ -146,6 +137,19 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
+
+        for (Actor entry : characterRenderGroup.getChildren()) {
+            Character character = (Character) entry;
+            if(!visibleCharacters.containsKey(character.getName())){
+                character.remove();
+            }
+        }
+
+        for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
+            Character targetCharacter = charactersInScene.get(entry.getKey());
+            targetCharacter.setExpression(entry.getValue());
+            characterRenderGroup.addActor(targetCharacter);
+        }
 
         // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));

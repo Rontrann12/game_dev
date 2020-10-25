@@ -2,13 +2,14 @@ package com.mygdx.game.novel1.typ;
 
 
 import java.util.ArrayDeque;
+import java.util.LinkedHashMap;
 
 public class SnapShot {
-    private String dialogue;
+    private SpeakerMap dialogue;
     private String music;
     private String sound;
     private String character;
-    private ArrayDeque<CharacterActionMap> action;
+    private LinkedHashMap<String, String> action;
 
     public SnapShot() {
         this.dialogue = null;
@@ -18,7 +19,15 @@ public class SnapShot {
         this.action = null;
     }
 
-    public SnapShot(String dialogue, String music, String sound, String character, ArrayDeque<CharacterActionMap> action) {
+    public SnapShot(SnapShot snapshot){
+        this.dialogue = snapshot.getDialogue();
+        this.music = snapshot.getBGMCommand();
+        this.sound = snapshot.getSound();
+        this.character = snapshot.getCharacter();
+        this.action = snapshot.getAction();
+    }
+
+    public SnapShot(SpeakerMap dialogue, String music, String sound, String character, LinkedHashMap<String, String> action) {
         this.dialogue = dialogue;
         this.music = music;
         this.sound = sound;
@@ -26,7 +35,7 @@ public class SnapShot {
         this.action = action;
     }
 
-    public void setDialogue(String line) {
+    public void setDialogue(SpeakerMap line) {
         this.dialogue = line;
     }
 
@@ -42,11 +51,11 @@ public class SnapShot {
         this.character = character;
     }
 
-    public void setAction(ArrayDeque<CharacterActionMap> action) {
+    public void setAction(LinkedHashMap<String, String> action) {
         this.action = action;
     }
 
-    public String getDialogue() {
+    public SpeakerMap getDialogue() {
         return this.dialogue;
     }
 
@@ -62,7 +71,7 @@ public class SnapShot {
         return this.character;
     }
 
-    public ArrayDeque<CharacterActionMap> getAction() {
+    public LinkedHashMap<String, String> getAction() {
         return this.action;
     }
 

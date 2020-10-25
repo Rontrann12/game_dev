@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.ui.buttons.BackButton;
 import com.mygdx.game.novel1.ui.buttons.LoadButton;
 import com.mygdx.game.novel1.ui.buttons.StartButton;
 

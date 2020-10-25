@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.ui.buttons.ChoiceButton;
-import com.mygdx.game.novel1.ui.buttons.LoadButton;
-import com.mygdx.game.novel1.ui.buttons.MainMenuButton;
+import com.mygdx.game.novel1.screen.InGame;
+import com.mygdx.game.novel1.ui.buttons.*;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
+import com.mygdx.game.novel1.utils.ScriptTracker;
 
 
 public class InGameUI extends BaseLayout{
@@ -17,13 +17,19 @@ public class InGameUI extends BaseLayout{
     private String line;
     private Dialogue box;
     private TextureRegion textBoxImage;
+    private InGame screen;
 
-    public InGameUI(Stage stage, NovelOne game, String initialLine) {
+    public InGameUI(Stage stage, NovelOne game, String initialLine, InGame screen) {
         super(stage, game);
         this.line = initialLine;
+        this.screen = screen;
     }
 
     @Override
+    /**
+     * TODO - should transfer button handling to the screen class
+     * TODO - should return a list of buttons to be tracked of by the screen
+     */
     public void generateUI() {
 
         Texture texture = super.getAssets();
@@ -33,7 +39,8 @@ public class InGameUI extends BaseLayout{
         this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
         this.box = new Dialogue(this.textBoxImage, line);
 
-        TextureRegion backImage = new TextureRegion(texture, 0, 0, 62, 20);
+        TextureRegion backHover = new TextureRegion(texture, 0, 0, 62, 20);
+        TextureRegion backIdle = new TextureRegion(texture, 62, 0, 62, 20);
         TextureRegion historyImage = new TextureRegion(texture, 452, 0, 80, 26);
         TextureRegion loadIdle = new TextureRegion(texture, 186, 0, 62, 20);
         TextureRegion loadHover = new TextureRegion(texture, 124, 0, 62, 20);
@@ -51,10 +58,13 @@ public class InGameUI extends BaseLayout{
         MainMenuButton mainButton = new MainMenuButton(mainIdle, mainHover, game, null);
         //ChoiceButton choice1 = new ChoiceButton(buttonIdle, buttonHover, game, "Yes Baby!");
         //ChoiceButton choice2 = new ChoiceButton(buttonIdle, buttonHover, game, "No Hun");
-
+        BackButton backButton = new BackButton(backIdle, backHover, game, null, screen);
         mainButton.spritePos(100, -5);
+        backButton.spritePos(250, -5);
         miniButtons.setX(150);
         miniButtons.setY(15);
+
+
 
 //        choice1.spritePos(0, 80);
 //        choiceButtons.setX(400);
@@ -63,6 +73,7 @@ public class InGameUI extends BaseLayout{
 //        choiceButtons.addActor(choice2);
 
         //draw option icons in the textbox
+        miniButtons.addActor(backButton);
         miniButtons.addActor(loadButton);
         miniButtons.addActor(mainButton);
 
@@ -71,6 +82,7 @@ public class InGameUI extends BaseLayout{
         stage.addActor(box);
         stage.addActor(miniButtons);
         stage.addActor(choiceButtons);
+
     }
 
     public void nextLine(String line) {
