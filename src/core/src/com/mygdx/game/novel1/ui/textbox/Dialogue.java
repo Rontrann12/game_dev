@@ -5,16 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Dialogue extends BaseTextBox {
 
-    private String character;
-
     public Dialogue(TextureRegion textBoxTexture) {
         super(textBoxTexture);
     }
 
-    public Dialogue(TextureRegion textBoxTexture, String dialogue) {
+    public Dialogue(TextureRegion textBoxTexture, String speaker, String dialogue) {
         super(textBoxTexture);
         super.dialogue = dialogue;
         super.text = new BitmapFont();
+        super.speakerText = new BitmapFont();
+        super.speaker = speaker;
     }
 
     public void setAlpha(float alpha) {
@@ -22,8 +22,9 @@ public class Dialogue extends BaseTextBox {
         super.textBoxImage.setAlpha(alpha);
     }
 
-    public void updateLine(String line) {
+    public void updateLine(String speaker, String line) {
         super.dialogue = line;
+        super.speaker = speaker;
     }
 
 }
