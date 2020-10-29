@@ -10,8 +10,10 @@ abstract class BaseTextBox extends Actor {
 
     protected String[] script;
     protected String dialogue;
+    protected String speaker;
     protected Sprite textBoxImage;
     protected BitmapFont text;
+    protected BitmapFont speakerText;
 
     public BaseTextBox(TextureRegion textBoxTexture) {
         textBoxImage = new Sprite(textBoxTexture);
@@ -34,12 +36,21 @@ abstract class BaseTextBox extends Actor {
         return textBoxImage.getY() + textBoxImage.getHeight()/2;
     }
 
+    private float speakerX() {
+        return textBoxImage.getX() + textBoxImage.getWidth()/4;
+    }
+
+    private float speakerY() {
+        return textBoxImage.getY() + 3*(textBoxImage.getHeight()/4);
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         textBoxImage.draw(batch);
 
         if (dialogue != null) {
             text.draw(batch, dialogue, textX(), textY());
+            speakerText.draw(batch,speaker, speakerX(), speakerY());
         }
 
     }

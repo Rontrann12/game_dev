@@ -12,6 +12,7 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.typ.AssetsDTO;
 import com.mygdx.game.novel1.typ.SnapShot;
+import com.mygdx.game.novel1.typ.SpeakerMap;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.typ.Character;
@@ -53,7 +54,6 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            //uiHandler.nextLine(processScriptLine());
                             uiHandler.nextLine(stepForward());
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
@@ -67,7 +67,6 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                //uiHandler.nextLine(processScriptLine());
                                 uiHandler.nextLine(stepForward());
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
@@ -87,12 +86,12 @@ public class InGame implements Screen {
      *
      * @return
      */
-    private String stepForward() {
+    private SpeakerMap stepForward() {
         SnapShot snapshot = tracker.getNextLine();
         visibleCharacters = snapshot.getAction();
         AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
         AudioHandler.playSound(snapshot.getSound());
-        return snapshot.getDialogue().getLine();
+        return snapshot.getDialogue();
 
     }
 
@@ -103,7 +102,7 @@ public class InGame implements Screen {
      */
     public void stepBack() {
         SnapShot previous = tracker.traceScriptBackwards();
-        uiHandler.nextLine(previous.getDialogue().getLine());
+        uiHandler.nextLine(previous.getDialogue());
         visibleCharacters = previous.getAction();
         AudioHandler.handleMusicCommand(previous.getBGMCommand());
         AudioHandler.playSound(previous.getSound());

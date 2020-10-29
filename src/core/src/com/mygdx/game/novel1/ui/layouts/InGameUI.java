@@ -7,21 +7,21 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.InGame;
+import com.mygdx.game.novel1.typ.SpeakerMap;
 import com.mygdx.game.novel1.ui.buttons.*;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
-import com.mygdx.game.novel1.utils.ScriptTracker;
 
 
 public class InGameUI extends BaseLayout{
 
-    private String line;
+    private SpeakerMap speakerLine;
     private Dialogue box;
     private TextureRegion textBoxImage;
     private InGame screen;
 
-    public InGameUI(Stage stage, NovelOne game, String initialLine, InGame screen) {
+    public InGameUI(Stage stage, NovelOne game, SpeakerMap initialLine, InGame screen) {
         super(stage, game);
-        this.line = initialLine;
+        this.speakerLine = initialLine;
         this.screen = screen;
     }
 
@@ -37,7 +37,7 @@ public class InGameUI extends BaseLayout{
         Group choiceButtons = new Group();
 
         this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
-        this.box = new Dialogue(this.textBoxImage, line);
+        this.box = new Dialogue(this.textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
 
         TextureRegion backHover = new TextureRegion(texture, 0, 0, 62, 20);
         TextureRegion backIdle = new TextureRegion(texture, 62, 0, 62, 20);
@@ -85,9 +85,9 @@ public class InGameUI extends BaseLayout{
 
     }
 
-    public void nextLine(String line) {
+    public void nextLine(SpeakerMap speaker) {
         Gdx.app.log("In game" , "updating textbox dialog");
-        this.line = line;
-        this.box.updateLine(line);
+        this.speakerLine = speaker;
+        this.box.updateLine(speakerLine.getCharacter(), speakerLine.getLine());
     }
 }
