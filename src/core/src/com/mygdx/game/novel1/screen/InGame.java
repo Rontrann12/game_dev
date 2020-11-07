@@ -22,13 +22,22 @@ import java.util.*;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
+/**
+ * TODO - create new class and separate character sprite handling code
+ * TODO - add to configs to also get the next scenes
+ * TODO - add to configs to get contain script path information
+ * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
+ * TODO - Find a way to differentiate between script files as they will be sharing the same directory
+ * TODO - Need to handle options in script and reactions to choices
+ */
+
 public class InGame implements Screen {
 
     private final NovelOne game;
     private final Batch batch;
     private final Stage stage;
     private final InGameUI uiHandler;
-    private final String path = Paths.TEST_CONFIG_PATH;
+    private String configPath = Paths.TEST_CONFIG_PATH;
     private LinkedHashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
@@ -37,7 +46,8 @@ public class InGame implements Screen {
     private LinkedHashMap<String, String> visibleCharacters;
 
 
-    public InGame(final NovelOne game) {
+    public InGame(final NovelOne game, final String configPath) {
+        this.configPath = configPath;
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
@@ -109,14 +119,15 @@ public class InGame implements Screen {
     }
 
     private void configure() {
-        ConfigReader.configNewScene(path);
-        ArrayDeque<String> cast = ConfigReader.getCastList();
-        ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
-        ArrayDeque<String> bgmList = ConfigReader.getMusicList();
-        ArrayDeque<String> sfxList = ConfigReader.getSoundList();
-        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
+        ConfigReader.readNewConfiguration(configPath);
+        AssetsDTO assets = AssetReader.getAllAssets(
+                ConfigReader.getScriptPath(),
+                ConfigReader.getCastList(),
+                ConfigReader.getBackgrounds(),
+                ConfigReader.getMusicList(),
+                ConfigReader.getSoundList()
+        );
 
-        //this.script = assets.getScript();
         tracker = new ScriptTracker(assets.getScript());
         this.backgrounds = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
