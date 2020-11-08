@@ -3,7 +3,6 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
-import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 
@@ -18,6 +17,7 @@ public class ScriptTracker {
     private String currentAction = null;
     private LinkedHashMap<String, String> activeCharacters;
     private String newScriptName = "";
+    private String[] choices = null;
 
     public ScriptTracker(ArrayDeque<String> script) {
         this.scriptLogger = new ArrayList<>();
@@ -56,9 +56,10 @@ public class ScriptTracker {
         SpeakerMap dialogue = null;
         String soundCue = null;
 
-        while (dialogue == null && this.newScriptName.equals("")) {
+        while (dialogue == null && this.newScriptName.equals("") && this.choices == null) {
             String scriptLine = this.script.pop();
             this.newScriptName = handleEndScriptCue(scriptLine);
+            this.choices = handleChoicesCue(scriptLine);
             handleMusicChange(scriptLine);
             soundCue = handleSoundCue(scriptLine, soundCue);
             handleCharacterCue(scriptLine);
@@ -73,6 +74,16 @@ public class ScriptTracker {
         }
 
         return new SnapShot(dialogue, this.currentMusic, soundCue, this.currentSpeaker, deepCopy);
+    }
+
+    private String[] handleChoicesCue(String line) {
+        if (line.contains(ScriptCues.CHOICES_CUE)) {
+            int separatorIndex = line.indexOf('-');
+            String dataSection = line.substring(separatorIndex + 2);
+            String[] choices = dataSection.split(", ");
+            return choices;
+        }
+        return null;
     }
 
     private void handleCharacterCue(String line) {
@@ -98,6 +109,11 @@ public class ScriptTracker {
     public String getNewScriptName(){
         Gdx.app.log("ScriptTracker::getNewLineFromScript", "checking value of newScriptName: " + this.newScriptName);
         return this.newScriptName;
+    }
+
+    public String[] getChoices(){
+        Gdx.app.log("ScriptTracker::getChoices", "checking value of choices: " + this.choices);
+        return this.choices;
     }
 
     private SpeakerMap handleDialogue(String line) {

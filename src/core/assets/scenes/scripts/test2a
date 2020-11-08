@@ -52,10 +52,7 @@ MC:
 Sayori: Sayori_happy
     "So! Where do you want to go??"
 
-OPTION:
-    "The Amusement Park"
-    "The Library"
-    "My Place"
+OPTIONS - The Amusement Park, The Library, My Place
 
 
 Case 1:

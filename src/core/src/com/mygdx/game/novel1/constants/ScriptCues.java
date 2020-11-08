@@ -8,6 +8,7 @@ public class ScriptCues {
     public static final char DIALOGUE_CONTAINER = '\"';
     public static final char SFX_CONTAINER = '*';
     public static final char END_SCRIPT_CONTAINER = '#';
+    public static final String CHOICES_CUE = "OPTIONS - ";
 
 
 }

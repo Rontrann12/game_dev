@@ -44,6 +44,7 @@ public class InGame implements Screen {
     private Texture background;
     private ScriptTracker tracker;
     private LinkedHashMap<String, String> visibleCharacters;
+    private boolean disableControls = false;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -64,7 +65,9 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            uiHandler.nextLine(stepForward());
+                            if(!disableControls){
+                                uiHandler.nextLine(stepForward());
+                            }
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
@@ -77,7 +80,9 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                uiHandler.nextLine(stepForward());
+                                if(!disableControls){
+                                    uiHandler.nextLine(stepForward());
+                                }
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
@@ -100,6 +105,12 @@ public class InGame implements Screen {
 
         SnapShot snapshot = tracker.getNextLine();
         String newScriptName = tracker.getNewScriptName();
+        String[] options = tracker.getChoices();
+
+        Gdx.app.log("InGame::stepForward", "choices:" + options);
+        if(options != null) {
+            this.disableControls = true;
+        }
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
         if(!newScriptName.equals("")){
