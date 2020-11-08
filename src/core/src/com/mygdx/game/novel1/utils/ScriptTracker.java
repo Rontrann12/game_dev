@@ -3,7 +3,7 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
-import com.mygdx.game.novel1.constants.StringWrappers;
+import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 
@@ -17,6 +17,7 @@ public class ScriptTracker {
     private int historyIndex;
     private String currentAction = null;
     private LinkedHashMap<String, String> activeCharacters;
+    private String newScriptName = "";
 
     public ScriptTracker(ArrayDeque<String> script) {
         this.scriptLogger = new ArrayList<>();
@@ -55,12 +56,14 @@ public class ScriptTracker {
         SpeakerMap dialogue = null;
         String soundCue = null;
 
-        while (dialogue == null) {
+        while (dialogue == null && this.newScriptName.equals("")) {
             String scriptLine = this.script.pop();
+            this.newScriptName = handleEndScriptCue(scriptLine);
             handleMusicChange(scriptLine);
             soundCue = handleSoundCue(scriptLine, soundCue);
             handleCharacterCue(scriptLine);
             dialogue = handleDialogue(scriptLine);
+
         }
 
         LinkedHashMap<String, String> deepCopy = new LinkedHashMap<>();
@@ -92,25 +95,37 @@ public class ScriptTracker {
         }
     }
 
+    public String getNewScriptName(){
+        Gdx.app.log("ScriptTracker::getNewLineFromScript", "checking value of newScriptName: " + this.newScriptName);
+        return this.newScriptName;
+    }
+
     private SpeakerMap handleDialogue(String line) {
-        if (StringUtilities.isContainer(line, StringWrappers.DIALOGUE_CONTAINER)) {
-            return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, StringWrappers.DIALOGUE_CONTAINER));
+        if (StringUtilities.isContainer(line, ScriptCues.DIALOGUE_CONTAINER)) {
+            return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER));
         }
         return null;
     }
 
     private String handleSoundCue(String line, String soundCue) {
-        if (StringUtilities.isContainer(line, StringWrappers.SFX_CONTAINER)) {
-            soundCue = StringUtilities.getContainedContent(line, StringWrappers.SFX_CONTAINER);
+        if (StringUtilities.isContainer(line, ScriptCues.SFX_CONTAINER)) {
+            soundCue = StringUtilities.getContainedContent(line, ScriptCues.SFX_CONTAINER);
         }
         return soundCue;
     }
 
     private String handleMusicChange(String line) {
-        if (StringUtilities.isContainer(line, StringWrappers.BGM_CONTAINER)) {
-            this.currentMusic = StringUtilities.getContainedContent(line, StringWrappers.BGM_CONTAINER);
+        if (StringUtilities.isContainer(line, ScriptCues.BGM_CONTAINER)) {
+            this.currentMusic = StringUtilities.getContainedContent(line, ScriptCues.BGM_CONTAINER);
         }
         return this.currentMusic;
+    }
+
+    private String handleEndScriptCue(String line) {
+        if(StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
+            return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER);
+        }
+        return "";
     }
 
     /**

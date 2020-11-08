@@ -14,7 +14,7 @@ import static com.mygdx.game.novel1.constants.ConfigKeys.*;
 
 public class ConfigReader {
 
-    private static ArrayDeque<String> backgrounds;
+    private static String background;
     private static ArrayDeque<String> castList;
     private static ArrayDeque<String> music;
     private static ArrayDeque<String> sounds;
@@ -50,7 +50,7 @@ public class ConfigReader {
                         break;
 
                     case BACKGROUND_MODE:
-                        backgrounds = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
+                        background = dataSection;
                         break;
 
                     case BGM_MODE:
@@ -61,7 +61,7 @@ public class ConfigReader {
                         sounds = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
                         break;
                     case SCRIPT_PATH_MODE:
-                        scriptPath = Paths.SCRIPTS_PATH + "test";
+                        scriptPath = Paths.SCRIPTS_PATH + dataSection;
                         break;
                 }
             }
@@ -137,15 +137,16 @@ public class ConfigReader {
         return castList;
     }
 
-    public static ArrayDeque<String> getBackgrounds() {
-        return backgrounds;
+    public static String getBackground() {
+        return background;
     }
 
     public static ArrayDeque<String> getMusicList(){ return music; }
 
     public static String getScriptPath(){
         Gdx.app.log("ConfigReader::getScriptPath", scriptPath);
-        return scriptPath; }
+        return scriptPath;
+    }
     /**
      * TODO - decide if this should be moved to String utilities
      * @param data

@@ -86,8 +86,13 @@ public class InGameUI extends BaseLayout{
     }
 
     public void nextLine(SpeakerMap speaker) {
-        Gdx.app.log("In game" , "updating textbox dialog");
+        Gdx.app.log("InGameUI::nextLine" , "updating textbox dialog");
         this.speakerLine = speaker;
-        this.box.updateLine(speakerLine.getCharacter(), speakerLine.getLine());
+        try{
+            this.box.updateLine(speakerLine.getCharacter(), speakerLine.getLine());
+        } catch( NullPointerException e) {
+            Gdx.app.log("InGameUI::nextLine", e.getMessage());
+        }
+
     }
 }

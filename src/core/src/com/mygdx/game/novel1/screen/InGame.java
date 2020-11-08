@@ -41,12 +41,12 @@ public class InGame implements Screen {
     private LinkedHashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
-    private HashMap<String, Texture> backgrounds;
+    private Texture background;
     private ScriptTracker tracker;
     private LinkedHashMap<String, String> visibleCharacters;
 
-
     public InGame(final NovelOne game, final String configPath) {
+        Gdx.app.log("InGame::Constructor", "creating new InGame screen");
         this.configPath = configPath;
         this.game = game;
         this.stage = new Stage(game.viewport);
@@ -97,12 +97,21 @@ public class InGame implements Screen {
      * @return
      */
     private SpeakerMap stepForward() {
+
         SnapShot snapshot = tracker.getNextLine();
+        String newScriptName = tracker.getNewScriptName();
+
+        Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
+        if(!newScriptName.equals("")){
+            game.getScreen().dispose();
+            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+            return null;
+        }
         visibleCharacters = snapshot.getAction();
         AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
         AudioHandler.playSound(snapshot.getSound());
-        return snapshot.getDialogue();
 
+        return snapshot.getDialogue();
     }
 
     /**
@@ -123,13 +132,13 @@ public class InGame implements Screen {
         AssetsDTO assets = AssetReader.getAllAssets(
                 ConfigReader.getScriptPath(),
                 ConfigReader.getCastList(),
-                ConfigReader.getBackgrounds(),
+                ConfigReader.getBackground(),
                 ConfigReader.getMusicList(),
                 ConfigReader.getSoundList()
         );
 
         tracker = new ScriptTracker(assets.getScript());
-        this.backgrounds = assets.getBackgroundTextures();
+        this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
         HashMap<String, Texture> characters = assets.getCharacterTextures();
@@ -150,7 +159,7 @@ public class InGame implements Screen {
 
         for (Actor entry : characterRenderGroup.getChildren()) {
             Character character = (Character) entry;
-            if(!visibleCharacters.containsKey(character.getName())){
+            if (!visibleCharacters.containsKey(character.getName())) {
                 character.remove();
             }
         }
@@ -162,7 +171,7 @@ public class InGame implements Screen {
         }
 
         // TODO - backgrounds need to be cued in by the script
-        Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));
+        Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.begin();

@@ -1,0 +1,54 @@
+Sayori.png
+size: 3840, 1920
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Sayori_happy
+  rotate: false
+  xy: 0, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayori_interested
+  rotate: false
+  xy: 960, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayori_nervous_posture
+  rotate: false
+  xy: 1920, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayori_satified
+  rotate: false
+  xy: 2880, 0
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayori_serious
+  rotate: false
+  xy: 0, 960
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayori_shocked
+  rotate: false
+  xy: 960, 960
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Sayory_cheerful_talking
+  rotate: false
+  xy: 1920, 960
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1

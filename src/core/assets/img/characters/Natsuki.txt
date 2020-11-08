@@ -1,30 +1,30 @@
-Monika.png
+Natsuki.png
 size: 1924, 1924
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Monika_disappointed
-  rotate: false
-  xy: 1, 1
-  size: 960, 960
-  orig: 960, 960
-  offset: 0, 0
-  index: -1
-Monika_explain
+Natsuki_angry
   rotate: false
   xy: 1, 963
   size: 960, 960
   orig: 960, 960
   offset: 0, 0
   index: -1
-Monika_smile1
+Natsuki_cry
   rotate: false
   xy: 963, 1
   size: 960, 960
   orig: 960, 960
   offset: 0, 0
   index: -1
-Monika_turn_away
+Natsuki_Grin
+  rotate: false
+  xy: 1, 1
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
+Natsuki_happy
   rotate: false
   xy: 963, 963
   size: 960, 960

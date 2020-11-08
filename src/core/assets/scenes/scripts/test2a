@@ -16,7 +16,7 @@ MC:
 Sayori: Sayori_interested
 
 MC:
-    "It looks like heard us talking"
+    "It looks like someone heard us talking"
 
 Sayori: Sayori_interested
     "I think that's a great idea"
@@ -25,8 +25,10 @@ Sayori: Sayori_happy
     "I'll skip class with you"
     "We can go hang out somewhere!"
 
-Yuri: Yuri_strict
+Yuri: Yuri_angry
     "Well as class president, I can't let you guys skip class"
+
+Sayori: Sayori_serious
 
 MC:
     "I know I kn-"
@@ -41,13 +43,13 @@ Yuri: Yuri_scared
 
 *footsteps_running*
 
-Sayori: Sayori_satisfied
+Sayori: Sayori_satified
     "heh... chump"
 
 MC:
     "Haha nice"
 
-Sayori: Sayori_cheerful_talking
+Sayori: Sayori_happy
     "So! Where do you want to go??"
 
 OPTION:

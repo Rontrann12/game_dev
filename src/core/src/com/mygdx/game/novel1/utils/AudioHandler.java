@@ -6,10 +6,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.novel1.constants.ScriptCues;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class AudioHandler {
-    private static float bgmVolume = 0.2f;
-    private static float sfxVolume = 1.0f;
+    private static float bgmVolume = 0.0f;
+    private static float sfxVolume = 0.0f;
     private static Music currentMusic;
     private static HashMap<String, Sound> soundsList = new HashMap();
     private static HashMap<String, Music> musicList = new HashMap();
@@ -50,6 +51,7 @@ public class AudioHandler {
      */
     public static void setCurrentTrack(String track) {
         Music music = musicList.get(track);
+        Gdx.app.log("AudioHandler::setCurrentTrack", "checking if music is null:" + music);
         if (music != null && music != currentMusic) {
             if (currentMusic != null) {
                 currentMusic.dispose();
@@ -88,7 +90,7 @@ public class AudioHandler {
 
         Sound sound = soundsList.get(key);
         if(sound != null) {
-            sound.play();
+            sound.play(sfxVolume);
         }
     }
 
@@ -111,6 +113,9 @@ public class AudioHandler {
      * disposes all sounds stored by the class
      */
     public static void clearSounds() {
+        for(Sound sound : soundsList.values()) {
+            sound.stop();
+        }
         soundsList.clear();
     }
 
@@ -136,6 +141,7 @@ public class AudioHandler {
         } else if (action.equals(ScriptCues.RESUME_MUSIC)) {
             playMusic();
         } else {
+            Gdx.app.log("AudioHandler::handleMusicCommand", "setting new track: " + action);
             setCurrentTrack(action);
         }
     }
