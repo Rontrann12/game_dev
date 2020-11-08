@@ -22,22 +22,32 @@ import java.util.*;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
+/**
+ * TODO - create new class and separate character sprite handling code
+ * TODO - add to configs to also get the next scenes
+ * TODO - add to configs to get contain script path information
+ * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
+ * TODO - Find a way to differentiate between script files as they will be sharing the same directory
+ * TODO - Need to handle options in script and reactions to choices
+ */
+
 public class InGame implements Screen {
 
     private final NovelOne game;
     private final Batch batch;
     private final Stage stage;
     private final InGameUI uiHandler;
-    private final String path = Paths.TEST_CONFIG_PATH;
+    private String configPath = Paths.TEST_CONFIG_PATH;
     private LinkedHashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
-    private HashMap<String, Texture> backgrounds;
+    private Texture background;
     private ScriptTracker tracker;
     private LinkedHashMap<String, String> visibleCharacters;
 
-
-    public InGame(final NovelOne game) {
+    public InGame(final NovelOne game, final String configPath) {
+        Gdx.app.log("InGame::Constructor", "creating new InGame screen");
+        this.configPath = configPath;
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
@@ -87,12 +97,21 @@ public class InGame implements Screen {
      * @return
      */
     private SpeakerMap stepForward() {
+
         SnapShot snapshot = tracker.getNextLine();
+        String newScriptName = tracker.getNewScriptName();
+
+        Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
+        if(!newScriptName.equals("")){
+            game.getScreen().dispose();
+            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+            return null;
+        }
         visibleCharacters = snapshot.getAction();
         AudioHandler.handleMusicCommand(snapshot.getBGMCommand());
         AudioHandler.playSound(snapshot.getSound());
-        return snapshot.getDialogue();
 
+        return snapshot.getDialogue();
     }
 
     /**
@@ -109,16 +128,17 @@ public class InGame implements Screen {
     }
 
     private void configure() {
-        ConfigReader.configNewScene(path);
-        ArrayDeque<String> cast = ConfigReader.getCastList();
-        ArrayDeque<String> backgroundsList = ConfigReader.getBackgrounds();
-        ArrayDeque<String> bgmList = ConfigReader.getMusicList();
-        ArrayDeque<String> sfxList = ConfigReader.getSoundList();
-        AssetsDTO assets = AssetReader.getAllAssets(Paths.TEST_SCRIPT_PATH, cast, backgroundsList, bgmList, sfxList);
+        ConfigReader.readNewConfiguration(configPath);
+        AssetsDTO assets = AssetReader.getAllAssets(
+                ConfigReader.getScriptPath(),
+                ConfigReader.getCastList(),
+                ConfigReader.getBackground(),
+                ConfigReader.getMusicList(),
+                ConfigReader.getSoundList()
+        );
 
-        //this.script = assets.getScript();
         tracker = new ScriptTracker(assets.getScript());
-        this.backgrounds = assets.getBackgroundTextures();
+        this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
         HashMap<String, Texture> characters = assets.getCharacterTextures();
@@ -139,7 +159,7 @@ public class InGame implements Screen {
 
         for (Actor entry : characterRenderGroup.getChildren()) {
             Character character = (Character) entry;
-            if(!visibleCharacters.containsKey(character.getName())){
+            if (!visibleCharacters.containsKey(character.getName())) {
                 character.remove();
             }
         }
@@ -151,7 +171,7 @@ public class InGame implements Screen {
         }
 
         // TODO - backgrounds need to be cued in by the script
-        Sprite backgroundSprite = new Sprite(backgrounds.get("hallway"));
+        Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.begin();

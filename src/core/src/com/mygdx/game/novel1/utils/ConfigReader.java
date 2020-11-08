@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.novel1.constants.ConfigKeys;
+import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.constants.Separators;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,17 +14,18 @@ import static com.mygdx.game.novel1.constants.ConfigKeys.*;
 
 public class ConfigReader {
 
-    private static ArrayDeque<String> backgrounds;
+    private static String background;
     private static ArrayDeque<String> castList;
     private static ArrayDeque<String> music;
     private static ArrayDeque<String> sounds;
+    private static String scriptPath = "";
 
     /**
      * reads info on what assets should be loaded in the configuration for a scene
      *
      * @param path
      */
-    public static void configNewScene(String path) {
+    public static void readNewConfiguration(String path) {
         List<String> dataList;
         String separator = Separators.KEYVALUE + Separators.SPACE;
 
@@ -35,30 +37,31 @@ public class ConfigReader {
 
                 String data = reader.nextLine();
                 int separatorIndex = data.indexOf(separator);
-                String[] dataArray;
 
                 String config = data.substring(0, separatorIndex);
-                dataArray = data.substring(separatorIndex + 2).split(", ");
-                Gdx.app.log("ConfigReader::readCastList", "value of the config: " + config);
-                Gdx.app.log("ConfigReader::readCastList", "number of data points returned: " + dataArray.length);
-                dataList = Arrays.asList(dataArray);
+                String dataSection = data.substring(separatorIndex + 2);
+                Gdx.app.log("ConfigReader::readNewConfiguration", "value of the config: " + config);
+                Gdx.app.log("ConfigReader::readNewConfiguration", "reading data section: " + dataSection);
 
                 // TODO - make sure this still works
                 switch (config) {
                     case CHARACTER_MODE:
-                        castList = new ArrayDeque<>(dataList);
+                        castList = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
                         break;
 
                     case BACKGROUND_MODE:
-                        backgrounds = new ArrayDeque<>(dataList);
+                        background = dataSection;
                         break;
 
                     case BGM_MODE:
-                        music = new ArrayDeque<>(dataList);
+                        music = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
                         break;
 
                     case SFX_MODE:
-                        sounds = new ArrayDeque<>(dataList);
+                        sounds = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
+                        break;
+                    case SCRIPT_PATH_MODE:
+                        scriptPath = Paths.SCRIPTS_PATH + dataSection;
                         break;
                 }
             }
@@ -134,11 +137,16 @@ public class ConfigReader {
         return castList;
     }
 
-    public static ArrayDeque<String> getBackgrounds() {
-        return backgrounds;
+    public static String getBackground() {
+        return background;
     }
 
     public static ArrayDeque<String> getMusicList(){ return music; }
+
+    public static String getScriptPath(){
+        Gdx.app.log("ConfigReader::getScriptPath", scriptPath);
+        return scriptPath;
+    }
     /**
      * TODO - decide if this should be moved to String utilities
      * @param data

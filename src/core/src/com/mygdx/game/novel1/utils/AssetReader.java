@@ -27,10 +27,10 @@ public class AssetReader {
      *
      * @return All requested assets packaged in an object
      */
-    public static AssetsDTO getAllAssets(String scriptsPath, ArrayDeque<String> cast, ArrayDeque<String> backgroundList, ArrayDeque<String> musicList, ArrayDeque<String> sfxList) {
+    public static AssetsDTO getAllAssets(String scriptsPath, ArrayDeque<String> cast, String backgroundList, ArrayDeque<String> musicList, ArrayDeque<String> sfxList) {
 
         HashMap<String, Texture> characters = loadTextures(cast, CHARACTERS_PATH);
-        HashMap<String, Texture> backgrounds = loadTextures(backgroundList, BACKGROUNDS_PATH);
+        Texture backgrounds = loadTextures(backgroundList, BACKGROUNDS_PATH);
         HashMap<String, Music> bgm = loadMusic(musicList);
         ArrayDeque<String> script = readScriptTextFile(scriptsPath);
         HashMap<String, Sound> sounds = loadSounds(sfxList);
@@ -143,6 +143,20 @@ public class AssetReader {
         Gdx.app.log("AssetReader::loadTexture", "loaded " + textures.size() + " characters");
         return textures;
 
+    }
+
+    /**
+     * loads in the item specified. For single item
+     *
+     * @param name
+     * @param assetsPath
+     * @return
+     */
+    public static Texture loadTextures(String name, String assetsPath) {
+        AssetManager manager = new AssetManager();
+        manager.load(generateFileName(assetsPath, name, FileTypes.PNG), Texture.class);
+        manager.finishLoading();
+        return manager.get(generateFileName(assetsPath, name, FileTypes.PNG));
     }
 
     private static ArrayDeque<String> readScriptTextFile(String path) {

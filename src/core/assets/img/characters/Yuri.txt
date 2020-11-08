@@ -1,25 +1,32 @@
 Yuri.png
-size: 1920, 1920
+size: 1924, 1924
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+Yuri_angry
+  rotate: false
+  xy: 1, 1
+  size: 960, 960
+  orig: 960, 960
+  offset: 0, 0
+  index: -1
 Yuri_scared
   rotate: false
-  xy: 0, 0
+  xy: 1, 963
   size: 960, 960
   orig: 960, 960
   offset: 0, 0
   index: -1
 Yuri_shy
   rotate: false
-  xy: 960, 0
+  xy: 963, 1
   size: 960, 960
   orig: 960, 960
   offset: 0, 0
   index: -1
 Yuri_talking
   rotate: false
-  xy: 0, 960
+  xy: 963, 963
   size: 960, 960
   orig: 960, 960
   offset: 0, 0
