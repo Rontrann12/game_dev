@@ -81,7 +81,7 @@ public class InGameUI extends BaseLayout {
 
         int diff = 0;
         for (String option : choices) {
-            ChoiceButton temp = new ChoiceButton(buttonIdle, buttonHover, game, option);
+            ChoiceButton temp = new ChoiceButton(buttonIdle, buttonHover, game, option, screen);
             temp.spritePos(0, diff);
             diff = diff + 80;
             choiceButtons.addActor(temp);

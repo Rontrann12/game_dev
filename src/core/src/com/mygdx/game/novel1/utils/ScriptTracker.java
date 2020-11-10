@@ -116,6 +116,10 @@ public class ScriptTracker {
         return this.choices;
     }
 
+    public void handleScriptBranching(String selection) {
+        Gdx.app.log("ScriptTracker::handleScriptBranching", "The selection has been made: " + selection);
+    }
+
     private SpeakerMap handleDialogue(String line) {
         if (StringUtilities.isContainer(line, ScriptCues.DIALOGUE_CONTAINER)) {
             return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER));

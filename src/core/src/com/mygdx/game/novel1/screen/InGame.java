@@ -140,6 +140,16 @@ public class InGame implements Screen {
         AudioHandler.playSound(previous.getSound());
     }
 
+    /**
+     * This is to be called when the player has selected an option after being presented with a list of choices
+     *
+     * @param choice
+     */
+    public void handleChoiceSelection(String choice) {
+        this.disableControls = false;
+        tracker.handleScriptBranching(choice);
+    }
+
     private void configure() {
         ConfigReader.readNewConfiguration(configPath);
         AssetsDTO assets = AssetReader.getAllAssets(
