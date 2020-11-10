@@ -110,6 +110,8 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::stepForward", "choices:" + options);
         if(options != null) {
             this.disableControls = true;
+
+            uiHandler.presentChoices(options);
         }
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
