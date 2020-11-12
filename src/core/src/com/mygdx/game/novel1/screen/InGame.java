@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.typ.AssetsDTO;
@@ -17,6 +18,7 @@ import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.typ.Character;
 
+import java.nio.IntBuffer;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
@@ -44,6 +46,7 @@ public class InGame implements Screen {
     private Texture background;
     private ScriptTracker tracker;
     private LinkedHashMap<String, String> visibleCharacters;
+    private boolean disableControls = false;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -64,7 +67,9 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            uiHandler.nextLine(stepForward());
+                            if (!disableControls) {
+                                uiHandler.nextLine(stepForward());
+                            }
                         } catch (EmptyStackException e) {
                             Gdx.app.log("InGame::InGame", e.getMessage());
                         }
@@ -77,7 +82,9 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                uiHandler.nextLine(stepForward());
+                                if (!disableControls) {
+                                    uiHandler.nextLine(stepForward());
+                                }
                             } catch (EmptyStackException e) {
                                 Gdx.app.log("InGame::InGame", e.getMessage());
                             }
@@ -100,9 +107,16 @@ public class InGame implements Screen {
 
         SnapShot snapshot = tracker.getNextLine();
         String newScriptName = tracker.getNewScriptName();
+        String[] options = tracker.getChoices();
+
+        Gdx.app.log("InGame::stepForward", "choices:" + options);
+        if(options != null) {
+            this.disableControls = true;
+            uiHandler.presentChoices(options);
+        }
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
-        if(!newScriptName.equals("")){
+        if (!newScriptName.equals("")) {
             game.getScreen().dispose();
             game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
             return null;
@@ -125,6 +139,18 @@ public class InGame implements Screen {
         visibleCharacters = previous.getAction();
         AudioHandler.handleMusicCommand(previous.getBGMCommand());
         AudioHandler.playSound(previous.getSound());
+    }
+
+    /**
+     * This is to be called when the player has selected an option after being presented with a list of choices
+     *
+     * @param choice
+     */
+    public void handleChoiceSelection(String choice) {
+        this.disableControls = false;
+        tracker.handleScriptBranching(choice);
+        uiHandler.removeChoices();
+        uiHandler.nextLine(stepForward());
     }
 
     private void configure() {
@@ -170,7 +196,6 @@ public class InGame implements Screen {
             characterRenderGroup.addActor(targetCharacter);
         }
 
-        // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

@@ -3,11 +3,12 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
-import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 
 import java.util.*;
+
+import static com.mygdx.game.novel1.constants.ScriptCues.CASE_CUE;
 
 public class ScriptTracker {
     private ArrayList<SnapShot> scriptLogger;
@@ -18,6 +19,7 @@ public class ScriptTracker {
     private String currentAction = null;
     private LinkedHashMap<String, String> activeCharacters;
     private String newScriptName = "";
+    private String[] choices = null;
 
     public ScriptTracker(ArrayDeque<String> script) {
         this.scriptLogger = new ArrayList<>();
@@ -28,6 +30,7 @@ public class ScriptTracker {
 
     /**
      * Return the next line of dialogue
+     *
      * @return
      */
     public SnapShot getNextLine() {
@@ -56,9 +59,10 @@ public class ScriptTracker {
         SpeakerMap dialogue = null;
         String soundCue = null;
 
-        while (dialogue == null && this.newScriptName.equals("")) {
+        while (dialogue == null && this.newScriptName.equals("") && this.choices == null) {
             String scriptLine = this.script.pop();
             this.newScriptName = handleEndScriptCue(scriptLine);
+            this.choices = handleChoicesCue(scriptLine);
             handleMusicChange(scriptLine);
             soundCue = handleSoundCue(scriptLine, soundCue);
             handleCharacterCue(scriptLine);
@@ -75,6 +79,16 @@ public class ScriptTracker {
         return new SnapShot(dialogue, this.currentMusic, soundCue, this.currentSpeaker, deepCopy);
     }
 
+    private String[] handleChoicesCue(String line) {
+        if (line.contains(ScriptCues.CHOICES_CUE)) {
+            int separatorIndex = line.indexOf('-');
+            String dataSection = line.substring(separatorIndex + 2);
+            String[] choices = dataSection.split(", ");
+            return choices;
+        }
+        return null;
+    }
+
     private void handleCharacterCue(String line) {
 
         if (line.contains(Separators.KEYVALUE)) {
@@ -87,7 +101,7 @@ public class ScriptTracker {
                     activeCharacters.remove(this.currentSpeaker);
 
                 } else {
-                    activeCharacters.put(this.currentSpeaker,this.currentAction);
+                    activeCharacters.put(this.currentSpeaker, this.currentAction);
                 }
             } catch (NullPointerException e) {
                 Gdx.app.log("ScriptTracker::handleCharacterCue", "No action found, no issue: " + e.getMessage());
@@ -95,9 +109,27 @@ public class ScriptTracker {
         }
     }
 
-    public String getNewScriptName(){
-        Gdx.app.log("ScriptTracker::getNewLineFromScript", "checking value of newScriptName: " + this.newScriptName);
+    public String getNewScriptName() {
         return this.newScriptName;
+    }
+
+    public String[] getChoices() {
+        return this.choices;
+    }
+
+    public void handleScriptBranching(String selection) {
+        this.choices = null;
+        int limit = 100;
+        int index = 0;
+        boolean caseFound = false;
+
+        while (index < limit && !caseFound) {
+            String line = this.script.pop();
+            if (line.contains(CASE_CUE) && line.contains(selection)) {
+                caseFound = true;
+            }
+            index++;
+        }
     }
 
     private SpeakerMap handleDialogue(String line) {
@@ -122,7 +154,7 @@ public class ScriptTracker {
     }
 
     private String handleEndScriptCue(String line) {
-        if(StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
+        if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
             return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER);
         }
         return "";

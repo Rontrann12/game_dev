@@ -41,6 +41,8 @@ Yuri: Yuri_scared
     "You're right"
     "I've got to get the class ready for homeroom"
 
+Yuri: EXIT
+
 *footsteps_running*
 
 Sayori: Sayori_satified
@@ -52,22 +54,19 @@ MC:
 Sayori: Sayori_happy
     "So! Where do you want to go??"
 
-OPTION:
-    "The Amusement Park"
-    "The Library"
-    "My Place"
+OPTIONS - The Amusement Park, The Library, My Place
 
 
-Case 1:
-Sayori: Sayori_cheerful_talking
+Case - The Amusement Park
+Sayori: Sayori_satified
     "Ohhhhhhh!"
     "Lets goo!!"
 
 MC:
     "Sayori grabs my arm and we ditch class"
-**test3a
+#test3a#
 
-Case 2:
+Case - The Library
 Sayori: Sayori_serious
     "..."
     "Seriously?"
@@ -76,14 +75,14 @@ Sayori: Sayori_serious
 MC:
     "Alrighty then!"
     "Let's go!!"
-**test3b
+#test3b#
 
-Case 3:
+Case - My Place
 Sayori: Sayori_shocked
     "W-whaa?"
     "Really? I can come over!?"
 
-Sayori: Sayori_nervous_smile
+Sayori: Sayori_nervous_posture
     "Well..."
     "if it's okay with you"
-**test3c
+#test3c#

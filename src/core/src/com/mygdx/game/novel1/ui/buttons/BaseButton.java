@@ -100,5 +100,6 @@ abstract class BaseButton extends Actor{
         return sprite.getY() + sprite.getHeight()/2;
     }
 
+    //TODO - need to fix this, not all button actions will require NovelOne and some buttons require more parameters
     abstract public void action(NovelOne game);
 }
