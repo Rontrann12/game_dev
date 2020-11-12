@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.typ.AssetsDTO;
@@ -17,6 +18,7 @@ import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.typ.Character;
 
+import java.nio.IntBuffer;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;

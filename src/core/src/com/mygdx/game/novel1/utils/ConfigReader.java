@@ -112,7 +112,7 @@ public class ConfigReader {
                 }
 
                 if (xCoord != -1 && yCoord != -1 && width != -1 && height != -1) {
-                    Gdx.app.log("ConfigReader::mapSprites", "creating region of dimensions: " + xCoord + " " + yCoord + " " + width + " " + height);
+                    Gdx.app.log("ConfigReader::mapSprites", "creating region of dimensions: " + xCoord + " " + yCoord + " " + width + " " + height + " For key: " + key);
                     TextureRegion region = new TextureRegion(texture, xCoord, yCoord, width, height);
                     mapping.put(key, region);
                     xCoord = -1;
