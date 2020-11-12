@@ -20,6 +20,7 @@ public class InGameUI extends BaseLayout {
     private InGame screen;
     private TextureRegion buttonIdle;
     private TextureRegion buttonHover;
+    private Group choiceButtons;
 
     public InGameUI(Stage stage, NovelOne game, SpeakerMap initialLine, InGame screen) {
         super(stage, game);
@@ -28,6 +29,7 @@ public class InGameUI extends BaseLayout {
         this.screen = screen;
         this.buttonHover = new TextureRegion(texture, 0, 26, 900, 64);
         this.buttonIdle = new TextureRegion(texture, 900, 26, 900, 64);
+        this.choiceButtons = null;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class InGameUI extends BaseLayout {
     }
 
     public void presentChoices(String[] choices) {
-        Group choiceButtons = new Group();
+        this.choiceButtons = new Group();
 
         int diff = 0;
         for (String option : choices) {
@@ -92,6 +94,11 @@ public class InGameUI extends BaseLayout {
         stage.addActor(choiceButtons);
     }
 
+    public void removeChoices(){
+        if(this.choiceButtons != null) {
+            this.choiceButtons.remove();
+        }
+    }
     public void nextLine(SpeakerMap speaker) {
         Gdx.app.log("InGameUI::nextLine", "updating textbox dialog");
         this.speakerLine = speaker;

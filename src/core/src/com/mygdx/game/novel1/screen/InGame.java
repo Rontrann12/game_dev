@@ -65,7 +65,7 @@ public class InGame implements Screen {
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                         try {
                             Gdx.app.log("InGame::InGame", "mouse down detected");
-                            if(!disableControls){
+                            if (!disableControls) {
                                 uiHandler.nextLine(stepForward());
                             }
                         } catch (EmptyStackException e) {
@@ -80,7 +80,7 @@ public class InGame implements Screen {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
                             Gdx.app.log("InGame::InGame", "space bar button down detected");
                             try {
-                                if(!disableControls){
+                                if (!disableControls) {
                                     uiHandler.nextLine(stepForward());
                                 }
                             } catch (EmptyStackException e) {
@@ -110,12 +110,11 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::stepForward", "choices:" + options);
         if(options != null) {
             this.disableControls = true;
-
             uiHandler.presentChoices(options);
         }
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
-        if(!newScriptName.equals("")){
+        if (!newScriptName.equals("")) {
             game.getScreen().dispose();
             game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
             return null;
@@ -148,6 +147,8 @@ public class InGame implements Screen {
     public void handleChoiceSelection(String choice) {
         this.disableControls = false;
         tracker.handleScriptBranching(choice);
+        uiHandler.removeChoices();
+        uiHandler.nextLine(stepForward());
     }
 
     private void configure() {
@@ -193,7 +194,6 @@ public class InGame implements Screen {
             characterRenderGroup.addActor(targetCharacter);
         }
 
-        // TODO - backgrounds need to be cued in by the script
         Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

@@ -8,6 +8,8 @@ import com.mygdx.game.novel1.typ.SpeakerMap;
 
 import java.util.*;
 
+import static com.mygdx.game.novel1.constants.ScriptCues.CASE_CUE;
+
 public class ScriptTracker {
     private ArrayList<SnapShot> scriptLogger;
     private ArrayDeque<String> script;
@@ -28,6 +30,7 @@ public class ScriptTracker {
 
     /**
      * Return the next line of dialogue
+     *
      * @return
      */
     public SnapShot getNextLine() {
@@ -98,7 +101,7 @@ public class ScriptTracker {
                     activeCharacters.remove(this.currentSpeaker);
 
                 } else {
-                    activeCharacters.put(this.currentSpeaker,this.currentAction);
+                    activeCharacters.put(this.currentSpeaker, this.currentAction);
                 }
             } catch (NullPointerException e) {
                 Gdx.app.log("ScriptTracker::handleCharacterCue", "No action found, no issue: " + e.getMessage());
@@ -106,18 +109,27 @@ public class ScriptTracker {
         }
     }
 
-    public String getNewScriptName(){
-        Gdx.app.log("ScriptTracker::getNewLineFromScript", "checking value of newScriptName: " + this.newScriptName);
+    public String getNewScriptName() {
         return this.newScriptName;
     }
 
-    public String[] getChoices(){
-        Gdx.app.log("ScriptTracker::getChoices", "checking value of choices: " + this.choices);
+    public String[] getChoices() {
         return this.choices;
     }
 
     public void handleScriptBranching(String selection) {
-        Gdx.app.log("ScriptTracker::handleScriptBranching", "The selection has been made: " + selection);
+        this.choices = null;
+        int limit = 100;
+        int index = 0;
+        boolean caseFound = false;
+
+        while (index < limit && !caseFound) {
+            String line = this.script.pop();
+            if (line.contains(CASE_CUE) && line.contains(selection)) {
+                caseFound = true;
+            }
+            index++;
+        }
     }
 
     private SpeakerMap handleDialogue(String line) {
@@ -142,7 +154,7 @@ public class ScriptTracker {
     }
 
     private String handleEndScriptCue(String line) {
-        if(StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
+        if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
             return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER);
         }
         return "";
