@@ -7,20 +7,24 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.InGame;
+import com.mygdx.game.novel1.typ.Character;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 import com.mygdx.game.novel1.ui.buttons.*;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class InGameUI extends BaseLayout {
 
     private SpeakerMap speakerLine;
     private Dialogue box;
-    private TextureRegion textBoxImage;
-    private InGame screen;
-    private TextureRegion buttonIdle;
-    private TextureRegion buttonHover;
+    private final InGame screen;
+    private final TextureRegion buttonIdle;
+    private final TextureRegion buttonHover;
     private Group choiceButtons;
+    private HashMap<String, Character> loadedCharacters;
 
     public InGameUI(Stage stage, NovelOne game, SpeakerMap initialLine, InGame screen) {
         super(stage, game);
@@ -33,18 +37,14 @@ public class InGameUI extends BaseLayout {
     }
 
     @Override
-    /**
-     * TODO - should transfer button handling to the screen class
-     * TODO - should return a list of buttons to be tracked of by the screen
-     */
     public void generateUI() {
 
         Texture texture = super.getAssets();
         Group miniButtons = new Group();
 
 
-        this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
-        this.box = new Dialogue(this.textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
+        TextureRegion textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
+        this.box = new Dialogue(textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
 
         TextureRegion backHover = new TextureRegion(texture, 0, 0, 62, 20);
         TextureRegion backIdle = new TextureRegion(texture, 62, 0, 62, 20);
@@ -107,6 +107,30 @@ public class InGameUI extends BaseLayout {
         } catch (NullPointerException e) {
             Gdx.app.log("InGameUI::nextLine", e.getMessage());
         }
+    }
 
+    public void positionCharacterSprites(LinkedHashMap<String, String> charactersOrdered, HashMap<String, Character> characterMap) {
+        int numberOfSprites = charactersOrdered.size();
+        int xDelta = 0;
+        int xPosition = 0;
+        switch (numberOfSprites) {
+            case 1:
+                xPosition = 400;
+                break;
+
+            case 2:
+                xDelta = 960;
+                break;
+
+            case 3:
+                xDelta = 500;
+                break;
+        }
+
+        for(Map.Entry<String, String> entry : charactersOrdered.entrySet()) {
+            Character targetCharacter = characterMap.get(entry.getKey());
+            targetCharacter.spritePos(xPosition, 0);
+            xPosition = xPosition + xDelta;
+        }
     }
 }
