@@ -110,7 +110,7 @@ public class InGame implements Screen {
         String[] options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
-        if(options != null) {
+        if (options != null) {
             this.disableControls = true;
             uiHandler.presentChoices(options);
         }
@@ -134,11 +134,13 @@ public class InGame implements Screen {
      * @return
      */
     public void stepBack() {
-        SnapShot previous = tracker.traceScriptBackwards();
-        uiHandler.nextLine(previous.getDialogue());
-        visibleCharacters = previous.getAction();
-        AudioHandler.handleMusicCommand(previous.getBGMCommand());
-        AudioHandler.playSound(previous.getSound());
+        if (!disableControls) {
+            SnapShot previous = tracker.traceScriptBackwards();
+            uiHandler.nextLine(previous.getDialogue());
+            visibleCharacters = previous.getAction();
+            AudioHandler.handleMusicCommand(previous.getBGMCommand());
+            AudioHandler.playSound(previous.getSound());
+        }
     }
 
     /**

@@ -11,7 +11,6 @@ import com.mygdx.game.novel1.typ.Character;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 import com.mygdx.game.novel1.ui.buttons.*;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,11 +20,11 @@ public class InGameUI extends BaseLayout {
 
     private SpeakerMap speakerLine;
     private Dialogue box;
-    private TextureRegion textBoxImage;
-    private InGame screen;
-    private TextureRegion buttonIdle;
-    private TextureRegion buttonHover;
+    private final InGame screen;
+    private final TextureRegion buttonIdle;
+    private final TextureRegion buttonHover;
     private Group choiceButtons;
+    private HashMap<String, Character> loadedCharacters;
 
     public InGameUI(Stage stage, NovelOne game, SpeakerMap initialLine, InGame screen) {
         super(stage, game);
@@ -38,18 +37,14 @@ public class InGameUI extends BaseLayout {
     }
 
     @Override
-    /**
-     * TODO - should transfer button handling to the screen class
-     * TODO - should return a list of buttons to be tracked of by the screen
-     */
     public void generateUI() {
 
         Texture texture = super.getAssets();
         Group miniButtons = new Group();
 
 
-        this.textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
-        this.box = new Dialogue(this.textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
+        TextureRegion textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
+        this.box = new Dialogue(textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
 
         TextureRegion backHover = new TextureRegion(texture, 0, 0, 62, 20);
         TextureRegion backIdle = new TextureRegion(texture, 62, 0, 62, 20);
