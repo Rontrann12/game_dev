@@ -7,9 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.InGame;
+import com.mygdx.game.novel1.typ.Character;
 import com.mygdx.game.novel1.typ.SpeakerMap;
 import com.mygdx.game.novel1.ui.buttons.*;
 import com.mygdx.game.novel1.ui.textbox.Dialogue;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class InGameUI extends BaseLayout {
@@ -107,6 +112,30 @@ public class InGameUI extends BaseLayout {
         } catch (NullPointerException e) {
             Gdx.app.log("InGameUI::nextLine", e.getMessage());
         }
+    }
 
+    public void positionCharacterSprites(LinkedHashMap<String, String> charactersOrdered, HashMap<String, Character> characterMap) {
+        int numberOfSprites = charactersOrdered.size();
+        int xDelta = 0;
+        int xPosition = 0;
+        switch (numberOfSprites) {
+            case 1:
+                xPosition = 400;
+                break;
+
+            case 2:
+                xDelta = 960;
+                break;
+
+            case 3:
+                xDelta = 500;
+                break;
+        }
+
+        for(Map.Entry<String, String> entry : charactersOrdered.entrySet()) {
+            Character targetCharacter = characterMap.get(entry.getKey());
+            targetCharacter.spritePos(xPosition, 0);
+            xPosition = xPosition + xDelta;
+        }
     }
 }
