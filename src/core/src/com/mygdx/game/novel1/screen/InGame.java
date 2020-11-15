@@ -40,7 +40,7 @@ public class InGame implements Screen {
     private final Stage stage;
     private final InGameUI uiHandler;
     private String configPath = Paths.TEST_CONFIG_PATH;
-    private LinkedHashMap<String, Character> charactersInScene;
+    private HashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private Texture background;
@@ -54,7 +54,7 @@ public class InGame implements Screen {
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
-        charactersInScene = new LinkedHashMap<>();
+        charactersInScene = new HashMap<>();
         configure();
         this.uiHandler = new InGameUI(stage, game, stepForward(), this);
         characterRenderGroup = new Group();
@@ -110,7 +110,7 @@ public class InGame implements Screen {
         String[] options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
-        if(options != null) {
+        if (options != null) {
             this.disableControls = true;
             uiHandler.presentChoices(options);
         }
@@ -134,11 +134,13 @@ public class InGame implements Screen {
      * @return
      */
     public void stepBack() {
-        SnapShot previous = tracker.traceScriptBackwards();
-        uiHandler.nextLine(previous.getDialogue());
-        visibleCharacters = previous.getAction();
-        AudioHandler.handleMusicCommand(previous.getBGMCommand());
-        AudioHandler.playSound(previous.getSound());
+        if (!disableControls) {
+            SnapShot previous = tracker.traceScriptBackwards();
+            uiHandler.nextLine(previous.getDialogue());
+            visibleCharacters = previous.getAction();
+            AudioHandler.handleMusicCommand(previous.getBGMCommand());
+            AudioHandler.playSound(previous.getSound());
+        }
     }
 
     /**
@@ -195,6 +197,8 @@ public class InGame implements Screen {
             targetCharacter.setExpression(entry.getValue());
             characterRenderGroup.addActor(targetCharacter);
         }
+
+        uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
 
         Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
