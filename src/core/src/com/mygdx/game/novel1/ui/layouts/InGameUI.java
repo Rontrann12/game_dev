@@ -53,17 +53,19 @@ public class InGameUI extends BaseLayout {
         TextureRegion loadHover = new TextureRegion(texture, 124, 0, 62, 20);
         TextureRegion mainIdle = new TextureRegion(texture, 952, 0, 100, 26);
         TextureRegion mainHover = new TextureRegion(texture, 852, 0, 100, 26);
-        TextureRegion saveImage = new TextureRegion(texture, 310, 0, 62, 20);
+        TextureRegion saveIdle = new TextureRegion(texture, 310, 0, 62, 20);
+        TextureRegion saveHover = new TextureRegion(texture, 248, 0, 62, 20);
         TextureRegion settingsImage = new TextureRegion(texture, 772, 0, 80, 26);
 
         //create the objects (buttons, textbox)
         box.setAlpha((float) 0.8);
         LoadButton loadButton = new LoadButton(loadIdle, loadHover, game, null);
         MainMenuButton mainButton = new MainMenuButton(mainIdle, mainHover, game, null);
-
+        SaveButton saveButton = new SaveButton(saveIdle, saveHover, game, null);
         BackButton backButton = new BackButton(backIdle, backHover, game, null, screen);
         mainButton.spritePos(100, -5);
         backButton.spritePos(250, -5);
+        saveButton.spritePos(350, -5);
         miniButtons.setX(150);
         miniButtons.setY(15);
 
@@ -71,6 +73,7 @@ public class InGameUI extends BaseLayout {
         miniButtons.addActor(backButton);
         miniButtons.addActor(loadButton);
         miniButtons.addActor(mainButton);
+        miniButtons.addActor(saveButton);
 
         //draw buttons
         stage.addActor(box);
