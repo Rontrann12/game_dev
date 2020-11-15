@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.ui.buttons.BackButton;
 import com.mygdx.game.novel1.ui.buttons.LoadButton;
+import com.mygdx.game.novel1.ui.buttons.SaveButton;
 import com.mygdx.game.novel1.ui.buttons.StartButton;
 
 public class MainMenuUI extends BaseLayout {
@@ -29,15 +30,18 @@ public class MainMenuUI extends BaseLayout {
 
         StartButton start = new StartButton(idleTexture, hoverTexture, game, "start button");
         LoadButton load = new LoadButton(idleTexture, hoverTexture, game, "load button");
+        SaveButton save = new SaveButton(idleTexture, hoverTexture, game, "save Button");
 
         menuGroup.setOrigin(0, 0);
         start.spritePos(0, 100);
         load.spritePos(0, 0);
+        save.spritePos(0, 200);
         menuGroup.setX(Gdx.graphics.getWidth() / 3 - 100);
         menuGroup.setY(Gdx.graphics.getHeight() / 3);
 
         menuGroup.addActor(start);
         menuGroup.addActor(load);
+        menuGroup.addActor(save);
         stage.addActor(menuGroup);
 
         multiplexer.addProcessor(stage);
