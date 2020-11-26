@@ -5,31 +5,36 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.screen.MainMenu;
+import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.utils.AudioHandler;
 
-public class MainMenuButton extends BaseButton {
-    public MainMenuButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name){
-        super(idleTexture, hoverTexture,game, name);
+public class ReturnButton extends BaseButton {
 
+    public ReturnButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, String name, Save save) {
+        super(idleTexture, hoverTexture, game, name);
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                Gdx.app.log(name, "button clicked");
+                Gdx.app.log("SaveButton::Savebutton", "Mouse entered bounds");
+
                 AudioHandler.playSound(buttonClick);
+
                 action(game);
 
                 return true;
             }
         });
+    }
 
+    public void action(NovelOne game, Save save) {
+        Gdx.app.log("ReturnButton::action", "method executing");
+        //game.setScreen(save.getPreviousScreen());
     }
 
     @Override
-    public void action(NovelOne game ){
-        game.getScreen().dispose();
-        game.setScreen(new MainMenu(game));
-    }
+    public void action(NovelOne game) {
+        Gdx.app.log("ReturnButton::action", "overriden method executing");
 
+    }
 }

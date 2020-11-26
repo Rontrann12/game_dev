@@ -47,6 +47,7 @@ public class InGame implements Screen {
     private ScriptTracker tracker;
     private LinkedHashMap<String, String> visibleCharacters;
     private boolean disableControls = false;
+    private InputMultiplexer multiplexer;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -59,7 +60,7 @@ public class InGame implements Screen {
         this.uiHandler = new InGameUI(stage, game, stepForward(), this);
         characterRenderGroup = new Group();
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
+        this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(
                 new InputAdapter() {
@@ -244,7 +245,6 @@ public class InGame implements Screen {
 
     @Override
     public void hide() {
-
     }
 
 
