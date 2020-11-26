@@ -31,7 +31,26 @@ public class StringUtilities {
         if(nameSplit.length == 1) {
             nameSplit[0] = nameSplit[0].replace(Separators.KEYVALUE,Separators.EMPTY);
         }
-        return nameSplit[0];
+
+        String name = nameSplit[0];
+        if(nameSplit[0].contains("(") && nameSplit[0].contains(")")) {
+            name = name.substring(0,name.indexOf('('));
+        }
+
+        return name;
+    }
+
+    /**
+     * parses out aliases from character names
+     */
+
+    public static String getCharacterAlias(String input) {
+        String[] nameSplit = input.split(Separators.KEYVALUE + Separators.SPACE);
+
+        if(isContainer(nameSplit[0],'(', ')')){
+            return getContainedContent(input, '(', ')', true );
+        }
+        return null;
     }
 
     /**
@@ -77,12 +96,44 @@ public class StringUtilities {
         }
     }
 
+    public static boolean isContainer(String line, char openingContainer, char closingContainer) {
+        try {
+            String underCheck = getContainer(line, openingContainer, closingContainer);
+            Gdx.app.log("StringUtilities::isDialogue", "testing line: " + underCheck);
+            if ((underCheck.indexOf(openingContainer) == 0) && (underCheck.lastIndexOf(closingContainer) == underCheck.length()-1)){
+                return true;
+            }
+            return false;
+
+        }catch(StringIndexOutOfBoundsException e) {
+            Gdx.app.log("StringUtilities::isDialogue", e.getMessage());
+            return false;
+
+        }
+    }
+
 
 
     public static String getContainedContent(String line, char container, boolean stripContainer) {
         int firstChar = line.indexOf(container);
         int secondChar = line.lastIndexOf(container);
-        String stripped = line;
+        String stripped;
+
+        if(stripContainer){
+            stripped = line.substring(firstChar +1 , secondChar);
+        }
+        else{
+            stripped = line.substring(firstChar, secondChar + 1);
+        }
+
+        Gdx.app.log("StringUtilities::getContainedContent", "stripped string from " + line + " to: " + stripped);
+        return stripped;
+    }
+
+    public static String getContainedContent(String line, char openingCharacter, char closingCharacter, boolean stripContainer) {
+        int firstChar = line.indexOf(openingCharacter);
+        int secondChar = line.lastIndexOf(closingCharacter);
+        String stripped;
 
         if(stripContainer){
             stripped = line.substring(firstChar +1 , secondChar);
@@ -98,6 +149,14 @@ public class StringUtilities {
     private static String getContainer(String line, char container) {
         int firstChar = line.indexOf(container);
         int secondChar = line.lastIndexOf(container);
+        String stripped = line.substring(firstChar, secondChar+1);
+        Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
+        return stripped;
+    }
+
+    private static String getContainer(String line, char openingContainer, char closingContainer){
+        int firstChar = line.indexOf(openingContainer);
+        int secondChar = line.lastIndexOf(closingContainer);
         String stripped = line.substring(firstChar, secondChar+1);
         Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
         return stripped;

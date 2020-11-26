@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class Character extends Actor {
 
     private String name;
+    private boolean hideName;
     private HashMap<String, TextureRegion> expressions;
     private Sprite currentExpression;
 

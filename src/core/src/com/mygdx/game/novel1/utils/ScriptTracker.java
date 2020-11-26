@@ -15,6 +15,7 @@ public class ScriptTracker {
     private ArrayDeque<String> script;
     private String currentMusic = null;
     private String currentSpeaker = null;
+    private String currentSpeakerAlias = null;
     private int historyIndex;
     private String currentAction = null;
     private LinkedHashMap<String, String> activeCharacters;
@@ -93,6 +94,7 @@ public class ScriptTracker {
 
         if (line.contains(Separators.KEYVALUE)) {
             this.currentSpeaker = StringUtilities.getCharacterName(line);
+            this.currentSpeakerAlias = StringUtilities.getCharacterAlias(line);
             this.currentAction = StringUtilities.getAction(line);
 
             try {
@@ -139,7 +141,13 @@ public class ScriptTracker {
 
             if (this.currentSpeaker.equals("Thought")) {
                 return new SpeakerMap(null, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, true));
-            } else {
+            }
+
+            else if (this.currentSpeakerAlias != null) {
+                Gdx.app.log("ScriptTracker::handleSpeechLine", "current speaker alias is: " + currentSpeakerAlias);
+                return new SpeakerMap(this.currentSpeakerAlias, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, false));
+            }
+            else  {
                 return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, false));
             }
         }
