@@ -1,0 +1,69 @@
+~home_theme~
+
+Ron:
+    "... Huh"
+    "I got something in the mail"
+
+*crumbling_paper*
+
+Letter:
+    "Ronald Tran"
+    "Since you have turned 25 yesterday,"
+    "The state had assigned you a SO"
+    "You must come to the capital building tomorrow at 10 am"
+    "The state has excused you from work and your team had been notified"
+
+Ron:
+    "The hell?"
+    "I"m 25 years old already?"
+    "I didn"t event realize"
+    "Manadatory SO assignment felt like a surprise to me"
+    "Theres not much I can do about it now"
+    "..."
+    "I should shower"
+    'Something fell out of my pocket as I took off my jacket'
+    "What's this?"
+
+*crumbling_paper*
+
+Letter:
+    "Hey Ron, It's Carmen"
+    "I had fun earlier and I would like to see you again"
+    "If you're interested too, then meet me in the alley behind the bar we met"
+    "Same time, 3 days from today"
+    "It'll be... a date if you will ;)"
+    "I hope to see you again soon"
+
+Ron:
+    "I knew she was up to something from the start"
+    "Is she serious about this!?"
+    "Is this a trap?"
+
+OPTIONS - Report Carmen, Ignore the letter, Meet her
+
+Case - Report Carmen
+    "What is she thinking?"
+    "We could get into serious trouble if we were caught"
+    "and after I had just been assigned an SO as well?"
+    "This must be a trap"
+    "I'll do my part and report her to the authorities"
+
+
+#script6a#
+
+Case - Ignore the letter
+    "What is she thinking?"
+    "We could get into serious trouble if we were caught"
+    "and after I had just been assigned an SO as well?"
+    "..."
+    "Maybe she really was having a bad day"
+    "I'll forgive her and forget that this happened"
+
+#script6a#
+
+Case - Meet her
+    "..."
+    "I'm curious"
+    "I know it's risky but I'll meet her"
+
+#script6a#

@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.novel1.constants.ScriptCues;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class AudioHandler {
     private static float bgmVolume = 0.0f;
