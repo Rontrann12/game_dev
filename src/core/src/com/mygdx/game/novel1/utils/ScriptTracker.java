@@ -59,14 +59,14 @@ public class ScriptTracker {
         SpeakerMap dialogue = null;
         String soundCue = null;
 
-        while (dialogue == null && this.newScriptName.equals("") && this.choices == null) {
+        while (dialogue == null && this.newScriptName.equals(Separators.EMPTY) && this.choices == null) {
             String scriptLine = this.script.pop();
             this.newScriptName = handleEndScriptCue(scriptLine);
             this.choices = handleChoicesCue(scriptLine);
             handleMusicChange(scriptLine);
             soundCue = handleSoundCue(scriptLine, soundCue);
             handleCharacterCue(scriptLine);
-            dialogue = handleDialogue(scriptLine);
+            dialogue = handleSpeechLine(scriptLine);
 
         }
 
@@ -132,30 +132,37 @@ public class ScriptTracker {
         }
     }
 
-    private SpeakerMap handleDialogue(String line) {
+    private SpeakerMap handleSpeechLine(String line) {
         if (StringUtilities.isContainer(line, ScriptCues.DIALOGUE_CONTAINER)) {
-            return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER));
+
+            Gdx.app.log("ScriptTracker::handleSpeechLine", "current speaker is: " + currentSpeaker);
+
+            if (this.currentSpeaker.equals("Thought")) {
+                return new SpeakerMap(null, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, true));
+            } else {
+                return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, false));
+            }
         }
         return null;
     }
 
     private String handleSoundCue(String line, String soundCue) {
         if (StringUtilities.isContainer(line, ScriptCues.SFX_CONTAINER)) {
-            soundCue = StringUtilities.getContainedContent(line, ScriptCues.SFX_CONTAINER);
+            soundCue = StringUtilities.getContainedContent(line, ScriptCues.SFX_CONTAINER, true);
         }
         return soundCue;
     }
 
     private String handleMusicChange(String line) {
         if (StringUtilities.isContainer(line, ScriptCues.BGM_CONTAINER)) {
-            this.currentMusic = StringUtilities.getContainedContent(line, ScriptCues.BGM_CONTAINER);
+            this.currentMusic = StringUtilities.getContainedContent(line, ScriptCues.BGM_CONTAINER, true);
         }
         return this.currentMusic;
     }
 
     private String handleEndScriptCue(String line) {
         if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
-            return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER);
+            return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER, true);
         }
         return "";
     }

@@ -1,6 +1,7 @@
 package com.mygdx.game.novel1.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 
 public class StringUtilities {
@@ -26,6 +27,10 @@ public class StringUtilities {
      */
     public static String getCharacterName(String spriteName) {
         String[] nameSplit = spriteName.split(Separators.KEYVALUE+Separators.SPACE);
+
+        if(nameSplit.length == 1) {
+            nameSplit[0] = nameSplit[0].replace(Separators.KEYVALUE,Separators.EMPTY);
+        }
         return nameSplit[0];
     }
 
@@ -74,10 +79,18 @@ public class StringUtilities {
 
 
 
-    public static String getContainedContent(String line, char container) {
+    public static String getContainedContent(String line, char container, boolean stripContainer) {
         int firstChar = line.indexOf(container);
         int secondChar = line.lastIndexOf(container);
-        String stripped = line.substring(firstChar +1 , secondChar);
+        String stripped = line;
+
+        if(stripContainer){
+            stripped = line.substring(firstChar +1 , secondChar);
+        }
+        else{
+            stripped = line.substring(firstChar, secondChar + 1);
+        }
+
         Gdx.app.log("StringUtilities::getContainedContent", "stripped string from " + line + " to: " + stripped);
         return stripped;
     }

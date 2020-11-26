@@ -1,0 +1,236 @@
+~bar_theme~
+
+*bar_noises*
+
+Bartender: Bartender_friendly
+    "Hey Ron"
+    "Good day at work today"
+
+Ron:
+    "You know it"
+    "I'll get the usual"
+
+Bartender:
+    "You got it"
+    "A Nikka on the rocks, and some grilled squid"
+    "Coming right up"
+
+Ron:
+    "."
+    ".."
+
+??: 
+    "Good day at work, huh?"
+
+Ron:
+    "Hmm?"
+
+Carmen (??): Carmen_smiling 
+
+Ron:
+    "Yeah.. I did"
+    "Hopefully you did too?"
+
+Carmen (??): Carmen_serious
+    "Can't say the same"
+    "Rough day for me"
+
+Carmen (??): Carmen_smiling
+    "I'm here to drink my misery away"
+
+Ron:
+    "Haha"
+    "Yeah, been there before"
+    "But I'm sure things will get better soon"
+
+Carmen (??): Carmen_serious
+    "We'll see"
+
+Carmen:  Carmen_smiling
+    "Anyways, I'm Carmen"
+
+Ron:
+    "I'm Ron"
+    "Nice to meet you"
+
+Carmen: Carmen_smiling 
+    "Hey"
+    "Mind if I sit next to you?"
+
+Ron:
+    "Not at all"
+    'A chance to sit next to a pretty girl is always welcome'
+
+Bartender:
+    "Ayee, tender"
+    "I'll get what buddy here is having"
+
+Bartender:
+    "Coming right up"
+
+Ron: 
+    'She seems kind of ill mannered'
+    'Maybe that's why she having it rough at work'
+    "So what do you do for work?"
+
+Carmen: Carmen_smiling
+    "Ohh"
+    "I clean up trash around the city"
+
+Ron:
+    "I see"
+    "Garbage Woman?"
+
+Carmen: Carmen_smiling
+    "Yup"
+    "..."
+
+Carmen: Carmen_glare
+    "Go ahead say it"
+    "It's a shitty job isn't it"
+
+Ron:
+    "No Not at all"
+    "You're job is very important"
+    "If it wasn't for people like you, we'd be living in filth"
+
+Carmen: Carmen_laughing
+    "How cute"
+    "I know you're just saying that"
+    "Asshole"
+    "I think we can both agree that my job is pretty shitty"
+
+Ron:
+    'How does she have the balls to openly complain about her life in public like that?!'
+    'Does she not know that she can be reported for openly complaining about her assigned job like that?'
+    'I look around the bar'
+    '...'
+    'The bar is pretty loud right now, it doesn't look like anyone noticed'
+
+Bartender: Bartender_friendly
+    "Here you go"
+
+Ron:
+    'Anyway, I'll let it slide'
+    'We all have those days where we just feel miserable'
+    'I won't report her'
+    "Hey Carmen listen, I think you should be careful about what you say"
+    "We're not allowed to be complaining about what has been assigned to us"
+
+Carmen: Carmen_glare
+    "..."
+
+Carmen: Carmen_smile
+    "Yeah, you're right"
+    "Fuck the people assigning us shitty careers then"
+
+Ron: 
+    "Carmen, I know you're upset but try to keep your comments to yourself"
+    "You're putting yourself in danger"
+
+Carmen: Carmen_glare
+    "..."
+    "I'll be right back"
+
+Carmen: Carmen_smile
+    "Watch my stuff okay"
+
+Ron:
+    'I look in disbelief as she gets up and heads out of sight'
+    "Crazy..."
+    'I continue to enjoy my whiskey and food'
+
+Carmen: Carmen_excited
+    "Back!"
+    "Sorry about earlier"
+
+Carmen: Carmen_smiling
+    "Anyways lets just eat!"
+
+Ron:
+    'I smile at her'
+    "Sure"
+    '...'
+
+Carmen: Carmen_surprised
+    "Damn, this whiskey is good!"
+    
+Carmen: Carmen_excited  
+    "You have good taste!"
+
+Ron:
+    "I like to try whiskeys during my free time"
+    "Glad you like it"
+
+Carmen: Carmen_curious
+    "So..."
+    "I told you what I do for a living"
+    "Tell me about what you do"
+
+Ron:
+    "Oh, I'm a nuclear engineer"
+    "My office is nearby"
+
+Carmen: Carmen_surprised
+    "Sounds like a pretty cool job"
+
+Ron:
+    "Ehh"
+    "Sounds cool, but I just sit in an office all day"
+    'I tell her more about what I do'
+
+Carmen: Carmen_smiling
+    "Sound like it could get pretty stressful"
+
+Ron:
+    "It does"
+    "I started driking a lot more every since I started work a year ago"
+    "Eventually, whiskey testing became my hobby"
+
+Carmen: Carmen_smiling
+    "hahaha.. "
+    "Cute"
+    "Hey, you're out of booze"
+    "Let me get you another one"
+
+Ron:
+    "No no, it's fine"
+    "I shouldn't drink too much"
+
+Carmen: Carmen_wink
+    "What's wrong?"
+    "Afraid you might start ranting about work while drunk?"
+
+Ron:
+    "I don't know what I would do if I were drunk"
+    "Wouldn't you be worried about what you might say while drunk too"
+
+Carmen: Carmen_wink
+    "..."
+    "That's why I'll never get drunk"
+
+Ron:
+    'I start to wonder what's she trying to get out of me'
+    "It's getting late, I need to head out"
+    "It was nice meeting you Carmen"
+    "I'll see you around"
+    'I pay the bartender and I grab my belongings and headed for the door'
+
+Carmen: Carmen_smiling
+    "See you next time!"
+
+#script5#
+
+
+
+
+    
+
+
+    
+
+
+
+
+
+

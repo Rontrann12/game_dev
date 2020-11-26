@@ -1,0 +1,51 @@
+
+*alarm_ringing*
+
+Ron:
+    ".."
+    "..."
+
+~home_theme~
+
+Ron:     
+    "Man - 5 am already"
+    "Better get up for work..."
+
+*radio_chatter*
+
+Radio:
+    "Good morning Calgary!"
+    "For today's state news:"
+    "Last night, authorities raided a small band of non-cooperatives in the Marlborough district"
+    "Police actions were swift and effective thanks to a tip off from a good sameritan"
+    
+
+
+Ron:
+    "Police raided another band of non-compliants last night?"
+    "This kind of news has been more common latetly"
+    "I don't get it"
+    "Why challenge the authorities?"
+    "It's much better to follow the rules than to break the them and risk capture"
+    "Anyways, I need to get ready for work. Can't Risk being late for work"
+    "..."
+    "Seriously"
+
+
+Radio:
+    "That is all for today's state news"
+    "I would like to remind citizens that you are REQUIRED to report ANY suspicious behaviour that may pose a threat to the integrity of this society"
+    "Remember..."
+    "The success of this society requires your full compliance and cooperation"
+    "May you all have a productive day today"
+
+*radio_shut_off*
+
+Ron:
+    "Yeah"
+    "No need to remind me again"
+    "Well, off I go"
+
+#script2#
+
+

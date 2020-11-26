@@ -1,0 +1,32 @@
+~city_theme~
+
+Ron:
+    "Luckly, my office is just 30 min walk from work"
+    "Most people have to take the shitty train to get to work"
+    "There arn't many trains running at once, so people would normally have to pack together on one train"
+    "I turn into an empty alley"
+    "I never see any cars on the streets anymore aside from city buses"
+    "Authorities have dealt with incidents where non-compliants would use cars to- "
+
+??:
+    "Alright"
+    "Move your asses"
+
+Ron:
+    "??"
+    "I hear yelling and whimpering from a building on my left"
+    "I look over and see Armored personnel escorting a few people out of the building at gun point"
+
+Officer: 
+    "I said get a move on mother fuckers!"
+
+Ron:
+    "I see the officer shove 3 people with bags over their heads in to an armoured van"
+    "..."
+    "I never thought i'd be so close to the action"
+    "..."
+    "How terrifying"
+    "I should mind my own business and forget what I just saw"
+    "Anyways, I am almost at the office"
+
+#script3#

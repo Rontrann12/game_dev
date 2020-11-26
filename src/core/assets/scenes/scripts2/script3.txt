@@ -1,0 +1,210 @@
+~office_theme~
+
+*office_noices*
+
+Ron:
+    'I grab a coffee and arrived at my desk just in time'
+    'I see that others from my team had just arrived as well'
+    'Alright, yesterday, I was almost able to get the reactor online'
+    'Let's finish that up today'
+    'I start typing away at my computer'
+
+*footsteps_walking*
+Ron:
+    'From the corner of my eye, I see someone from management approach'
+
+Shaina: Shaina_smiling
+
+Management:
+    "Team, meet Shaina"
+    "She just completed state training in Nuclear Engineering and will be working with you all starting today"
+
+Ron:
+    'Huh...' 
+    'She's kind of cute'
+    'Looks like now i'll have her pretty face to look forward to when I go to work now'
+    'At least will make working for the rest of my life easier'
+
+Team:
+    "Welcome to the Team Shaina"
+
+Ron:
+    "Welcome to the Team Shaina"
+
+Shaina: Shaina_excited
+    "Thank you!"
+    "I look forward to working with you all"
+
+Ron:
+    'Shaina takes an empty desk next to me'
+    "Hi, I'm Ron. I've been on this team for only about a year"
+    "But let me know if you're ever stuck on something. I'd be happy to help"
+
+Shaina: Shaina_smiling
+    "Hi Ron, nice to meet you"
+    "Thanks, I will keep that in mind"
+    "..."
+
+ Shaina: Shaina_curious
+    "... Did you study nuclear engineering as well?"
+
+Ron:
+    "Yeah... I think everyone on the team did haha"
+
+Shaina: Shaina_embarrassed
+    "Oh sorry, dumb question"
+
+Ron:
+    "No it's fine, this is only your first day of work after state training anyway"
+
+Shaina: Shaina_curious
+    "Yeah"
+    "So what does the team do?"
+
+Ron:
+    "So this team is called the NRCC.. Nuclear Reactor Control Center"
+    "Basically, We develop Reactor components and maintain Calgary's nuclear energy systems"
+    'I go through more of the details of what the team does'
+    "Yup, so thats what we do"
+
+Shaina: Shaina_bored
+    "Oh I see"
+
+Ron:
+    'Shaina doesn't seem too enthusiasic'
+    'Either she isn't interested or I don't sound very interested myself'
+    'I guess it can't be helped as we are practically told what to study and what to do for work'
+    "Anyways, You should introduce yourself to Dale there"
+    "He's the most experience member of the team and he can help you get set up"
+
+Shaina: Shaina_smiling
+    "Sure thanks!"
+    "Nice talking to you Ron"
+    "I will catch up with you later"
+
+Ron:
+    'I smile back'
+    "Sure"
+
+Shaina: EXIT
+
+Ron:
+    'Shaina leaves her desk to talk to Dale'
+    'I shift my focus to my computer'
+    'I start typing away'
+    '.'
+    '..'
+    '...'
+    'Several Hours pass'
+    '.'
+    '..'
+    '...'
+    'Ayeee'
+    'Reactor is online. Better send out a status report'
+    '...'
+    'aaand done! This calls for a quick celebration'
+    'It's almost time to go home'
+    'I think I will stop by a nearby bar for a drink after work'
+    '...'
+    'I see Shaina return to her desk'
+
+Shaina: Shaina_dazed
+    "Hey"
+
+Ron:
+    "Hey, Welcome back"
+    "You okay?"
+
+Shaina:
+    "I'm fine"
+    "Just a lot of info to process"
+
+Ron:
+    "Ahh yeah, I get it"
+    "First day is never easy"
+    "Well, the day is almost over"
+    "Go home and get a good night rest"
+    "I'm sure tomorrow will be better"
+
+Shaina: Shaina_dazed
+    "Thanks"
+    "I wonder if there is a good bar nearby"
+
+Ron:
+    "You're planning on drinking already?"
+    "It's only your first day!"
+
+Shaina: Shaina_shy
+    "N-Not today"
+    "Just wanted to know"
+    "..."
+    "For extra hard work days"
+
+Ron:
+    "Haha, i see"
+    "Well..."
+
+OPTIONS - There's one near by, I'll show next time
+
+Case - There's one near by
+
+Ron:
+    "There's one in Prince Edward's Park"
+
+Shaina: Shaina_curious
+    "Ohh. That's nearby!"
+    "I will check it out
+    "..."
+
+Shaina: Shaina_shy
+    "Not today of course"
+
+Ron:
+    "Sure"
+    "Anyways, I'm going to head home now"
+    "See you tomorrow"
+
+Shaina: Shaina_smiling
+    "Byee~!"
+
+
+Shaina: EXIT
+
+Ron:
+    'Alright! Time for a nice glass of whiskey!'
+
+#script4#
+
+
+Case - I'll show next time
+Ron:
+    "There's one near by"
+    "I can show you the place next time"
+
+Shaina: Shaina_shy
+    ".."
+
+Ron:
+    "After work of course"
+    "Not anything else"
+
+Shaina: Shaina_smiling
+    "Sure"
+    "We'll go next time then"
+
+Ron:
+    "Sure"
+    "Anyways, I'm going to head home now"
+    "See you tomorrow"
+
+Shaina: Shaina_smiling
+    "Byee~!"
+
+Shaina: EXIT
+
+Ron:
+    'Alright! Time for a nice glass of whiskey!'
+
+#script4#
+
+

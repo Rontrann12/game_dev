@@ -193,6 +193,9 @@ public class InGame implements Screen {
             }
         }
 
+        // TODO - Want to display aribitrary display names but with correct sprites
+        // TODO - for example, show that ?? is speaking but display a monika sprite
+
         for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
             Character targetCharacter = charactersInScene.get(entry.getKey());
             targetCharacter.setExpression(entry.getValue());
