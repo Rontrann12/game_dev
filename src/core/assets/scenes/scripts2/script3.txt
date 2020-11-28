@@ -1,6 +1,6 @@
 ~office_theme~
 
-*office_noices*
+*office_noises*
 
 Ron:
     'I grab a coffee and arrived at my desk just in time'
