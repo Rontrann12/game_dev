@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
@@ -20,9 +21,18 @@ public class Character extends Actor {
     private Sprite currentExpression;
 
 
-    public Character(String name, Texture sheet) {
+    public Character(String name, Texture[] sheets) {
         this.name = name;
-        this.expressions = ConfigReader.mapSprites(StringUtilities.generateFileName(Paths.CHARACTERS_PATH, name, FileTypes.TEXT), sheet);
+        this.expressions = new HashMap<>();
+        gatherExpressions(sheets);
+    }
+
+    private void gatherExpressions(Texture[] sheets) {
+        for (int i = 0; i < sheets.length; i ++) {
+            HashMap<String,TextureRegion> temp;
+            temp = ConfigReader.mapSprites(StringUtilities.generateFileName(Paths.CHARACTERS_PATH, name + Separators.UNDERSCORE + i, FileTypes.TEXT), sheets[i]);
+            this.expressions.putAll(temp);
+        }
     }
 
     public void setExpression(String expression) {

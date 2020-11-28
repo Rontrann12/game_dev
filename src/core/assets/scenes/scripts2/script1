@@ -1,27 +1,25 @@
+~beneath_the_mask~
 
-*alarm_ringing*
 
-Ron:
+Ron: Ron_Troubled
     ".."
     "..."
 
-~home_theme~
 
-Ron:     
+Ron: Ron_Sad
     "Man - 5 am already"
     "Better get up for work..."
 
-*radio_chatter*
 
 Radio:
     "Good morning Calgary!"
-    "For today's state news:"
+    "For today's state news"
     "Last night, authorities raided a small band of non-cooperatives in the Marlborough district"
     "Police actions were swift and effective thanks to a tip off from a good sameritan"
     
 
 
-Ron:
+Ron: Ron_Amazing
     "Police raided another band of non-compliants last night?"
     "This kind of news has been more common latetly"
     "I don't get it"
@@ -39,9 +37,8 @@ Radio:
     "The success of this society requires your full compliance and cooperation"
     "May you all have a productive day today"
 
-*radio_shut_off*
 
-Ron:
+Ron: Ron_Angry
     "Yeah"
     "No need to remind me again"
     "Well, off I go"

@@ -170,11 +170,11 @@ public class InGame implements Screen {
         this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
-        HashMap<String, Texture> characters = assets.getCharacterTextures();
+        HashMap<String, Texture[]> characters = assets.getCharacterTextures();
 
 
-        for (Map.Entry<String, Texture> stringTextureEntry : characters.entrySet()) {
-            Map.Entry<String, Texture> pair = stringTextureEntry;
+        for (Map.Entry<String, Texture[]> stringTextureEntry : characters.entrySet()) {
+            Map.Entry<String, Texture[]> pair = stringTextureEntry;
             Gdx.app.log("InGame::configure", "adding character texture: " + pair.getKey());
             charactersInScene.put(pair.getKey(), new Character(pair.getKey(), pair.getValue()));
         }

@@ -6,4 +6,5 @@ public class Separators {
     public static final String FILETYPE = ".";
     public static final String SPACE = " ";
     public static final String EMPTY = "";
+    public static final String UNDERSCORE = "_";
 }

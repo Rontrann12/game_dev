@@ -1,4 +1,4 @@
-Monika.png
+Monika_0.png
 size: 1924, 1924
 format: RGBA8888
 filter: Linear,Linear
