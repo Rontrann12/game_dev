@@ -95,7 +95,7 @@ public class ConfigReader {
                 String data = reader.nextLine();
 
                 if (data.indexOf(Separators.FILETYPE) != -1) {
-                    targetCharacter = data.substring(0, data.indexOf(Separators.FILETYPE));
+                    targetCharacter = data.split("\\" + Separators.FILETYPE)[0].split(Separators.UNDERSCORE)[0];//data.substring(0, data.indexOf(Separators.FILETYPE));
                 } else if (data.contains(targetCharacter)) {
                     key = data;
                 }

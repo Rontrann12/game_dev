@@ -10,13 +10,13 @@ import java.util.HashMap;
 
 public class AssetsDTO {
 
-    private HashMap<String, Texture> characterTextures;
+    private HashMap<String, Texture[]> characterTextures;
     private ArrayDeque<String> script;
     private HashMap<String, Music> tracks;
     private Texture backgrounds;
     private HashMap<String, Sound> sounds;
 
-    public AssetsDTO(ArrayDeque<String> script, HashMap<String, Texture> textures, Texture backgrounds, HashMap<String, Music> tracks, HashMap<String, Sound> sounds) {
+    public AssetsDTO(ArrayDeque<String> script, HashMap<String, Texture[]> textures, Texture backgrounds, HashMap<String, Music> tracks, HashMap<String, Sound> sounds) {
         this.script = script;
         this.characterTextures = textures;
         this.backgrounds = backgrounds;
@@ -29,7 +29,7 @@ public class AssetsDTO {
         return this.script;
     }
 
-    public HashMap<String, Texture> getCharacterTextures() {
+    public HashMap<String, Texture[]> getCharacterTextures() {
         return this.characterTextures;
     }
 
