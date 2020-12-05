@@ -33,7 +33,7 @@ abstract class BaseTextBox extends Actor {
     }
 
     private float textY() {
-        return textBoxImage.getY() + textBoxImage.getHeight() / 2;
+        return textBoxImage.getY() + textBoxImage.getHeight() / 2  + 50;
     }
 
     private float speakerX() {
@@ -41,7 +41,7 @@ abstract class BaseTextBox extends Actor {
     }
 
     private float speakerY() {
-        return textBoxImage.getY() + 3 * (textBoxImage.getHeight() / 4);
+        return textBoxImage.getY() + 3 * (textBoxImage.getHeight() / 4 + 10);
     }
 
     @Override

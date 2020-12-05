@@ -5,10 +5,7 @@ import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
-
 import java.util.*;
-
-import static com.mygdx.game.novel1.constants.ScriptCues.CASE_CUE;
 
 public class ScriptTracker {
     private ArrayList<SnapShot> scriptLogger;
@@ -48,6 +45,64 @@ public class ScriptTracker {
 
         return snap;
 
+    }
+
+
+    /**
+     * adds a new event (sounds, music played, and line) at a given point in the script
+     */
+    public void logScriptEvent(SnapShot snapshot) {
+        Gdx.app.log("ScriptTracker::logScriptEvent", "line: " + snapshot.getDialogue() +
+                ", music: " + snapshot.getBGMCommand() +
+                ", sound: " + snapshot.getSound() +
+                ", character: " + snapshot.getCharacter() +
+                ", action: " + snapshot.getAction().size());
+
+        SnapShot copy = new SnapShot(snapshot);
+        scriptLogger.add(copy);
+        historyIndex++;
+    }
+
+    public SnapShot traceScriptBackwards() {
+        historyIndex--;
+        SnapShot snapshot = scriptLogger.get(historyIndex);
+        Gdx.app.log("ScriptTracker::traceScriptBackwards", "line: " + snapshot.getDialogue() +
+                ", music: " + snapshot.getBGMCommand() +
+                ", sound: " + snapshot.getSound() +
+                ", character: " + snapshot.getCharacter() +
+                ", action: " + snapshot.getAction());
+
+        return snapshot;
+    }
+
+    /**
+     * returns the history taken from the logger
+     */
+    public void getHistory() {
+
+    }
+
+    public String getNewScriptName() {
+        return this.newScriptName;
+    }
+
+    public String[] getChoices() {
+        return this.choices;
+    }
+
+    public void handleScriptBranching(String selection) {
+        this.choices = null;
+        int limit = 100;
+        int index = 0;
+        boolean caseFound = false;
+
+        while (index < limit && !caseFound) {
+            String line = this.script.pop();
+            if (line.contains(ScriptCues.CASE_CUE) && line.contains(selection)) {
+                caseFound = true;
+            }
+            index++;
+        }
     }
 
     /**
@@ -111,102 +166,56 @@ public class ScriptTracker {
         }
     }
 
-    public String getNewScriptName() {
-        return this.newScriptName;
-    }
-
-    public String[] getChoices() {
-        return this.choices;
-    }
-
-    public void handleScriptBranching(String selection) {
-        this.choices = null;
-        int limit = 100;
-        int index = 0;
-        boolean caseFound = false;
-
-        while (index < limit && !caseFound) {
-            String line = this.script.pop();
-            if (line.contains(CASE_CUE) && line.contains(selection)) {
-                caseFound = true;
-            }
-            index++;
-        }
-    }
 
     private SpeakerMap handleSpeechLine(String line) {
-        if (StringUtilities.isContainer(line, ScriptCues.DIALOGUE_CONTAINER)) {
+        if (StringUtilities.isContainer(line, ScriptCues.DIALOGUE_CONTAINER, ScriptCues.DIALOGUE_CONTAINER)) {
 
             Gdx.app.log("ScriptTracker::handleSpeechLine", "current speaker is: " + currentSpeaker);
 
+            //TODO - display thoughts better
             if (this.currentSpeaker.equals("Thought")) {
-                return new SpeakerMap(null, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, true));
-            }
 
-            else if (this.currentSpeakerAlias != null) {
+                return new SpeakerMap(null, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, ScriptCues.DIALOGUE_CONTAINER, true));
+
+            } else if (this.currentSpeakerAlias != null) {
+
                 Gdx.app.log("ScriptTracker::handleSpeechLine", "current speaker alias is: " + currentSpeakerAlias);
-                return new SpeakerMap(this.currentSpeakerAlias, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, false));
-            }
-            else  {
-                return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, false));
+                return new SpeakerMap(this.currentSpeakerAlias, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, ScriptCues.DIALOGUE_CONTAINER, false));
+
+            } else {
+
+                return new SpeakerMap(this.currentSpeaker, StringUtilities.getContainedContent(line, ScriptCues.DIALOGUE_CONTAINER, ScriptCues.DIALOGUE_CONTAINER, false));
             }
         }
         return null;
     }
 
     private String handleSoundCue(String line, String soundCue) {
-        if (StringUtilities.isContainer(line, ScriptCues.SFX_CONTAINER)) {
-            soundCue = StringUtilities.getContainedContent(line, ScriptCues.SFX_CONTAINER, true);
+
+        if (StringUtilities.isContainer(line, ScriptCues.SFX_CONTAINER, ScriptCues.SFX_CONTAINER)) {
+            soundCue = StringUtilities.getContainedContent(line, ScriptCues.SFX_CONTAINER, ScriptCues.SFX_CONTAINER, true);
         }
+
         return soundCue;
     }
 
     private String handleMusicChange(String line) {
-        if (StringUtilities.isContainer(line, ScriptCues.BGM_CONTAINER)) {
-            this.currentMusic = StringUtilities.getContainedContent(line, ScriptCues.BGM_CONTAINER, true);
+
+        if (StringUtilities.isContainer(line, ScriptCues.BGM_CONTAINER, ScriptCues.BGM_CONTAINER)) {
+            this.currentMusic = StringUtilities.getContainedContent(line, ScriptCues.BGM_CONTAINER, ScriptCues.BGM_CONTAINER, true);
         }
+
         return this.currentMusic;
     }
 
     private String handleEndScriptCue(String line) {
-        if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER)) {
-            return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER, true);
+
+        if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER, ScriptCues.END_SCRIPT_CONTAINER)) {
+            return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER, ScriptCues.END_SCRIPT_CONTAINER, true);
+
         }
         return "";
     }
 
-    /**
-     * adds a new event (sounds, music played, and line) at a given point in the script
-     */
-    public void logScriptEvent(SnapShot snapshot) {
-        Gdx.app.log("ScriptTracker::logScriptEvent", "line: " + snapshot.getDialogue() +
-                ", music: " + snapshot.getBGMCommand() +
-                ", sound: " + snapshot.getSound() +
-                ", character: " + snapshot.getCharacter() +
-                ", action: " + snapshot.getAction().size());
-
-        SnapShot copy = new SnapShot(snapshot);
-        scriptLogger.add(copy);
-        historyIndex++;
-    }
-
-    public SnapShot traceScriptBackwards() {
-        historyIndex--;
-        SnapShot snapshot = scriptLogger.get(historyIndex);
-        Gdx.app.log("ScriptTracker::traceScriptBackwards", "line: " + snapshot.getDialogue() +
-                ", music: " + snapshot.getBGMCommand() +
-                ", sound: " + snapshot.getSound() +
-                ", character: " + snapshot.getCharacter() +
-                ", action: " + snapshot.getAction());
-
-        return snapshot;
-    }
-
-    /**
-     * returns the history taken from the logger
-     */
-    public void getHistory() {
-
-    }
 }
 

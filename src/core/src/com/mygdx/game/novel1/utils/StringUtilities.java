@@ -70,32 +70,32 @@ public class StringUtilities {
         }
     }
 
+//    public static boolean isContainer(String line, char containerCharacter) {
+//        try {
+//            String underCheck = getContainer(line, containerCharacter);
+//            Gdx.app.log("StringUtilities::isDialogue", "testing line: " + underCheck);
+//            if ((underCheck.indexOf(containerCharacter) == 0) && (underCheck.lastIndexOf(containerCharacter) == underCheck.length()-1)){
+//                return true;
+//            }
+//            return false;
+//
+//        }catch(StringIndexOutOfBoundsException e) {
+//            Gdx.app.log("StringUtilities::isDialogue", e.getMessage());
+//            return false;
+//
+//        }
+//    }
 
     /**
      * TODO - Need to test this
      *
      * checks that the containerCharacter contains a string
      *
-      * @param line
-     * @param containerCharacter
+     * @param line
+     * @param openingContainer
+     * @param closingContainer
      * @return
      */
-    public static boolean isContainer(String line, char containerCharacter) {
-        try {
-            String underCheck = getContainer(line, containerCharacter);
-            Gdx.app.log("StringUtilities::isDialogue", "testing line: " + underCheck);
-            if ((underCheck.indexOf(containerCharacter) == 0) && (underCheck.lastIndexOf(containerCharacter) == underCheck.length()-1)){
-                return true;
-            }
-            return false;
-
-        }catch(StringIndexOutOfBoundsException e) {
-            Gdx.app.log("StringUtilities::isDialogue", e.getMessage());
-            return false;
-
-        }
-    }
-
     public static boolean isContainer(String line, char openingContainer, char closingContainer) {
         try {
             String underCheck = getContainer(line, openingContainer, closingContainer);
@@ -111,7 +111,6 @@ public class StringUtilities {
 
         }
     }
-
 
 
     public static String getContainedContent(String line, char container, boolean stripContainer) {
@@ -146,13 +145,13 @@ public class StringUtilities {
         return stripped;
     }
 
-    private static String getContainer(String line, char container) {
-        int firstChar = line.indexOf(container);
-        int secondChar = line.lastIndexOf(container);
-        String stripped = line.substring(firstChar, secondChar+1);
-        Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
-        return stripped;
-    }
+//    private static String getContainer(String line, char container) {
+//        int firstChar = line.indexOf(container);
+//        int secondChar = line.lastIndexOf(container);
+//        String stripped = line.substring(firstChar, secondChar+1);
+//        Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
+//        return stripped;
+//    }
 
     private static String getContainer(String line, char openingContainer, char closingContainer){
         int firstChar = line.indexOf(openingContainer);

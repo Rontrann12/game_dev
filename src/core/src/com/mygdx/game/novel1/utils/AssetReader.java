@@ -51,17 +51,15 @@ public class AssetReader {
 
         HashMap<String, Sound> allSounds = new HashMap<>();
         AssetManager manager = new AssetManager();
-        int limit = 10;
-        int i = 0;
+
         Iterator iterator = list.iterator();
 
-        while (iterator.hasNext() && i < limit) {
+        while (iterator.hasNext()) {
             String name = iterator.next().toString();
-
             Gdx.app.log("AssetReader::loadSound", "loading sfx: " + name);
             manager.load(generateFileName(SFX_PATH, name, FileTypes.AUDIO), Sound.class);
-            i++;
         }
+
         manager.finishLoading();
 
         while (!list.isEmpty()) {
@@ -86,16 +84,13 @@ public class AssetReader {
     private static HashMap<String, Music> loadMusic(ArrayDeque<String> list) {
         HashMap<String, Music> allMusic = new HashMap<>();
         AssetManager manager = new AssetManager();
-        int limit = 10;
-        int i = 0;
         Iterator iterator = list.iterator();
 
-        while (iterator.hasNext() && i < limit) {
+        while (iterator.hasNext()) {
             String name = iterator.next().toString();
 
             Gdx.app.log("AssetReader::loadMusic", "loading track: " + name);
             manager.load(generateFileName(BGM_PATH, name, FileTypes.AUDIO), Music.class);
-            i++;
         }
         manager.finishLoading();
 
@@ -158,42 +153,6 @@ public class AssetReader {
         Gdx.app.log("AssetReader::loadTexture", "loaded " + textures.size() + " characters");
         return textures;
     }
-
-
-//    private static HashMap<String, Texture> loadTextures2(ArrayDeque<String> list, String assetsPath) {
-//
-//        AssetManager manager = new AssetManager();
-//        HashMap<String, Texture> textures = new HashMap<>();
-//        int limit = 10;
-//        int i = 0;
-//        Iterator listIterator = list.iterator();
-//
-//        while (listIterator.hasNext() && i < limit) {
-//            String name = listIterator.next().toString();
-//            File temp = new File(generateFileName(assetsPath, name + Separators.UNDERSCORE + i, FileTypes.PNG));
-//            Gdx.app.log("AssetReader::loadTextures", "checking infinite loop");
-//            if(temp.exists()){
-//                Gdx.app.log("AssetReader::loadTextures", "loading texture: " + name);
-//                manager.load(generateFileName(assetsPath, name + Separators.UNDERSCORE + i, FileTypes.PNG), Texture.class);
-//            }else{
-//                break;
-//            }
-//            i++;
-//
-//        }
-//
-//        manager.finishLoading();
-//
-//        while (!list.isEmpty()) {
-//            String name = list.pop();
-//            Texture texture = manager.get(generateFileName(assetsPath, name, FileTypes.PNG));
-//            textures.put(name, texture);
-//        }
-//
-//        Gdx.app.log("AssetReader::loadTexture", "loaded " + textures.size() + " characters");
-//        return textures;
-//
-//    }
 
     /**
      * loads in the item specified. For single item

@@ -15,6 +15,8 @@ public class Dialogue extends BaseTextBox {
         super.text = new BitmapFont();
         super.speakerText = new BitmapFont();
         super.speaker = speaker;
+
+        spritePos(0,-100);
     }
 
     public void setAlpha(float alpha) {

@@ -26,7 +26,7 @@ public class ConfigReader {
      * @param path
      */
     public static void readNewConfiguration(String path) {
-        List<String> dataList;
+
         String separator = Separators.KEYVALUE + Separators.SPACE;
 
         try {
@@ -43,10 +43,9 @@ public class ConfigReader {
                 Gdx.app.log("ConfigReader::readNewConfiguration", "value of the config: " + config);
                 Gdx.app.log("ConfigReader::readNewConfiguration", "reading data section: " + dataSection);
 
-                // TODO - make sure this still works
                 switch (config) {
                     case CHARACTER_MODE:
-                        castList = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
+                        castList = new ArrayDeque<>(Arrays.asList(dataSection.split((Separators.DATAFIELDS + Separators.SPACE))));
                         break;
 
                     case BACKGROUND_MODE:
@@ -54,11 +53,11 @@ public class ConfigReader {
                         break;
 
                     case BGM_MODE:
-                        music = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
+                        music = new ArrayDeque<>(Arrays.asList(dataSection.split((Separators.DATAFIELDS + Separators.SPACE))));
                         break;
 
                     case SFX_MODE:
-                        sounds = new ArrayDeque<>(Arrays.asList(dataSection.split((", "))));
+                        sounds = new ArrayDeque<>(Arrays.asList(dataSection.split((Separators.DATAFIELDS + Separators.SPACE))));
                         break;
                     case SCRIPT_PATH_MODE:
                         scriptPath = Paths.SCRIPTS_PATH + dataSection;
@@ -95,7 +94,7 @@ public class ConfigReader {
                 String data = reader.nextLine();
 
                 if (data.indexOf(Separators.FILETYPE) != -1) {
-                    targetCharacter = data.split("\\" + Separators.FILETYPE)[0].split(Separators.UNDERSCORE)[0];//data.substring(0, data.indexOf(Separators.FILETYPE));
+                    targetCharacter = data.split("\\" + Separators.FILETYPE)[0].split(Separators.UNDERSCORE)[0];
                 } else if (data.contains(targetCharacter)) {
                     key = data;
                 }

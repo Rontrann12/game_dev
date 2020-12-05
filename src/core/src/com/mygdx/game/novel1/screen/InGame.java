@@ -31,6 +31,8 @@ import static com.badlogic.gdx.Input.Keys.SPACE;
  * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
  * TODO - Find a way to differentiate between script files as they will be sharing the same directory
  * TODO - Need to handle options in script and reactions to choices
+ *
+ * TODO - test configReader::readNewConfiguration
  */
 
 public class InGame implements Screen {
@@ -192,9 +194,6 @@ public class InGame implements Screen {
                 character.remove();
             }
         }
-
-        // TODO - Want to display aribitrary display names but with correct sprites
-        // TODO - for example, show that ?? is speaking but display a monika sprite
 
         for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
             Character targetCharacter = charactersInScene.get(entry.getKey());
