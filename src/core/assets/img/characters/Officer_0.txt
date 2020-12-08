@@ -1,0 +1,12 @@
+Officer_0.png
+size: 648, 1284
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Officer_neutral
+  rotate: false
+  xy: 0, 0
+  size: 648, 1284
+  orig: 648, 1284
+  offset: 0, 0
+  index: -1

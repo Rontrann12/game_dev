@@ -132,7 +132,7 @@ public class InGameUI extends BaseLayout {
 
         for(Map.Entry<String, String> entry : charactersOrdered.entrySet()) {
             Character targetCharacter = characterMap.get(entry.getKey());
-            targetCharacter.spritePos(xPosition, 0);
+            targetCharacter.spritePos(xPosition, -300);
             xPosition = xPosition + xDelta;
         }
     }

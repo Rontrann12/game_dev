@@ -33,7 +33,7 @@ public class StringUtilities {
         }
 
         String name = nameSplit[0];
-        if(nameSplit[0].contains("(") && nameSplit[0].contains(")")) {
+        if(nameSplit[0].contains(Separators.OPEN_BRACKET) && nameSplit[0].contains(Separators.CLOSE_BRACKET)) {
             name = name.substring(0,name.indexOf('('));
         }
 
@@ -47,8 +47,8 @@ public class StringUtilities {
     public static String getCharacterAlias(String input) {
         String[] nameSplit = input.split(Separators.KEYVALUE + Separators.SPACE);
 
-        if(isContainer(nameSplit[0],'(', ')')){
-            return getContainedContent(input, '(', ')', true );
+        if(isContainer(nameSplit[0], Separators.OPEN_BRACKET.charAt(0), Separators.CLOSE_BRACKET.charAt(0))){
+            return getContainedContent(input, Separators.OPEN_BRACKET.charAt(0), Separators.CLOSE_BRACKET.charAt(0), true );
         }
         return null;
     }

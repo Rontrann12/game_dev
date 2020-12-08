@@ -187,7 +187,7 @@ public class InGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
-
+        
         for (Actor entry : characterRenderGroup.getChildren()) {
             Character character = (Character) entry;
             if (!visibleCharacters.containsKey(character.getName())) {
