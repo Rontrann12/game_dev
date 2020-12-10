@@ -1,26 +1,47 @@
-Ron_2.png
-size: 1707, 1730
+Ron_1.png
+size: 3918, 1293
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Ron_Normal
-  rotate: false
-  xy: 811, 0
-  size: 896, 700
-  orig: 896, 700
-  offset: 0, 0
-  index: -1
-Ron_Sad
-  rotate: false
-  xy: 0, 1030
-  size: 896, 700
-  orig: 896, 700
-  offset: 0, 0
-  index: -1
-Ron_Top
+Ron_relief
   rotate: false
   xy: 0, 0
-  size: 811, 1030
-  orig: 811, 1030
+  size: 653, 1293
+  orig: 653, 1293
+  offset: 0, 0
+  index: -1
+Ron_relief_talking
+  rotate: false
+  xy: 653, 0
+  size: 653, 1293
+  orig: 653, 1293
+  offset: 0, 0
+  index: -1
+Ron_sad
+  rotate: false
+  xy: 1306, 0
+  size: 653, 1293
+  orig: 653, 1293
+  offset: 0, 0
+  index: -1
+Ron_sad_talking
+  rotate: false
+  xy: 1959, 0
+  size: 653, 1293
+  orig: 653, 1293
+  offset: 0, 0
+  index: -1
+Ron_surprised
+  rotate: false
+  xy: 2612, 0
+  size: 653, 1293
+  orig: 653, 1293
+  offset: 0, 0
+  index: -1
+Ron_surprised_talking
+  rotate: false
+  xy: 3265, 0
+  size: 653, 1293
+  orig: 653, 1293
   offset: 0, 0
   index: -1

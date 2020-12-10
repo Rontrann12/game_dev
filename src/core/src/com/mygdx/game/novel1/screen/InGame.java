@@ -31,6 +31,8 @@ import static com.badlogic.gdx.Input.Keys.SPACE;
  * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
  * TODO - Find a way to differentiate between script files as they will be sharing the same directory
  * TODO - Need to handle options in script and reactions to choices
+ * <p>
+ * TODO - test configReader::readNewConfiguration
  */
 
 public class InGame implements Screen {
@@ -66,29 +68,15 @@ public class InGame implements Screen {
                 new InputAdapter() {
                     @Override
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                        try {
-                            Gdx.app.log("InGame::InGame", "mouse down detected");
-                            if (!disableControls) {
-                                uiHandler.nextLine(stepForward());
-                            }
-                        } catch (EmptyStackException e) {
-                            Gdx.app.log("InGame::InGame", e.getMessage());
-                        }
 
+                        manageInput();
                         return true;
                     }
 
                     @Override
                     public boolean keyDown(int keyCode) {
                         if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
-                            Gdx.app.log("InGame::InGame", "space bar button down detected");
-                            try {
-                                if (!disableControls) {
-                                    uiHandler.nextLine(stepForward());
-                                }
-                            } catch (EmptyStackException e) {
-                                Gdx.app.log("InGame::InGame", e.getMessage());
-                            }
+                            manageInput();
                         }
                         return true;
                     }
@@ -98,6 +86,20 @@ public class InGame implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    private void manageInput() {
+        try {
+            Gdx.app.log("InGame::InGame", "input detected");
+            if (!disableControls) {
+                if (uiHandler.textBoxReady()) {
+                    uiHandler.nextLine(stepForward());
+                } else {
+                    uiHandler.textBoxFastForward();
+                }
+            }
+        } catch (EmptyStackException e) {
+            Gdx.app.log("InGame::InGame", e.getMessage());
+        }
+    }
 
     /**
      * progresses the game and the script forward
@@ -186,15 +188,14 @@ public class InGame implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.stage.act(Gdx.graphics.getDeltaTime());
 
+        Gdx.graphics.setContinuousRendering(true);
+
         for (Actor entry : characterRenderGroup.getChildren()) {
             Character character = (Character) entry;
             if (!visibleCharacters.containsKey(character.getName())) {
                 character.remove();
             }
         }
-
-        // TODO - Want to display aribitrary display names but with correct sprites
-        // TODO - for example, show that ?? is speaking but display a monika sprite
 
         for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
             Character targetCharacter = charactersInScene.get(entry.getKey());

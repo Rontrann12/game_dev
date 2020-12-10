@@ -1,0 +1,19 @@
+Shaina_1.png
+size: 3840, 1080
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Shaina_wink
+  rotate: false
+  xy: 0, 0
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_wink_talking
+  rotate: false
+  xy: 1920, 0
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1

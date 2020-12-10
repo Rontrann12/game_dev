@@ -17,8 +17,9 @@ Ron:
     "I hear yelling and whimpering from a building on my left"
     "I look over and see Armored personnel escorting a few people out of the building at gun point"
 
-Officer: 
+Officer: Officer_neutral
     "I said get a move on mother fuckers!"
+Officer: EXIT
 
 Ron:
     "I see the officer shove 3 people with bags over their heads in to an armoured van"

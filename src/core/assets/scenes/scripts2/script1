@@ -1,34 +1,38 @@
 ~beneath_the_mask~
 
 
-Ron: Ron_Troubled
+Ron: Ron_neutral
     ".."
     "..."
 
-
-Ron: Ron_Sad
+Ron: Ron_relief_talking
     "Man - 5 am already"
     "Better get up for work..."
 
+Ron: Ron_surprised
 
 Radio:
     "Good morning Calgary!"
     "For today's state news"
     "Last night, authorities raided a small band of non-cooperatives in the Marlborough district"
-    "Police actions were swift and effective thanks to a tip off from a good sameritan"
+    "Police actions were swift and effective thanks to a tip off from a good samaritan"
     
 
 
-Ron: Ron_Amazing
+Ron: Ron_surprised_talking
     "Police raided another band of non-compliants last night?"
     "This kind of news has been more common latetly"
     "I don't get it"
-    "Why challenge the authorities?"
+
+Ron: Ron_angry_talking
+    "Why put yourself at risk like that?"
     "It's much better to follow the rules than to break the them and risk capture"
     "Anyways, I need to get ready for work. Can't Risk being late for work"
     "..."
     "Seriously"
 
+
+Ron: Ron_neutral
 
 Radio:
     "That is all for today's state news"
@@ -38,7 +42,7 @@ Radio:
     "May you all have a productive day today"
 
 
-Ron: Ron_Angry
+Ron: Ron_sad_talking
     "Yeah"
     "No need to remind me again"
     "Well, off I go"

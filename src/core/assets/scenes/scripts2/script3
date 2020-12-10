@@ -1,19 +1,17 @@
-~office_theme~
+~beneath_the_mask~
 
-*office_noises*
-
-Ron:
-    'I grab a coffee and arrived at my desk just in time'
-    'I see that others from my team had just arrived as well'
-    'Alright, yesterday, I was almost able to get the reactor online'
-    'Let's finish that up today'
-    'I start typing away at my computer'
+Thought:
+    "I grab a coffee and arrived at my desk just in time"
+    "I see that others from my team had just arrived as well"
+    "Alright, yesterday, I was almost able to get the reactor online"
+    "Let"s finish that up today"
+    "I start typing away at my computer"
 
 *footsteps_walking*
-Ron:
-    'From the corner of my eye, I see someone from management approach'
+Thought:
+    "From the corner of my eye, I see someone from management approach"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile
 
 Management:
     "Team, meet Shaina"
@@ -31,7 +29,7 @@ Team:
 Ron:
     "Welcome to the Team Shaina"
 
-Shaina: Shaina_excited
+Shaina: Shaina_wink_talking
     "Thank you!"
     "I look forward to working with you all"
 
@@ -40,26 +38,30 @@ Ron:
     "Hi, I'm Ron. I've been on this team for only about a year"
     "But let me know if you're ever stuck on something. I'd be happy to help"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile_talking
     "Hi Ron, nice to meet you"
     "Thanks, I will keep that in mind"
     "..."
 
- Shaina: Shaina_curious
+Shaina: Shaina_neutral_talking
     "... Did you study nuclear engineering as well?"
 
 Ron:
     "Yeah... I think everyone on the team did haha"
 
-Shaina: Shaina_embarrassed
+Shaina: Shaina_sad_talking
     "Oh sorry, dumb question"
+
+Shaina: Shaina_sad
 
 Ron:
     "No it's fine, this is only your first day of work after state training anyway"
 
-Shaina: Shaina_curious
+Shaina: Shaina_neutral_talking
     "Yeah"
     "So what does the team do?"
+
+Shaina: Shaina_neutral
 
 Ron:
     "So this team is called the NRCC.. Nuclear Reactor Control Center"
@@ -67,7 +69,7 @@ Ron:
     'I go through more of the details of what the team does'
     "Yup, so thats what we do"
 
-Shaina: Shaina_bored
+Shaina: Shaina_sad_talking
     "Oh I see"
 
 Ron:
@@ -77,7 +79,7 @@ Ron:
     "Anyways, You should introduce yourself to Dale there"
     "He's the most experience member of the team and he can help you get set up"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile_talking
     "Sure thanks!"
     "Nice talking to you Ron"
     "I will catch up with you later"
@@ -89,27 +91,29 @@ Ron:
 Shaina: EXIT
 
 Ron:
-    'Shaina leaves her desk to talk to Dale'
-    'I shift my focus to my computer'
-    'I start typing away'
-    '.'
-    '..'
-    '...'
-    'Several Hours pass'
-    '.'
-    '..'
-    '...'
-    'Ayeee'
-    'Reactor is online. Better send out a status report'
-    '...'
-    'aaand done! This calls for a quick celebration'
-    'It's almost time to go home'
-    'I think I will stop by a nearby bar for a drink after work'
-    '...'
-    'I see Shaina return to her desk'
+    "Shaina leaves her desk to talk to Dale"
+    "I shift my focus to my computer"
+    "I start typing away"
+    "."
+    ".."
+    "..."
+    "Several Hours pass"
+    "."
+    ".."
+    "..."
+    "Ayeee"
+    "Reactor is online. Better send out a status report"
+    "..."
+    "aaand done! This calls for a quick celebration"
+    "It"s almost time to go home"
+    "I think I will stop by a nearby bar for a drink after work"
+    "..."
+    "I see Shaina return to her desk"
 
-Shaina: Shaina_dazed
+Shaina: Shaina_sad_talking
     "Hey"
+
+Shaina: Shaina_sad
 
 Ron:
     "Hey, Welcome back"
@@ -126,7 +130,7 @@ Ron:
     "Go home and get a good night rest"
     "I'm sure tomorrow will be better"
 
-Shaina: Shaina_dazed
+Shaina: Shaina_sad_talking
     "Thanks"
     "I wonder if there is a good bar nearby"
 
@@ -134,7 +138,7 @@ Ron:
     "You're planning on drinking already?"
     "It's only your first day!"
 
-Shaina: Shaina_shy
+Shaina: Shaina_wink_talking
     "N-Not today"
     "Just wanted to know"
     "..."
@@ -151,12 +155,12 @@ Case - There's one near by
 Ron:
     "There's one in Prince Edward's Park"
 
-Shaina: Shaina_curious
+Shaina: Shaina_sad
     "Ohh. That's nearby!"
     "I will check it out
     "..."
 
-Shaina: Shaina_shy
+Shaina: Shaina_wink_talking
     "Not today of course"
 
 Ron:
@@ -164,7 +168,7 @@ Ron:
     "Anyways, I'm going to head home now"
     "See you tomorrow"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile_talking
     "Byee~!"
 
 
@@ -181,14 +185,14 @@ Ron:
     "There's one near by"
     "I can show you the place next time"
 
-Shaina: Shaina_shy
+Shaina: Shaina_sad
     ".."
 
 Ron:
     "After work of course"
     "Not anything else"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile_talking
     "Sure"
     "We'll go next time then"
 
@@ -197,7 +201,7 @@ Ron:
     "Anyways, I'm going to head home now"
     "See you tomorrow"
 
-Shaina: Shaina_smiling
+Shaina: Shaina_smile_talking
     "Byee~!"
 
 Shaina: EXIT

@@ -81,6 +81,14 @@ public class InGameUI extends BaseLayout {
 
     }
 
+    public void textBoxFastForward(){
+        this.box.fastForward();
+    }
+
+    public boolean textBoxReady() {
+        return this.box.textFullyDisplayed();
+    }
+
     public void presentChoices(String[] choices) {
         this.choiceButtons = new Group();
 
@@ -132,7 +140,7 @@ public class InGameUI extends BaseLayout {
 
         for(Map.Entry<String, String> entry : charactersOrdered.entrySet()) {
             Character targetCharacter = characterMap.get(entry.getKey());
-            targetCharacter.spritePos(xPosition, 0);
+            targetCharacter.spritePos(xPosition, -300);
             xPosition = xPosition + xDelta;
         }
     }

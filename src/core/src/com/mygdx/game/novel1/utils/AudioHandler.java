@@ -8,8 +8,8 @@ import com.mygdx.game.novel1.constants.ScriptCues;
 import java.util.HashMap;
 
 public class AudioHandler {
-    private static float bgmVolume = 0.1f;
-    private static float sfxVolume = 0.1f;
+    private static float bgmVolume = 0.0f;
+    private static float sfxVolume = 0.0f;
     private static Music currentMusic;
     private static HashMap<String, Sound> soundsList = new HashMap();
     private static HashMap<String, Music> musicList = new HashMap();
