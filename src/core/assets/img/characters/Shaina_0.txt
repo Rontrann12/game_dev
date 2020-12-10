@@ -1,0 +1,47 @@
+Shaina_0.png
+size: 3840, 3240
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Shaina_neutral
+  rotate: false
+  xy: 0, 0
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_neutral_talking
+  rotate: false
+  xy: 1920, 0
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_sad
+  rotate: false
+  xy: 0, 1080
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_sad_talking
+  rotate: false
+  xy: 1920, 1080
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_smile
+  rotate: false
+  xy: 0, 2160
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+Shaina_smile_talking
+  rotate: false
+  xy: 1920, 2160
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1

@@ -12,7 +12,7 @@ import java.util.ArrayDeque;
 abstract class BaseTextBox extends Actor {
 
     protected String[] script;
-    protected String dialogue;
+    protected char[] dialogue;
     protected String speaker;
     protected Sprite textBoxImage;
     protected BitmapFont text;
@@ -21,15 +21,13 @@ abstract class BaseTextBox extends Actor {
     private final int yPadding = 10;
     private final int yPadding2 = 50;
     protected String toBeDisplayed = "";
-    protected ArrayDeque<Character> brokenString;
-    private int index = 0;
+    protected int index = 0;
+    private boolean textDisplayed = true;
 
     public BaseTextBox(TextureRegion textBoxTexture) {
         textBoxImage = new Sprite(textBoxTexture);
         dialogue = null;
         spritePos(0, 0);
-        brokenString = new ArrayDeque<>();
-
     }
 
 
@@ -37,6 +35,48 @@ abstract class BaseTextBox extends Actor {
         this.textBoxImage.setPosition(x, y);
         setBounds(textBoxImage.getX(), textBoxImage.getY(), textBoxImage.getWidth(), textBoxImage.getHeight());
     }
+
+    public boolean textFullyDisplayed(){
+        return textDisplayed;
+    }
+
+    public void fastForward() {
+        this.index = dialogue.length;
+        this.toBeDisplayed = new String(dialogue);
+    }
+
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        textBoxImage.draw(batch);
+
+        String dialogue = toBeDisplayed;
+
+        if (dialogue != null) {
+            text.draw(batch,dialogue,textX(),textY(), Gdx.graphics.getWidth()/4f, -1, true);
+        }
+
+        if (speaker != null) {
+            speakerText.draw(batch, speaker, speakerX(), speakerY());
+        }
+
+    }
+
+    @Override
+    public void act(float delta) {
+        if (index < dialogue.length) {
+            textDisplayed = false;
+            toBeDisplayed = toBeDisplayed + dialogue[index];
+            index++;
+        }
+        else{
+            textDisplayed = true;
+        }
+
+
+        super.act(delta);
+    }
+
 
     private float textX() {
         return textBoxImage.getX() + xPadding;
@@ -54,31 +94,6 @@ abstract class BaseTextBox extends Actor {
         return textBoxImage.getY() + 3 * (textBoxImage.getHeight() / 4 + yPadding);
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        textBoxImage.draw(batch);
-
-        String dialogue = toBeDisplayed;
-
-        if (dialogue != null) {
-            text.draw(batch, dialogue, textX(), textY());
-        }
-
-        if (speaker != null) {
-            speakerText.draw(batch, speaker, speakerX(), speakerY());
-        }
-
-    }
-
-    @Override
-    public void act(float delta) {
-        if(index < yPadding){
-            toBeDisplayed = toBeDisplayed + "ron";
-            index++;
-        }
-
-        super.act(delta);
-    }
 
 
 }

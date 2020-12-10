@@ -1,5 +1,0 @@
-Characters: Ron, Shaina, Employee
-Backgrounds: office
-Music: office_theme
-Sounds: office_noises, footsteps_walking
-Script: script3

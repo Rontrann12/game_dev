@@ -5,13 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Dialogue extends BaseTextBox {
 
-    public Dialogue(TextureRegion textBoxTexture) {
-        super(textBoxTexture);
-    }
-
     public Dialogue(TextureRegion textBoxTexture, String speaker, String dialogue) {
         super(textBoxTexture);
-        super.dialogue = dialogue;
+        super.dialogue = dialogue.toCharArray();
         super.text = new BitmapFont();
         super.speakerText = new BitmapFont();
         super.speaker = speaker;
@@ -25,8 +21,10 @@ public class Dialogue extends BaseTextBox {
     }
 
     public void updateLine(String speaker, String line) {
-        super.dialogue = line;
+        super.dialogue = line.toCharArray();
         super.speaker = speaker;
+        super.index = 0;
+        super.toBeDisplayed = "";
     }
 
 }

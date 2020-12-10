@@ -81,6 +81,14 @@ public class InGameUI extends BaseLayout {
 
     }
 
+    public void textBoxFastForward(){
+        this.box.fastForward();
+    }
+
+    public boolean textBoxReady() {
+        return this.box.textFullyDisplayed();
+    }
+
     public void presentChoices(String[] choices) {
         this.choiceButtons = new Group();
 
