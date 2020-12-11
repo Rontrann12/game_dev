@@ -217,11 +217,17 @@ public class InGame implements Screen {
 
     @Override
     public void show() {
+
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
         int numActors = this.stage.getActors().size;
-
+        render(Gdx.graphics.getDeltaTime());
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
+
+        Gdx.app.log("InGame::show", "before fade");
+        FadeScreen fade = new FadeScreen();
+        stage.addActor(fade);
+        Gdx.app.log("InGame::show", "after fade");
     }
 
     @Override

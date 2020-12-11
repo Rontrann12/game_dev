@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.screen.InGame;
@@ -16,9 +18,10 @@ import com.mygdx.game.novel1.utils.AudioHandler;
  */
 public class StartButton extends BaseButton {
 
-    public StartButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name) {
+    private Stage stage;
+    public StartButton(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name, Stage stage) {
         super(idleTexture, hoverTexture, game, name);
-
+        this.stage = stage;
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
