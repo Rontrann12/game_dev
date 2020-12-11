@@ -58,7 +58,7 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new HashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, stepForward(), this);
+        this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
 
         this.multiplexer = new InputMultiplexer();
@@ -196,13 +196,15 @@ public class InGame implements Screen {
             }
         }
 
-        for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
-            Character targetCharacter = charactersInScene.get(entry.getKey());
-            targetCharacter.setExpression(entry.getValue());
-            characterRenderGroup.addActor(targetCharacter);
+        if(visibleCharacters != null) {
+            for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
+                Character targetCharacter = charactersInScene.get(entry.getKey());
+                targetCharacter.setExpression(entry.getValue());
+                characterRenderGroup.addActor(targetCharacter);
+            }
+            uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
         }
 
-        uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
 
         Sprite backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

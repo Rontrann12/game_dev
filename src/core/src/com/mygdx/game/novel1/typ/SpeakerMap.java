@@ -9,8 +9,8 @@ public class SpeakerMap {
     private String line;
 
     public SpeakerMap(){
-        this.character = null;
-        this.line = null;
+        this.character = "";
+        this.line = "";
     }
     public SpeakerMap(String character, String line){
         this.character = character;
