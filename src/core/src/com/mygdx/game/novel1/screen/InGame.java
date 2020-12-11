@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.BufferUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.effects.Fade;
 import com.mygdx.game.novel1.typ.AssetsDTO;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
@@ -18,7 +18,6 @@ import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.typ.Character;
 
-import java.nio.IntBuffer;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
@@ -225,7 +224,7 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
 
         Gdx.app.log("InGame::show", "before fade");
-        FadeScreen fade = new FadeScreen();
+        Fade fade = new Fade();
         stage.addActor(fade);
         Gdx.app.log("InGame::show", "after fade");
     }

@@ -1,17 +1,17 @@
-package com.mygdx.game.novel1.screen;
+package com.mygdx.game.novel1.effects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class FadeScreen extends Actor {
+public class Fade extends Actor {
 
     private ShapeRenderer fadeRenderer;
     private float alpha;
     private boolean isComplete;
 
-    public FadeScreen(){
+    public Fade(){
         this.fadeRenderer = new ShapeRenderer(8);
         this.alpha = 1;
         isComplete = false;
