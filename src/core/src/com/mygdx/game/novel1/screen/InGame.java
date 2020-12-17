@@ -49,6 +49,8 @@ public class InGame implements Screen {
     private LinkedHashMap<String, String> visibleCharacters;
     private boolean disableControls = false;
     private InputMultiplexer multiplexer;
+    private String newScriptName;
+    private Fade fade;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -60,6 +62,7 @@ public class InGame implements Screen {
         configure();
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
+        newScriptName = "";
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -108,7 +111,7 @@ public class InGame implements Screen {
     private SpeakerMap stepForward() {
 
         SnapShot snapshot = tracker.getNextLine();
-        String newScriptName = tracker.getNewScriptName();
+        newScriptName = tracker.getNewScriptName();
         String[] options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
@@ -119,8 +122,9 @@ public class InGame implements Screen {
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
         if (!newScriptName.equals("")) {
-            game.getScreen().dispose();
-            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+            this.disableControls = true;
+            this.fade = new Fade(false);
+            this.stage.addActor(fade);
             return null;
         }
         visibleCharacters = snapshot.getAction();
@@ -214,6 +218,10 @@ public class InGame implements Screen {
         batch.end();
 
         this.stage.draw();
+
+        if(!newScriptName.equals("") && this.fade.isComplete()){
+            dispose();
+        }
     }
 
     @Override
@@ -222,7 +230,6 @@ public class InGame implements Screen {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
         int numActors = this.stage.getActors().size;
-        render(Gdx.graphics.getDeltaTime());
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
 
         Gdx.app.log("InGame::show", "before fade");
@@ -235,6 +242,7 @@ public class InGame implements Screen {
     public void dispose() {
         AudioHandler.clearMusic();
         AudioHandler.clearSounds();
+        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
     }
 
 

@@ -37,6 +37,6 @@ public class StartButton extends BaseButton {
 
     @Override
     public void action(NovelOne game) {
-        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + "script3"));
+        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + "script1"));
     }
 }

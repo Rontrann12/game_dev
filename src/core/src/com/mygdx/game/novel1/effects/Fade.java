@@ -9,12 +9,26 @@ public class Fade extends Actor {
 
     private ShapeRenderer fadeRenderer;
     private float alpha;
+    private boolean fadeIn;
+    private boolean animationComplete;
 
     public Fade(){
         this.fadeRenderer = new ShapeRenderer(8);
         this.alpha = 1;
+        this.fadeIn = true;
     }
 
+    public Fade(boolean fadeIn) {
+        this.fadeRenderer = new ShapeRenderer(8);
+
+        if (fadeIn){
+            this.alpha = 1;
+        }else{
+            this.alpha = 0;
+        }
+
+        this.fadeIn = fadeIn;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -30,12 +44,21 @@ public class Fade extends Actor {
     @Override
     public void act(float delta){
 
-        if(alpha > 0) {
+        if(alpha > 0 && fadeIn) {
             alpha -= 0.01;
 
-        }else{
+        }
+        else if(alpha < 1 && !fadeIn){
+            alpha += 0.01;
+        }
+        else{
+            this.animationComplete = true;
             this.remove();
         }
 
+    }
+
+    public boolean isComplete(){
+        return this.animationComplete;
     }
 }
