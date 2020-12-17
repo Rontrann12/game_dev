@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
-import com.mygdx.game.novel1.effects.Fade;
+import com.mygdx.game.novel1.effects.ScreenFade;
 import com.mygdx.game.novel1.typ.AssetsDTO;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
@@ -50,7 +50,7 @@ public class InGame implements Screen {
     private boolean disableControls = false;
     private InputMultiplexer multiplexer;
     private String newScriptName;
-    private Fade fade;
+    private ScreenFade screenFade;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -123,8 +123,8 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
         if (!newScriptName.equals("")) {
             this.disableControls = true;
-            this.fade = new Fade(false);
-            this.stage.addActor(fade);
+            this.screenFade = new ScreenFade(false);
+            this.stage.addActor(screenFade);
             return null;
         }
         visibleCharacters = snapshot.getAction();
@@ -197,11 +197,13 @@ public class InGame implements Screen {
             Character character = (Character) entry;
             if (!visibleCharacters.containsKey(character.getName())) {
                 character.remove();
+                character.resetFade();
             }
         }
 
         if(visibleCharacters != null) {
             for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
+
                 Character targetCharacter = charactersInScene.get(entry.getKey());
                 targetCharacter.setExpression(entry.getValue());
                 characterRenderGroup.addActor(targetCharacter);
@@ -219,7 +221,7 @@ public class InGame implements Screen {
 
         this.stage.draw();
 
-        if(!newScriptName.equals("") && this.fade.isComplete()){
+        if(!newScriptName.equals("") && this.screenFade.isComplete()){
             dispose();
         }
     }
@@ -233,8 +235,8 @@ public class InGame implements Screen {
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
 
         Gdx.app.log("InGame::show", "before fade");
-        Fade fade = new Fade();
-        stage.addActor(fade);
+        ScreenFade screenFade = new ScreenFade();
+        stage.addActor(screenFade);
         Gdx.app.log("InGame::show", "after fade");
     }
 

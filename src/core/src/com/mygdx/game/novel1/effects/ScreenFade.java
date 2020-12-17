@@ -5,20 +5,20 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Fade extends Actor {
+public class ScreenFade extends Actor {
 
     private ShapeRenderer fadeRenderer;
     private float alpha;
     private boolean fadeIn;
     private boolean animationComplete;
 
-    public Fade(){
+    public ScreenFade(){
         this.fadeRenderer = new ShapeRenderer(8);
         this.alpha = 1;
         this.fadeIn = true;
     }
 
-    public Fade(boolean fadeIn) {
+    public ScreenFade(boolean fadeIn) {
         this.fadeRenderer = new ShapeRenderer(8);
 
         if (fadeIn){

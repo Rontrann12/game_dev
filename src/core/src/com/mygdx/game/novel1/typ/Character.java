@@ -1,5 +1,6 @@
 package com.mygdx.game.novel1.typ;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,12 +20,14 @@ public class Character extends Actor {
     private boolean hideName;
     private HashMap<String, TextureRegion> expressions;
     private Sprite currentExpression;
+    private float alpha;
 
 
     public Character(String name, Texture[] sheets) {
         this.name = name;
         this.expressions = new HashMap<>();
         gatherExpressions(sheets);
+        this.alpha = 0;
     }
 
     private void gatherExpressions(Texture[] sheets) {
@@ -35,6 +38,10 @@ public class Character extends Actor {
         }
     }
 
+    public void resetFade() {
+        Gdx.app.log("Character::resetFade", "resetFade called");
+        this.alpha = 0;
+    }
     public void setExpression(String expression) {
         currentExpression = new Sprite(expressions.get(expression));
     }
@@ -49,8 +56,18 @@ public class Character extends Actor {
     }
 
 
+
+    @Override
+    public void act(float delta) {
+        if( this.alpha < 1 ){
+            Gdx.app.log("Character::act", "new character entry: " + this.alpha);
+            this.alpha += 0.1;
+        }
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        currentExpression.draw(batch);
+        Gdx.app.log("Character::render", "Character alpha: " + this.alpha);
+        currentExpression.draw(batch,this.alpha);
     }
 }
