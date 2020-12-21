@@ -28,7 +28,7 @@ public class MainMenuUI extends BaseLayout {
         TextureRegion idleTexture = new TextureRegion(texture, 900, 26, 900, 64);
         TextureRegion hoverTexture = new TextureRegion(texture, 0, 26, 900, 64);
 
-        StartButton start = new StartButton(idleTexture, hoverTexture, game, "start button");
+        StartButton start = new StartButton(idleTexture, hoverTexture, game, "start button", super.stage);
         LoadButton load = new LoadButton(idleTexture, hoverTexture, game, "load button");
         SaveButton save = new SaveButton(idleTexture, hoverTexture, game, "save Button");
 

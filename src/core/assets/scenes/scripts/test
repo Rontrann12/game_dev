@@ -20,6 +20,15 @@ Monika: EXIT
 MC:
     "Okay, talk to you later"
 
+Monika: Monika_smile1
+    "Oh yeah"
+    "I forgot to remind you not to skip class!"
+    "Okay, Bye now"
+
+Monika: EXIT
+
+*footsteps_running*
+
 Yuri: Yuri_talking
     "So you are back"
     "Indeed, it is nice to see you again"

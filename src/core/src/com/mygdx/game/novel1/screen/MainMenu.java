@@ -57,6 +57,8 @@ public class MainMenu implements Screen {
         this.titleSprite.setY(700);
         Gdx.input.setInputProcessor(stage);
 
+
+
         Integer numActors = this.stage.getActors().size;
         Gdx.app.log("checking number of actors in stage (menu)", numActors.toString());
     }
@@ -69,7 +71,7 @@ public class MainMenu implements Screen {
 
         batch.begin();
         this.backgroundSprite.draw(batch);
-        //this.titleSprite.draw(batch);
+        this.titleSprite.draw(batch);
         batch.end();
 
         stage.draw();

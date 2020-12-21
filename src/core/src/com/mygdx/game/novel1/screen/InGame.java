@@ -8,9 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.effects.ScreenFade;
 import com.mygdx.game.novel1.typ.AssetsDTO;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
@@ -18,7 +19,7 @@ import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
 import com.mygdx.game.novel1.typ.Character;
 
-import java.nio.IntBuffer;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
@@ -50,6 +51,9 @@ public class InGame implements Screen {
     private LinkedHashMap<String, String> visibleCharacters;
     private boolean disableControls = false;
     private InputMultiplexer multiplexer;
+    private String newScriptName;
+    private ScreenFade screenFade;
+    private Sprite backgroundSprite;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -59,8 +63,9 @@ public class InGame implements Screen {
         this.batch = stage.getBatch();
         charactersInScene = new HashMap<>();
         configure();
-        this.uiHandler = new InGameUI(stage, game, stepForward(), this);
+        this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
+        newScriptName = "";
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -109,7 +114,7 @@ public class InGame implements Screen {
     private SpeakerMap stepForward() {
 
         SnapShot snapshot = tracker.getNextLine();
-        String newScriptName = tracker.getNewScriptName();
+        newScriptName = tracker.getNewScriptName();
         String[] options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
@@ -120,8 +125,9 @@ public class InGame implements Screen {
 
         Gdx.app.log("InGame::stepForward", "newScriptName: " + newScriptName);
         if (!newScriptName.equals("")) {
-            game.getScreen().dispose();
-            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+            this.disableControls = true;
+            this.screenFade = new ScreenFade(false);
+            this.stage.addActor(screenFade);
             return null;
         }
         visibleCharacters = snapshot.getAction();
@@ -182,6 +188,38 @@ public class InGame implements Screen {
         }
     }
 
+    private void removeExitedCharacters() {
+        for (Actor entry : characterRenderGroup.getChildren()) {
+            Character character = (Character) entry;
+            if (!visibleCharacters.containsKey(character.getName())) {
+                if(character.isPresent()){
+                    Gdx.app.log("InGame::render", "adding character");
+                    character.setFadeOut();
+                    character.setIsPresent(false);
+                    Gdx.app.log("InGame::removeExitedCharacters", "removing " +character.getName() + " from screen");
+                }
+            }
+        }
+    }
+
+    private void updateVisibleCharacters() {
+
+        if (visibleCharacters != null) {
+            for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
+
+                Character targetCharacter = charactersInScene.get(entry.getKey());
+                targetCharacter.setExpression(entry.getValue());
+
+                if (!targetCharacter.isPresent()) {
+                    characterRenderGroup.addActor(targetCharacter);
+                    targetCharacter.setFadeIn();
+                    targetCharacter.setIsPresent(true);
+                }
+            }
+            uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
+        }
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -190,44 +228,54 @@ public class InGame implements Screen {
 
         Gdx.graphics.setContinuousRendering(true);
 
-        for (Actor entry : characterRenderGroup.getChildren()) {
-            Character character = (Character) entry;
-            if (!visibleCharacters.containsKey(character.getName())) {
-                character.remove();
-            }
-        }
-
-        for (Map.Entry<String, String> entry : visibleCharacters.entrySet()) {
-            Character targetCharacter = charactersInScene.get(entry.getKey());
-            targetCharacter.setExpression(entry.getValue());
-            characterRenderGroup.addActor(targetCharacter);
-        }
-
-        uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
-
-        Sprite backgroundSprite = new Sprite(background);
-        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        removeExitedCharacters();
+        updateVisibleCharacters();
 
         batch.begin();
         backgroundSprite.draw(batch);
         batch.end();
 
         this.stage.draw();
+
+        /*
+            Removes the character from the render group after animations are done
+         */
+        Iterator<Actor> it = characterRenderGroup.getChildren().iterator();
+        while(it.hasNext()) {
+            Character temp = (Character) it.next();
+            if(!temp.isPresent() && temp.animationComplete()){
+                temp.remove();
+            }
+        }
+
+        if (!newScriptName.equals("") && this.screenFade.isComplete()) {
+            dispose();
+        }
     }
 
     @Override
     public void show() {
+
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
         int numActors = this.stage.getActors().size;
-
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
+
+
+        this.backgroundSprite = new Sprite(background);
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        Gdx.app.log("InGame::show", "before fade");
+        ScreenFade screenFade = new ScreenFade();
+        stage.addActor(screenFade);
+        Gdx.app.log("InGame::show", "after fade");
     }
 
     @Override
     public void dispose() {
         AudioHandler.clearMusic();
         AudioHandler.clearSounds();
+        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
     }
 
 

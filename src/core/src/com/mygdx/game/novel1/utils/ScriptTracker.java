@@ -47,7 +47,6 @@ public class ScriptTracker {
 
     }
 
-
     /**
      * adds a new event (sounds, music played, and line) at a given point in the script
      */
