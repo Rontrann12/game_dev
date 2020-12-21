@@ -25,16 +25,6 @@ import java.util.*;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
-/**
- * TODO - create new class and separate character sprite handling code
- * TODO - add to configs to also get the next scenes
- * TODO - add to configs to get contain script path information
- * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
- * TODO - Find a way to differentiate between script files as they will be sharing the same directory
- * TODO - Need to handle options in script and reactions to choices
- * <p>
- * TODO - test configReader::readNewConfiguration
- */
 
 public class InGame implements Screen {
 
@@ -259,6 +249,7 @@ public class InGame implements Screen {
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
         int numActors = this.stage.getActors().size;
+        manageInput();
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
 
 
