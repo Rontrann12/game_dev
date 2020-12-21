@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
 
         batch.begin();
         this.backgroundSprite.draw(batch);
-        //this.titleSprite.draw(batch);
+        this.titleSprite.draw(batch);
         batch.end();
 
         stage.draw();
