@@ -2,6 +2,7 @@ package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,6 +45,7 @@ public class InGame implements Screen {
     private String newScriptName;
     private ScreenFade screenFade;
     private Sprite backgroundSprite;
+    private String saveData;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -56,6 +58,7 @@ public class InGame implements Screen {
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
         newScriptName = "";
+        this.saveData ="InGame screen returning save data";
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -78,7 +81,7 @@ public class InGame implements Screen {
                 }
         );
 
-        Gdx.input.setInputProcessor(multiplexer);
+        //Gdx.input.setInputProcessor(multiplexer);
     }
 
     private void manageInput() {
@@ -153,6 +156,12 @@ public class InGame implements Screen {
         uiHandler.removeChoices();
         uiHandler.nextLine(stepForward());
     }
+
+    public String getSaveData() {
+        return this.saveData;
+    }
+
+
 
     private void configure() {
         ConfigReader.readNewConfiguration(configPath);
@@ -251,6 +260,7 @@ public class InGame implements Screen {
         int numActors = this.stage.getActors().size;
         manageInput();
         Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
+        Gdx.app.log("InGame::show", "Is controls disabled: " + disableControls);
 
 
         this.backgroundSprite = new Sprite(background);
@@ -260,13 +270,16 @@ public class InGame implements Screen {
         ScreenFade screenFade = new ScreenFade();
         stage.addActor(screenFade);
         Gdx.app.log("InGame::show", "after fade");
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
     public void dispose() {
         AudioHandler.clearMusic();
         AudioHandler.clearSounds();
-        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+        if(!newScriptName.isEmpty()){
+            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+        }
     }
 
 
@@ -288,6 +301,7 @@ public class InGame implements Screen {
 
     @Override
     public void hide() {
+        Gdx.app.log("InGame::hide", "no longer current screen");
     }
 
 

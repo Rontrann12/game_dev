@@ -4,13 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.FileTypes;
+import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.ui.layouts.SaveUI;
+import com.mygdx.game.novel1.utils.StringUtilities;
+
+import java.util.zip.Deflater;
 
 public class Save implements Screen {
 
@@ -23,32 +32,55 @@ public class Save implements Screen {
     private Sprite titlePage;
     private final AssetManager assets;
     private InputMultiplexer multiplexer;
+    private Pixmap screenshot;
+    private InGame inGameScreen;
 
-    public Save(final NovelOne game) {
+    public Save(final NovelOne game, final Pixmap screenshot) {
         this.game = game;
         this.stage = new Stage(game.viewport);
-        this.uiHandler = new SaveUI(stage, game, this);
         this.batch = stage.getBatch();
         this.assets = new AssetManager();
-        multiplexer = new InputMultiplexer();
+        this.multiplexer = new InputMultiplexer();
+        this.screenshot = screenshot;
+
+        try {
+            this.inGameScreen = (InGame) game.getScreen();
+            this.uiHandler = new SaveUI(stage, game, this, this.inGameScreen);
+
+        } catch (ClassCastException e) {
+            Gdx.app.log("Save::Save", e.getMessage());
+        }
+
+        try {
+            FileHandle fileHandle = new FileHandle(StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + Paths.SCREENSHOTS_PATH,
+                    "screenshot",
+                    FileTypes.PNG));
+            PixmapIO.writePNG(fileHandle,
+                    screenshot,
+                    Deflater.DEFAULT_COMPRESSION,
+                    true);
+            screenshot.dispose();
+        } catch (Exception e) {
+
+        }
     }
 
-    //TODO - might want to make this method as part of a base Screen
-    public Screen getPreviousScreen() {
-        return this.previousScreen;
+    /**
+     * Save the current state of the game
+     */
+    public void saveState() {
+        Gdx.app.log("Save::saveState", inGameScreen.getSaveData());
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());// Important line!! nothing will animate or update without it
 
         batch.begin();
         this.titlePage.draw(batch);
         batch.end();
-
         this.stage.draw();
+
     }
 
     @Override
@@ -60,7 +92,7 @@ public class Save implements Screen {
         this.titlePage = new Sprite((Texture) this.assets.get("img/test_titlepage.png"));
 
         Integer numActors = this.stage.getActors().size;
-        Gdx.app.log("checking number of actors in stage (menu)", numActors.toString());
+        Gdx.app.log("Save::show", "checking number of actors in stage" + numActors.toString());
         Gdx.input.setInputProcessor(stage);
 
     }

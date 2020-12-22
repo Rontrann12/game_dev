@@ -11,4 +11,5 @@ public class Paths {
     public final static String SCRIPTS_PATH = "scenes/scripts/";
     public final static String CHARACTERS_PATH = "img/characters/";
     public final static String BACKGROUNDS_PATH = "img/backgrounds/";
+    public final static String SCREENSHOTS_PATH = "img/screenshots/";
 }
