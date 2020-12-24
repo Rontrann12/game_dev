@@ -25,8 +25,8 @@ public class MainMenuUI extends BaseLayout {
         Group menuGroup = new Group();
         multiplexer = new InputMultiplexer();
 
-        TextureRegion idleTexture = new TextureRegion(texture, 900, 26, 900, 64);
-        TextureRegion hoverTexture = new TextureRegion(texture, 0, 26, 900, 64);
+        TextureRegion idleTexture = new TextureRegion(texture, 0, 241, 900, 64);
+        TextureRegion hoverTexture = new TextureRegion(texture, 750, 91, 900, 64);
 
         StartButton start = new StartButton(idleTexture, hoverTexture, game, "start button", super.stage);
         LoadButton load = new LoadButton(idleTexture, hoverTexture, game, "load button");

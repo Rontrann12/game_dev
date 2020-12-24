@@ -69,7 +69,7 @@ public class Save implements Screen {
      * Save the current state of the game
      */
     public void saveState() {
-        Gdx.app.log("Save::saveState", inGameScreen.getSaveData());
+        Gdx.app.log("Save::saveState", inGameScreen.getSaveData().toString());
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.mygdx.game.novel1.typ.SpeakerMap;
 import java.util.*;
 
 public class ScriptTracker {
-    private ArrayList<SnapShot> scriptLogger;
+    private ArrayList<SnapShot> scriptHistory;
     private ArrayDeque<String> script;
     private String currentMusic = null;
     private String currentSpeaker = null;
@@ -20,7 +20,7 @@ public class ScriptTracker {
     private String[] choices = null;
 
     public ScriptTracker(ArrayDeque<String> script) {
-        this.scriptLogger = new ArrayList<>();
+        this.scriptHistory = new ArrayList<>();
         this.script = script;
         this.historyIndex = -1;
         this.activeCharacters = new LinkedHashMap<>();
@@ -34,9 +34,9 @@ public class ScriptTracker {
     public SnapShot getNextLine() {
 
         SnapShot snap;
-        if (historyIndex < scriptLogger.size() - 1) {
+        if (historyIndex < scriptHistory.size() - 1) {
             historyIndex++;
-            snap = scriptLogger.get(historyIndex);
+            snap = scriptHistory.get(historyIndex);
 
         } else {
             snap = getNewLineFromScript();
@@ -58,13 +58,13 @@ public class ScriptTracker {
                 ", action: " + snapshot.getAction().size());
 
         SnapShot copy = new SnapShot(snapshot);
-        scriptLogger.add(copy);
+        scriptHistory.add(copy);
         historyIndex++;
     }
 
     public SnapShot traceScriptBackwards() {
         historyIndex--;
-        SnapShot snapshot = scriptLogger.get(historyIndex);
+        SnapShot snapshot = scriptHistory.get(historyIndex);
         Gdx.app.log("ScriptTracker::traceScriptBackwards", "line: " + snapshot.getDialogue() +
                 ", music: " + snapshot.getBGMCommand() +
                 ", sound: " + snapshot.getSound() +
@@ -74,11 +74,12 @@ public class ScriptTracker {
         return snapshot;
     }
 
+
     /**
      * returns the history taken from the logger
      */
-    public void getHistory() {
-
+    public ArrayList<SnapShot> getHistory() {
+        return this.scriptHistory;
     }
 
     public String getNewScriptName() {

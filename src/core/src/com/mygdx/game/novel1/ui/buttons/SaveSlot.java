@@ -8,13 +8,18 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.utils.AudioHandler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SaveSlot extends BaseButton {
 
-    public SaveSlot(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, final String name) {
+    private String saveDate;
+
+    public SaveSlot(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, String name) {
         super(idleTexture, hoverTexture, game, name);
+        this.saveDate = null;
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log(name, "Save Slot button clicked");
                 AudioHandler.playSound(buttonClick);
                 action(game);
                 return true;
@@ -28,6 +33,11 @@ public class SaveSlot extends BaseButton {
         try{
             Save save = (Save) game.getScreen();
             save.saveState();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            this.saveDate = formatter.format(date);
+            super.label = this.saveDate;
 
         }catch(ClassCastException e) {
             Gdx.app.log("SaveSlot::action", e.getMessage());

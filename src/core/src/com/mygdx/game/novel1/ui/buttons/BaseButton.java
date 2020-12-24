@@ -29,10 +29,10 @@ abstract class BaseButton extends Actor{
     private final Sprite hover;
     public final NovelOne game;
     private final BitmapFont font;
-    private final String label;
+    protected String label;
     protected String buttonClick = "Click";
 
-    public BaseButton(final TextureRegion idleButton, final TextureRegion hoverButton, final NovelOne game, final String name){
+    public BaseButton(final TextureRegion idleButton, final TextureRegion hoverButton, final NovelOne game, String name){
         this.idle = new Sprite(idleButton);
         this.hover = new Sprite(hoverButton);
         this.sprite = this.idle;
@@ -55,12 +55,10 @@ abstract class BaseButton extends Actor{
         addListener( new ClickListener() {
            @Override
            public void enter(InputEvent event,float x, float y, int pointer, Actor fromActor){
-                Gdx.app.log(name, "Mouse pointer entered button detected");
                 sprite = hover;
            }
            @Override
             public void exit(InputEvent event,float x, float y, int pointer, Actor fromActor) {
-               Gdx.app.log(name, "Mouse pointer exited button detected");
                sprite = idle;
            }
         });

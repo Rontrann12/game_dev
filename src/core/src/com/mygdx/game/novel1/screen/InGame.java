@@ -2,25 +2,20 @@ package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.effects.ScreenFade;
-import com.mygdx.game.novel1.typ.AssetsDTO;
-import com.mygdx.game.novel1.typ.SnapShot;
-import com.mygdx.game.novel1.typ.SpeakerMap;
+import com.mygdx.game.novel1.typ.*;
+import com.mygdx.game.novel1.typ.Character;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
-import com.mygdx.game.novel1.typ.Character;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
@@ -81,7 +76,10 @@ public class InGame implements Screen {
                 }
         );
 
-        //Gdx.input.setInputProcessor(multiplexer);
+        this.stage.addActor(this.characterRenderGroup);
+        this.uiHandler.generateUI();
+        manageInput();
+
     }
 
     private void manageInput() {
@@ -157,8 +155,8 @@ public class InGame implements Screen {
         uiHandler.nextLine(stepForward());
     }
 
-    public String getSaveData() {
-        return this.saveData;
+    public SaveDataCollection getSaveData() {
+        return new SaveDataCollection(this.tracker.getHistory(), this.configPath, this.visibleCharacters);
     }
 
 
@@ -254,14 +252,6 @@ public class InGame implements Screen {
 
     @Override
     public void show() {
-
-        this.stage.addActor(this.characterRenderGroup);
-        this.uiHandler.generateUI();
-        int numActors = this.stage.getActors().size;
-        manageInput();
-        Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
-        Gdx.app.log("InGame::show", "Is controls disabled: " + disableControls);
-
 
         this.backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
