@@ -20,16 +20,20 @@ public class SaveDataCollection {
     private ArrayList<SnapShot> snapShots;
     private String currentScriptConfig;
     private LinkedHashMap<String,String> visibleCharacters;
+    private boolean controlsDisabled;
+    private String[] options;
 
-    public SaveDataCollection(){
-    }
     public SaveDataCollection(ArrayList<SnapShot> snapShots,
                               String currentScriptConfig,
-                              LinkedHashMap<String,String> visibleCharacters){
+                              LinkedHashMap<String,String> visibleCharacters,
+                              boolean controlsDisabled,
+                              String[] options){
 
         this.snapShots = snapShots;
         this.currentScriptConfig = currentScriptConfig;
         this.visibleCharacters = visibleCharacters;
+        this.controlsDisabled = controlsDisabled;
+        this.options = options;
 
     }
 }

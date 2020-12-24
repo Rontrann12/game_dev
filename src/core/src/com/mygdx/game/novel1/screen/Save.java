@@ -12,13 +12,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.typ.SaveDataCollection;
 import com.mygdx.game.novel1.ui.layouts.SaveUI;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.zip.Deflater;
 
 public class Save implements Screen {
@@ -68,8 +74,34 @@ public class Save implements Screen {
     /**
      * Save the current state of the game
      */
-    public void saveState() {
+    public void saveState(String fileName) {
         Gdx.app.log("Save::saveState", inGameScreen.getSaveData().toString());
+        SaveDataCollection data = this.inGameScreen.getSaveData();
+
+
+        Json json = new Json();
+        String dataSerialized = json.toJson(data);
+        Gdx.app.log("Save::saveState", "checking save data serialization: " + dataSerialized);
+        Gdx.app.log("Save::saveState", "name of file: " + fileName);
+
+        try{
+            String filePath = StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH,
+                    fileName,
+                    FileTypes.SAVE);
+            Gdx.app.log("Save::saveState", "path of file: " + filePath);
+
+
+            File file = new File(filePath);
+
+            file.createNewFile();
+
+            FileWriter writer = new FileWriter(file);
+            writer.write(dataSerialized);
+            writer.close();
+        }catch(IOException e) {
+            Gdx.app.log("Save::saveState", e.getMessage());
+        }
+
     }
 
     @Override

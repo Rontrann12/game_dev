@@ -26,7 +26,7 @@ public class StringUtilities {
      * @return
      */
     public static String getCharacterName(String spriteName) {
-        String[] nameSplit = spriteName.split(Separators.KEYVALUE+Separators.SPACE);
+        String[] nameSplit = spriteName.split(Separators.KEY_SPACE);
 
         if(nameSplit.length == 1) {
             nameSplit[0] = nameSplit[0].replace(Separators.KEYVALUE,Separators.EMPTY);
@@ -45,7 +45,7 @@ public class StringUtilities {
      */
 
     public static String getCharacterAlias(String input) {
-        String[] nameSplit = input.split(Separators.KEYVALUE + Separators.SPACE);
+        String[] nameSplit = input.split(Separators.KEY_SPACE);
 
         if(isContainer(nameSplit[0], Separators.OPEN_BRACKET.charAt(0), Separators.CLOSE_BRACKET.charAt(0))){
             return getContainedContent(input, Separators.OPEN_BRACKET.charAt(0), Separators.CLOSE_BRACKET.charAt(0), true );
@@ -60,7 +60,7 @@ public class StringUtilities {
      * @return
      */
     public static String getAction(String spriteName) {
-        String[] nameSplit = spriteName.split(Separators.KEYVALUE+Separators.SPACE);
+        String[] nameSplit = spriteName.split(Separators.KEY_SPACE);
         try{
             return nameSplit[1];
 

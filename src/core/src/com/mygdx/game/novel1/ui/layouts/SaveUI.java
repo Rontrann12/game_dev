@@ -37,11 +37,11 @@ public class SaveUI extends BaseLayout {
         TextureRegion saveSlotIdle = new TextureRegion(texture, 1217,0,165, 91);
         TextureRegion saveSlotHover = new TextureRegion(texture, 1052, 0, 165, 91);
 
-        SaveSlot saveSlot1 = new SaveSlot(saveSlotIdle, saveSlotHover, game, null);
+        SaveSlot saveSlot1 = new SaveSlot(saveSlotIdle, saveSlotHover, game, "1");
         saveSlot1.spritePos(100, -5);
-        SaveSlot saveSlot2 = new SaveSlot(saveSlotIdle, saveSlotHover, game, null);
+        SaveSlot saveSlot2 = new SaveSlot(saveSlotIdle, saveSlotHover, game, "2");
         saveSlot2.spritePos(300, -5);
-        SaveSlot saveSlot3 = new SaveSlot(saveSlotIdle, saveSlotHover, game, null);
+        SaveSlot saveSlot3 = new SaveSlot(saveSlotIdle, saveSlotHover, game, "3");
         saveSlot3.spritePos(600, -5);
         ReturnButton returnButton = new ReturnButton(backIdle, backHover, game, null, this.previous);
 

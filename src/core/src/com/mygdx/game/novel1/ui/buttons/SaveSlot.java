@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.utils.AudioHandler;
 
@@ -32,12 +33,13 @@ public class SaveSlot extends BaseButton {
         Gdx.app.log("SaveSlot::action", "Running save slot action");
         try{
             Save save = (Save) game.getScreen();
-            save.saveState();
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
             this.saveDate = formatter.format(date);
-            super.label = this.saveDate;
+            super.label = super.label + Separators.KEY_SPACE + this.saveDate;
+            save.saveState(super.label.replace(Separators.KEYVALUE, Separators.EMPTY)
+                    .replace(Separators.SPACE, Separators.UNDERSCORE));
 
         }catch(ClassCastException e) {
             Gdx.app.log("SaveSlot::action", e.getMessage());

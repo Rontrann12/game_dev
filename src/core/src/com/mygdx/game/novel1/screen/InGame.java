@@ -40,7 +40,7 @@ public class InGame implements Screen {
     private String newScriptName;
     private ScreenFade screenFade;
     private Sprite backgroundSprite;
-    private String saveData;
+    private String[] options;
 
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
@@ -53,7 +53,7 @@ public class InGame implements Screen {
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
         newScriptName = "";
-        this.saveData ="InGame screen returning save data";
+        this.options = null;
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -106,7 +106,7 @@ public class InGame implements Screen {
 
         SnapShot snapshot = tracker.getNextLine();
         newScriptName = tracker.getNewScriptName();
-        String[] options = tracker.getChoices();
+        options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
         if (options != null) {
@@ -156,7 +156,11 @@ public class InGame implements Screen {
     }
 
     public SaveDataCollection getSaveData() {
-        return new SaveDataCollection(this.tracker.getHistory(), this.configPath, this.visibleCharacters);
+        return new SaveDataCollection(this.tracker.getHistory(),
+                this.configPath,
+                this.visibleCharacters,
+                this.disableControls,
+                this.options);
     }
 
 

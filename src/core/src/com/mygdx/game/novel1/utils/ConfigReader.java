@@ -27,7 +27,7 @@ public class ConfigReader {
      */
     public static void readNewConfiguration(String path) {
 
-        String separator = Separators.KEYVALUE + Separators.SPACE;
+        String separator = Separators.KEY_SPACE;
 
         try {
             File file = new File(path);
@@ -154,7 +154,7 @@ public class ConfigReader {
 
     private static String[] parseDataField(String data) {
 
-        int separatorIndex = data.indexOf(Separators.KEYVALUE + Separators.SPACE);
+        int separatorIndex = data.indexOf(Separators.KEY_SPACE);
         String dataField = data.substring(separatorIndex);
 
         int dataSeparatorIndex = dataField.indexOf(Separators.DATAFIELDS + Separators.SPACE);
