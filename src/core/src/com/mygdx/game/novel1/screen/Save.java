@@ -67,7 +67,7 @@ public class Save implements Screen {
                     true);
             screenshot.dispose();
         } catch (Exception e) {
-
+            Gdx.app.log("Save::Save", e.getMessage());
         }
     }
 

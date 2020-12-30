@@ -1,33 +1,62 @@
 package com.mygdx.game.novel1.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
+import com.mygdx.game.novel1.ui.layouts.SaveUI;
 
 public class Load implements Screen {
 
     private NovelOne game;
     private Stage stage;
+    private Batch batch;
+    private AssetManager manager;
+    private InputMultiplexer multiplexer;
+    private Screen inGameScreen;
+    private SaveUI uiHandler;
+    private Sprite background;
 
     public Load (final NovelOne game ){
 
         this.game = game;
         this.stage = new Stage(this.game.viewport);
+        this.batch = stage.getBatch();
+        this.manager = new AssetManager();
+        this.multiplexer = new InputMultiplexer();
 
+
+        try {
+            this.inGameScreen = game.getScreen();
+            this.uiHandler = new SaveUI(stage, game, this, this.inGameScreen);
+        }catch(ClassCastException e){
+            Gdx.app.log("Load::Load", e.getMessage());
+        }
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
 
+        batch.begin();
+        this.background.draw(batch);
+        batch.end();
+        this.stage.draw();
     }
 
     @Override
     public void show() {
-
+        this.uiHandler.generateUI();
+        this.manager.load("img/test_titlepage.png", Texture.class);
+        this.manager.finishLoading();
+        this.background = new Sprite((Texture) this.manager.get("img/test_titlepage.png"));
+        Gdx.input.setInputProcessor(stage);
     }
 
 

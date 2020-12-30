@@ -30,18 +30,15 @@ public class MainMenuUI extends BaseLayout {
 
         StartButton start = new StartButton(idleTexture, hoverTexture, game, "start button", super.stage);
         LoadButton load = new LoadButton(idleTexture, hoverTexture, game, "load button");
-        SaveButton save = new SaveButton(idleTexture, hoverTexture, game, "save Button");
 
         menuGroup.setOrigin(0, 0);
         start.spritePos(0, 100);
         load.spritePos(0, 0);
-        save.spritePos(0, 200);
         menuGroup.setX(Gdx.graphics.getWidth() / 3 - 100);
         menuGroup.setY(Gdx.graphics.getHeight() / 3);
 
         menuGroup.addActor(start);
         menuGroup.addActor(load);
-        menuGroup.addActor(save);
         stage.addActor(menuGroup);
 
         multiplexer.addProcessor(stage);
