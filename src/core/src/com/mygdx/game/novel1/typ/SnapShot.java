@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 
 public class SnapShot {
+
     private SpeakerMap dialogue;
     private String music;
     private String sound;
@@ -74,5 +75,6 @@ public class SnapShot {
     public LinkedHashMap<String, String> getAction() {
         return this.action;
     }
+
 
 }

@@ -42,6 +42,13 @@ public class InGame implements Screen {
     private Sprite backgroundSprite;
     private String[] options;
 
+    public InGame(final NovelOne game, SaveDataCollection savedState) {
+        this.game = game;
+        this.stage = new Stage(game.viewport);
+        this.batch = stage.getBatch();
+        this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
+    }
+
     public InGame(final NovelOne game, final String configPath) {
         Gdx.app.log("InGame::Constructor", "creating new InGame screen");
         this.configPath = configPath;

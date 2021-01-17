@@ -94,7 +94,7 @@ public class Save implements Screen {
 
 
         Json json = new Json();
-        String dataSerialized = json.toJson(data);
+        String dataSerialized = json.prettyPrint(data);
         Gdx.app.log("Save::saveState", "checking save data serialization: " + dataSerialized);
         Gdx.app.log("Save::saveState", "name of file: " + fileName);
 

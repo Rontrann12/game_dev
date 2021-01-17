@@ -1,0 +1,18 @@
+{
+snapShots: [
+	{
+		dialogue: {
+			character: null
+			line: I grab a coffee and arrived at my desk just in time
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+]
+currentScriptConfig: scenes/configs2/script3
+visibleCharacters: {}
+controlsDisabled: false
+options: null
+saveDataStructure: null
+}

@@ -10,9 +10,10 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Load;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.ui.buttons.*;
-import com.sun.jmx.remote.internal.ArrayQueue;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
+import java.util.Date;
 import java.util.HashMap;
 
 public class SaveLoadUI extends BaseLayout {
@@ -38,17 +39,24 @@ public class SaveLoadUI extends BaseLayout {
         this.parsedFileNames = parseFileNames(fileNameList);
     }
 
-    private HashMap<String, String> parseFileNames(ArrayDeque<String> fileNameList){
+    private HashMap<String, String> parseFileNames(ArrayDeque<String> fileNameList) {
         String slotNum;
         String saveTime;
         HashMap<String, String> parsedFileNames = new HashMap<>();
+
         while (fileNameList.size() > 0) {
             String temp = fileNameList.pop();
+            Gdx.app.log("SaveLoadUI::parseFileNames", "checking date: " + temp);
             slotNum = String.valueOf(temp.charAt(0));
             saveTime = temp.substring(2).split("\\.")[0];
-
-            Gdx.app.log("SaveLoadUI::parseFileNames", "slotNum: " + slotNum + ", saveTime: " + saveTime);
-            parsedFileNames.put(slotNum, saveTime);
+            try{
+                Date date = new SimpleDateFormat("yyyy-MM-dd_HHmmss").parse(saveTime);
+                saveTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                Gdx.app.log("SaveLoadUI::parseFileNames", "slotNum: " + slotNum + ", saveTime: " + saveTime);
+                parsedFileNames.put(slotNum, saveTime);
+            }catch (ParseException e){
+                Gdx.app.log("SaveLoadUI::parseFileNames", e.getMessage());
+            }
         }
 
         return parsedFileNames;
@@ -67,7 +75,7 @@ public class SaveLoadUI extends BaseLayout {
         TextureRegion slotIdle = new TextureRegion(texture, 1217, 0, 165, 91);
         TextureRegion slotHover = new TextureRegion(texture, 1052, 0, 165, 91);
 
-        if(load == null){
+        if (load == null) {
 
             SaveSlot saveSlot1 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"), "1");
             saveSlot1.spritePos(100, -5);
@@ -79,7 +87,7 @@ public class SaveLoadUI extends BaseLayout {
             uiArea.addActor(saveSlot2);
             uiArea.addActor(saveSlot3);
         }
-        if(save == null) {
+        if (save == null) {
             LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"));
             loadSlot1.spritePos(100, -5);
             LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));

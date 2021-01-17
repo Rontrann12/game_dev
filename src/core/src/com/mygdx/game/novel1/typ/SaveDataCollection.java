@@ -2,6 +2,7 @@ package com.mygdx.game.novel1.typ;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class SaveDataCollection {
@@ -22,6 +23,8 @@ public class SaveDataCollection {
     private LinkedHashMap<String,String> visibleCharacters;
     private boolean controlsDisabled;
     private String[] options;
+    private HashMap<String, String[]> saveDataStructure;
+
 
     public SaveDataCollection(ArrayList<SnapShot> snapShots,
                               String currentScriptConfig,
@@ -35,5 +38,26 @@ public class SaveDataCollection {
         this.controlsDisabled = controlsDisabled;
         this.options = options;
 
+        //this.saveDataStructure = generateSaveDataStructure();
     }
+
+    /**
+     * Generates a representation of how save data is organized. Will help with reading data in from a
+     * json file. Null values represent that the key contains a single value. Otherwise, that key represents
+     * an object
+     *
+     * good example: https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON#reading-object-graphs
+     *
+     * TODO - see if i can figure out a better way to represent this
+     * @return
+     */
+//    private HashMap<String, String[]> generateSaveDataStructure() {
+//        HashMap<String, String[]> tempStructure = new HashMap<>();
+//        tempStructure.put(snapShotsKey, SnapShot.getMetaData());
+//        tempStructure.put(currentScriptConfigKey, null);
+//        tempStructure.put(visibleCharactersKey, )
+//
+//        return tempStructure;
+//
+//    }
 }

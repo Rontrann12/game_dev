@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.typ.SaveDataCollection;
 import com.mygdx.game.novel1.ui.layouts.SaveLoadUI;
 
 import java.io.File;
@@ -47,7 +51,7 @@ public class Load implements Screen {
      * Gathers a list of files with save data
      * TODO - both Save and Load share this same method, will want to refactor this
      */
-    public ArrayDeque<String> listSaveFiles() {
+    private ArrayDeque<String> listSaveFiles() {
 
         File savePath = new File(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH);
         File[] allFiles = savePath.listFiles();
@@ -63,8 +67,13 @@ public class Load implements Screen {
     /**
      * Get saved data stored in specific file
      */
-    public void retrieveSavedData() {
+    public SaveDataCollection retrieveSavedData() {
 
+        String saveFileName = null;
+        Json json = new Json();
+        SaveDataCollection data = json.fromJson(SaveDataCollection.class, saveFileName);
+
+        return null;
     }
 
     @Override
