@@ -20,20 +20,14 @@ public class SaveLoadUI extends BaseLayout {
     private Load load;
     private Save save;
     private Screen previous;
-    private ArrayQueue<String> fileList;
     private HashMap<String, String> parsedFileNames;
-    public SaveLoadUI(Stage stage, NovelOne game, Save save , Screen previous) {
-        super(stage, game);
-        this.save = save;
-        this.previous = previous;
-        this.load = null;
-    }
 
-    public SaveLoadUI(Stage stage, NovelOne game, Load load, Screen previous) {
+    public SaveLoadUI(Stage stage, NovelOne game, Save save, ArrayDeque<String> fileNameList, Screen previous) {
         super(stage, game);
         this.save = null;
         this.previous = previous;
-        this.load = load;
+        this.save = save;
+        this.parsedFileNames = parseFileNames(fileNameList);
     }
 
     public SaveLoadUI(Stage stage, NovelOne game, Load load, ArrayDeque<String> fileNameList, Screen previous) {
@@ -51,7 +45,8 @@ public class SaveLoadUI extends BaseLayout {
         while (fileNameList.size() > 0) {
             String temp = fileNameList.pop();
             slotNum = String.valueOf(temp.charAt(0));
-            saveTime = temp.substring(2);
+            saveTime = temp.substring(2).split("\\.")[0];
+
             Gdx.app.log("SaveLoadUI::parseFileNames", "slotNum: " + slotNum + ", saveTime: " + saveTime);
             parsedFileNames.put(slotNum, saveTime);
         }
@@ -74,18 +69,18 @@ public class SaveLoadUI extends BaseLayout {
 
         if(load == null){
 
-            SaveSlot saveSlot1 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"));
+            SaveSlot saveSlot1 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"), "1");
             saveSlot1.spritePos(100, -5);
-            SaveSlot saveSlot2 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));
+            SaveSlot saveSlot2 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"), "2");
             saveSlot2.spritePos(300, -5);
-            SaveSlot saveSlot3 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"));
+            SaveSlot saveSlot3 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"), "3");
             saveSlot3.spritePos(600, -5);
             uiArea.addActor(saveSlot1);
             uiArea.addActor(saveSlot2);
             uiArea.addActor(saveSlot3);
         }
         if(save == null) {
-            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, "null");
+            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"));
             loadSlot1.spritePos(100, -5);
             LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));
             loadSlot2.spritePos(300, -5);

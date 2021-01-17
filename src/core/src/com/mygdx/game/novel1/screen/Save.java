@@ -22,6 +22,7 @@ import com.mygdx.game.novel1.utils.StringUtilities;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.zip.Deflater;
 
 public class Save implements Screen {
@@ -48,7 +49,7 @@ public class Save implements Screen {
 
         try {
             this.inGameScreen = (InGame) game.getScreen();
-            this.uiHandler = new SaveLoadUI(stage, game, this, this.inGameScreen);
+            this.uiHandler = new SaveLoadUI(stage, game, this, listSaveFiles(), this.inGameScreen);
 
         } catch (ClassCastException e) {
             Gdx.app.log("Save::Save", e.getMessage());
@@ -66,6 +67,22 @@ public class Save implements Screen {
         } catch (Exception e) {
             Gdx.app.log("Save::Save", e.getMessage());
         }
+    }
+
+    /**
+     * Gathers a list of files with save data
+     */
+    public ArrayDeque<String> listSaveFiles() {
+
+        File savePath = new File(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH);
+        File[] allFiles = savePath.listFiles();
+        ArrayDeque<String> allFileNames = new ArrayDeque<>();
+
+        for (int i = 0; i < allFiles.length; i ++) {
+            allFileNames.push(allFiles[i].getName());
+        }
+
+        return allFileNames;
     }
 
     /**

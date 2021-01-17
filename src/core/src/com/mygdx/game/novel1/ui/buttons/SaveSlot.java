@@ -15,10 +15,12 @@ import java.util.Date;
 public class SaveSlot extends BaseButton {
 
     private String saveDate;
+    private String id;
 
-    public SaveSlot(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, String name) {
+    public SaveSlot(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, String name, String id) {
         super(idleTexture, hoverTexture, game, name);
         this.saveDate = null;
+        this.id = id;
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 AudioHandler.playSound(buttonClick);
@@ -37,8 +39,9 @@ public class SaveSlot extends BaseButton {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
             this.saveDate = formatter.format(date);
-            super.label = super.label + Separators.KEY_SPACE + this.saveDate;
-            save.saveState(super.label.replace(Separators.KEYVALUE, Separators.EMPTY)
+            String temp = this.id + Separators.KEY_SPACE + this.saveDate;
+            super.label = this.saveDate;
+            save.saveState(temp.replace(Separators.KEYVALUE, Separators.EMPTY)
                     .replace(Separators.SPACE, Separators.UNDERSCORE));
 
         }catch(ClassCastException e) {
