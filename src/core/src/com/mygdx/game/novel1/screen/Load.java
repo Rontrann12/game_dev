@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.ui.layouts.SaveUI;
+import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.ui.layouts.SaveLoadUI;
+
+import java.io.File;
+import java.util.ArrayDeque;
 
 public class Load implements Screen {
 
@@ -20,7 +23,7 @@ public class Load implements Screen {
     private AssetManager manager;
     private InputMultiplexer multiplexer;
     private Screen inGameScreen;
-    private SaveUI uiHandler;
+    private SaveLoadUI uiHandler;
     private Sprite background;
 
     public Load (final NovelOne game ){
@@ -34,10 +37,33 @@ public class Load implements Screen {
 
         try {
             this.inGameScreen = game.getScreen();
-            this.uiHandler = new SaveUI(stage, game, this, this.inGameScreen);
+            this.uiHandler = new SaveLoadUI(stage, game, this, listSaveFiles(), this.inGameScreen);
         }catch(ClassCastException e){
             Gdx.app.log("Load::Load", e.getMessage());
         }
+    }
+
+    /**
+     * Gathers a list of files with save data
+     */
+    public ArrayDeque<String> listSaveFiles() {
+
+        File savePath = new File(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH);
+        File[] allFiles = savePath.listFiles();
+        ArrayDeque<String> allFileNames = new ArrayDeque<>();
+
+        for (int i = 0; i < allFiles.length; i ++) {
+            allFileNames.push(allFiles[i].getName());
+        }
+
+        return allFileNames;
+    }
+
+    /**
+     * Get saved data stored in specific file
+     */
+    public void retrieveSavedData() {
+
     }
 
     @Override

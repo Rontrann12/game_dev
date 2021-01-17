@@ -11,15 +11,15 @@ public class LoadSlot extends BaseButton {
     private String loadDate;
 
     public LoadSlot(TextureRegion idleTexture, TextureRegion hoverTexture, final NovelOne game, String name) {
-     super(idleTexture, hoverTexture, game, name);
-     this.loadDate = null;
-     addListener( new InputListener() {
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            AudioHandler.playSound(buttonClick);
-            action(game);
-            return true;
-        }
-     });
+        super(idleTexture, hoverTexture, game, name);
+        this.loadDate = null;
+        addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                AudioHandler.playSound(buttonClick);
+                action(game);
+                return true;
+            }
+        });
     }
 
     @Override

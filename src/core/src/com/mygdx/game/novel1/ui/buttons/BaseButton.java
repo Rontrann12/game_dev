@@ -41,7 +41,13 @@ abstract class BaseButton extends Actor{
         setTouchable(Touchable.enabled);
         this.game = game;
         this.font = new BitmapFont();
-        this.label = name;
+
+
+        String displayName = name;
+        if(name == null){
+            displayName = "";
+        }
+        this.label = displayName;
 
         AssetManager manager = new AssetManager();
 

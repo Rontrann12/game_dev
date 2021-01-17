@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,13 +12,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.Paths;
 import com.mygdx.game.novel1.typ.SaveDataCollection;
-import com.mygdx.game.novel1.ui.layouts.SaveUI;
+import com.mygdx.game.novel1.ui.layouts.SaveLoadUI;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
 import java.io.File;
@@ -32,7 +29,7 @@ public class Save implements Screen {
 
     private NovelOne game;
     private Stage stage;
-    private SaveUI uiHandler;
+    private SaveLoadUI uiHandler;
     private Screen previousScreen;
     private Batch batch;
     private Sprite titlePage;
@@ -51,7 +48,7 @@ public class Save implements Screen {
 
         try {
             this.inGameScreen = (InGame) game.getScreen();
-            this.uiHandler = new SaveUI(stage, game, this, this.inGameScreen);
+            this.uiHandler = new SaveLoadUI(stage, game, this, this.inGameScreen);
 
         } catch (ClassCastException e) {
             Gdx.app.log("Save::Save", e.getMessage());

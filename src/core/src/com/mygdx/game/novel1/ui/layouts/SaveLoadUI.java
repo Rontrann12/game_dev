@@ -1,5 +1,6 @@
 package com.mygdx.game.novel1.ui.layouts;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,25 +10,53 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Load;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.ui.buttons.*;
+import com.sun.jmx.remote.internal.ArrayQueue;
 
-public class SaveUI extends BaseLayout {
+import java.util.ArrayDeque;
+import java.util.HashMap;
+
+public class SaveLoadUI extends BaseLayout {
 
     private Load load;
     private Save save;
     private Screen previous;
-
-    public SaveUI(Stage stage, NovelOne game, Save save, Screen previous) {
+    private ArrayQueue<String> fileList;
+    private HashMap<String, String> parsedFileNames;
+    public SaveLoadUI(Stage stage, NovelOne game, Save save , Screen previous) {
         super(stage, game);
         this.save = save;
         this.previous = previous;
         this.load = null;
     }
 
-    public SaveUI(Stage stage, NovelOne game, Load load, Screen previous) {
+    public SaveLoadUI(Stage stage, NovelOne game, Load load, Screen previous) {
         super(stage, game);
         this.save = null;
         this.previous = previous;
         this.load = load;
+    }
+
+    public SaveLoadUI(Stage stage, NovelOne game, Load load, ArrayDeque<String> fileNameList, Screen previous) {
+        super(stage, game);
+        this.save = null;
+        this.previous = previous;
+        this.load = load;
+        this.parsedFileNames = parseFileNames(fileNameList);
+    }
+
+    private HashMap<String, String> parseFileNames(ArrayDeque<String> fileNameList){
+        String slotNum;
+        String saveTime;
+        HashMap<String, String> parsedFileNames = new HashMap<>();
+        while (fileNameList.size() > 0) {
+            String temp = fileNameList.pop();
+            slotNum = String.valueOf(temp.charAt(0));
+            saveTime = temp.substring(2);
+            Gdx.app.log("SaveLoadUI::parseFileNames", "slotNum: " + slotNum + ", saveTime: " + saveTime);
+            parsedFileNames.put(slotNum, saveTime);
+        }
+
+        return parsedFileNames;
     }
 
     @Override
@@ -45,22 +74,22 @@ public class SaveUI extends BaseLayout {
 
         if(load == null){
 
-            SaveSlot saveSlot1 = new SaveSlot(slotIdle, slotHover, game, "1");
+            SaveSlot saveSlot1 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"));
             saveSlot1.spritePos(100, -5);
-            SaveSlot saveSlot2 = new SaveSlot(slotIdle, slotHover, game, "2");
+            SaveSlot saveSlot2 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));
             saveSlot2.spritePos(300, -5);
-            SaveSlot saveSlot3 = new SaveSlot(slotIdle, slotHover, game, "3");
+            SaveSlot saveSlot3 = new SaveSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"));
             saveSlot3.spritePos(600, -5);
             uiArea.addActor(saveSlot1);
             uiArea.addActor(saveSlot2);
             uiArea.addActor(saveSlot3);
         }
         if(save == null) {
-            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, "1");
+            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, "null");
             loadSlot1.spritePos(100, -5);
-            LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, "2");
+            LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));
             loadSlot2.spritePos(300, -5);
-            LoadSlot loadSlot3 = new LoadSlot(slotIdle, slotHover, game, "3");
+            LoadSlot loadSlot3 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"));
             loadSlot3.spritePos(600, -5);
             uiArea.addActor(loadSlot1);
             uiArea.addActor(loadSlot2);
