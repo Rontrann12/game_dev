@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.effects.ScreenFade;
 import com.mygdx.game.novel1.typ.*;
 import com.mygdx.game.novel1.typ.Character;
@@ -28,7 +28,7 @@ public class InGame implements Screen {
     private final Batch batch;
     private final Stage stage;
     private final InGameUI uiHandler;
-    private String configPath = Paths.TEST_CONFIG_PATH;
+    private String configPath = AssetPaths.TEST_CONFIG_PATH;
     private HashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
@@ -279,7 +279,7 @@ public class InGame implements Screen {
         AudioHandler.clearMusic();
         AudioHandler.clearSounds();
         if(!newScriptName.isEmpty()){
-            game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+            game.setScreen(new InGame(game, AssetPaths.CONFIGS_PATH + newScriptName));
         }
     }
 

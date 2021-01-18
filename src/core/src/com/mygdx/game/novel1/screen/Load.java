@@ -9,14 +9,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
+import java.nio.file.Paths;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.typ.SaveDataCollection;
 import com.mygdx.game.novel1.ui.layouts.SaveLoadUI;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayDeque;
 
 public class Load implements Screen {
@@ -53,7 +54,7 @@ public class Load implements Screen {
      */
     private ArrayDeque<String> listSaveFiles() {
 
-        File savePath = new File(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH);
+        File savePath = new File(Gdx.files.getLocalStoragePath() + AssetPaths.SAVE_PATH);
         File[] allFiles = savePath.listFiles();
         ArrayDeque<String> allFileNames = new ArrayDeque<>();
 
@@ -70,8 +71,12 @@ public class Load implements Screen {
     public SaveDataCollection retrieveSavedData(String saveFileName) {
         Gdx.app.log("Load::retrieveSaveData", "checking file path and name: " + saveFileName);
         Json json = new Json();
-        SaveDataCollection data = json.fromJson(SaveDataCollection.class, saveFileName);
-
+        try{
+            String jsonFileContents = new String(Files.readAllBytes(java.nio.file.Paths.get(saveFileName)));
+            return json.fromJson(SaveDataCollection.class, jsonFileContents);
+        }catch(IOException e) {
+            Gdx.app.log("Load::retrieveSavedData", e.getMessage());
+        }
         return null;
     }
 

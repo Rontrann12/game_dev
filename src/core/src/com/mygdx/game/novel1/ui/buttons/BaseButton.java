@@ -10,11 +10,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.utils.AudioHandler;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
@@ -51,7 +50,7 @@ abstract class BaseButton extends Actor{
 
         AssetManager manager = new AssetManager();
 
-        String clickFilePath = StringUtilities.generateFileName(Paths.SFX_PATH, "click", FileTypes.AUDIO);
+        String clickFilePath = StringUtilities.generateFileName(AssetPaths.SFX_PATH, "click", FileTypes.AUDIO);
         manager.load(clickFilePath, Sound.class);
         manager.finishLoading();
         AudioHandler.addSound(buttonClick, (Sound) manager.get(clickFilePath));

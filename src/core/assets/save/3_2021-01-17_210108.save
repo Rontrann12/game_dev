@@ -110,78 +110,11 @@ snapShots: [
 			Shaina: Shaina_wink_talking
 		}
 	}
-	{
-		dialogue: {
-			character: Shaina
-			line: "\"I look forward to working with you all\""
-		}
-		music: beneath_the_mask
-		character: Shaina
-		action: {
-			Shaina: Shaina_wink_talking
-		}
-	}
-	{
-		dialogue: {
-			character: Ron
-			line: "\"Hi, I'm Ron. I've been on this team for only about a year\""
-		}
-		music: beneath_the_mask
-		character: Ron
-		action: {
-			Shaina: Shaina_wink_talking
-		}
-	}
-	{
-		dialogue: {
-			character: Ron
-			line: "\"But let me know if you're ever stuck on something. I'd be happy to help\""
-		}
-		music: beneath_the_mask
-		character: Ron
-		action: {
-			Shaina: Shaina_wink_talking
-		}
-	}
-	{
-		dialogue: {
-			character: Shaina
-			line: "\"Hi Ron, nice to meet you\""
-		}
-		music: beneath_the_mask
-		character: Shaina
-		action: {
-			Shaina: Shaina_smile_talking
-		}
-	}
-	{
-		dialogue: {
-			character: Shaina
-			line: "\"Thanks, I will keep that in mind\""
-		}
-		music: beneath_the_mask
-		character: Shaina
-		action: {
-			Shaina: Shaina_smile_talking
-		}
-	}
-	{
-		dialogue: {
-			character: Shaina
-			line: "\"...\""
-		}
-		music: beneath_the_mask
-		character: Shaina
-		action: {
-			Shaina: Shaina_smile_talking
-		}
-	}
 ]
 currentScriptConfig: scenes/configs2/script3
 visibleCharacters: {
-	Shaina: Shaina_smile_talking
+	Shaina: Shaina_wink_talking
 }
 controlsDisabled: false
 options: null
-saveDataStructure: null
 }

@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static com.mygdx.game.novel1.constants.Paths.*;
+import static com.mygdx.game.novel1.constants.AssetPaths.*;
 import static com.mygdx.game.novel1.utils.StringUtilities.generateFileName;
 
 

@@ -4,11 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.novel1.constants.FileTypes;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.utils.ConfigReader;
 import com.mygdx.game.novel1.utils.StringUtilities;
@@ -47,7 +46,7 @@ public class Character extends Actor {
     private void gatherExpressions(Texture[] sheets) {
         for (int i = 0; i < sheets.length; i++) {
             HashMap<String, TextureRegion> temp;
-            temp = ConfigReader.mapSprites(StringUtilities.generateFileName(Paths.CHARACTERS_PATH, name + Separators.UNDERSCORE + i, FileTypes.TEXT), sheets[i]);
+            temp = ConfigReader.mapSprites(StringUtilities.generateFileName(AssetPaths.CHARACTERS_PATH, name + Separators.UNDERSCORE + i, FileTypes.TEXT), sheets[i]);
             this.expressions.putAll(temp);
         }
     }

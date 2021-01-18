@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.typ.SaveDataCollection;
 import com.mygdx.game.novel1.ui.layouts.SaveLoadUI;
 import com.mygdx.game.novel1.utils.StringUtilities;
@@ -56,7 +56,7 @@ public class Save implements Screen {
         }
 
         try {
-            FileHandle fileHandle = new FileHandle(StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + Paths.SCREENSHOTS_PATH,
+            FileHandle fileHandle = new FileHandle(StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + AssetPaths.SCREENSHOTS_PATH,
                     "screenshot",
                     FileTypes.PNG));
             PixmapIO.writePNG(fileHandle,
@@ -74,7 +74,7 @@ public class Save implements Screen {
      */
     public ArrayDeque<String> listSaveFiles() {
 
-        File savePath = new File(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH);
+        File savePath = new File(Gdx.files.getLocalStoragePath() + AssetPaths.SAVE_PATH);
         File[] allFiles = savePath.listFiles();
         ArrayDeque<String> allFileNames = new ArrayDeque<>();
 
@@ -94,12 +94,12 @@ public class Save implements Screen {
 
 
         Json json = new Json();
-        String dataSerialized = json.prettyPrint(data);
+        String dataSerialized = json.toJson(data);
         Gdx.app.log("Save::saveState", "checking save data serialization: " + dataSerialized);
         Gdx.app.log("Save::saveState", "name of file: " + fileName);
 
         try{
-            String filePath = StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + Paths.SAVE_PATH,
+            String filePath = StringUtilities.generateFileName(Gdx.files.getLocalStoragePath() + AssetPaths.SAVE_PATH,
                     fileName,
                     FileTypes.SAVE);
             Gdx.app.log("Save::saveState", "path of file: " + filePath);
