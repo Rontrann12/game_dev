@@ -8,7 +8,9 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.utils.AudioHandler;
+import com.mygdx.game.novel1.utils.StringUtilities;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,18 +35,24 @@ public class SaveSlot extends BaseButton {
     @Override
     public void action(NovelOne game) {
         Gdx.app.log("SaveSlot::action", "Running save slot action");
-        try{
+        try {
             Save save = (Save) game.getScreen();
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
             this.saveDate = formatter.format(date);
-            String temp = this.id + Separators.KEY_SPACE + this.saveDate;
-            super.label = this.saveDate;
-            save.saveState(temp.replace(Separators.KEYVALUE, Separators.EMPTY)
+            this.label = this.saveDate;
+            String fileName = StringUtilities.appendPrefix(
+                    this.id,
+                    StringUtilities.getCompactDateFormat(this.saveDate));
+
+            save.saveState(fileName.replace(Separators.KEYVALUE, Separators.EMPTY)
                     .replace(Separators.SPACE, Separators.UNDERSCORE));
 
-        }catch(ClassCastException e) {
+
+        } catch (ClassCastException e) {
+            Gdx.app.log("SaveSlot::action", e.getMessage());
+        } catch (ParseException e) {
             Gdx.app.log("SaveSlot::action", e.getMessage());
         }
 

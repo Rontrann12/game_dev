@@ -79,7 +79,7 @@ public class Save implements Screen {
         ArrayDeque<String> allFileNames = new ArrayDeque<>();
 
         for (int i = 0; i < allFiles.length; i ++) {
-            allFileNames.push(allFiles[i].getName());
+            allFileNames.add(allFiles[i].getName());
         }
 
         return allFileNames;

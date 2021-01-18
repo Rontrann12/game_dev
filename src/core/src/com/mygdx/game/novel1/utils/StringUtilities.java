@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StringUtilities {
 
 
@@ -136,5 +140,38 @@ public class StringUtilities {
         Gdx.app.log("StringUtilities::getContainer", "stripped string from " + line + " to: " + stripped);
         return stripped;
     }
+
+    public static String getCompactDateFormat(String date) throws ParseException{
+        Date parsedOldDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+        return new SimpleDateFormat("yyyy-MM-dd_HHmmss").format(parsedOldDate);
+
+    }
+
+    public static String getExpandedDateFormat(String date) throws ParseException {
+        Date parsedOldDate = new SimpleDateFormat("yyyy-MM-dd_HHmmss").parse(date);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(parsedOldDate);
+    }
+
+    public static String appendPrefix(String prefix, String string) {
+        return prefix + Separators.UNDERSCORE + string;
+    }
+
+    public static String getPrefix(String string) {
+        return string.split(Separators.UNDERSCORE)[0];
+    }
+
+    public static String getStringAfterPrefix(String string) {
+        String[] stringSplit = string.split(Separators.UNDERSCORE);
+        String result = stringSplit[1];
+        for(int i = 2; i < stringSplit.length; i++){
+            result = result + Separators.UNDERSCORE + stringSplit[i];
+        }
+        return result;
+    }
+
+    public static String removeFileExtention(String string) {
+        return string.split("\\"+Separators.FILETYPE)[0];
+    }
+
 
 }

@@ -58,7 +58,7 @@ public class Load implements Screen {
         ArrayDeque<String> allFileNames = new ArrayDeque<>();
 
         for (int i = 0; i < allFiles.length; i ++) {
-            allFileNames.push(allFiles[i].getName());
+            allFileNames.add(allFiles[i].getName());
         }
 
         return allFileNames;
@@ -67,9 +67,8 @@ public class Load implements Screen {
     /**
      * Get saved data stored in specific file
      */
-    public SaveDataCollection retrieveSavedData() {
-
-        String saveFileName = null;
+    public SaveDataCollection retrieveSavedData(String saveFileName) {
+        Gdx.app.log("Load::retrieveSaveData", "checking file path and name: " + saveFileName);
         Json json = new Json();
         SaveDataCollection data = json.fromJson(SaveDataCollection.class, saveFileName);
 

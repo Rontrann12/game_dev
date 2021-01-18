@@ -10,6 +10,9 @@ import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Load;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.ui.buttons.*;
+import com.mygdx.game.novel1.utils.StringUtilities;
+import com.sun.jmx.remote.internal.ArrayQueue;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
@@ -45,22 +48,20 @@ public class SaveLoadUI extends BaseLayout {
         HashMap<String, String> parsedFileNames = new HashMap<>();
 
         while (fileNameList.size() > 0) {
-            String temp = fileNameList.pop();
-            Gdx.app.log("SaveLoadUI::parseFileNames", "checking date: " + temp);
-            slotNum = String.valueOf(temp.charAt(0));
-            saveTime = temp.substring(2).split("\\.")[0];
-            try{
-                Date date = new SimpleDateFormat("yyyy-MM-dd_HHmmss").parse(saveTime);
-                saveTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-                Gdx.app.log("SaveLoadUI::parseFileNames", "slotNum: " + slotNum + ", saveTime: " + saveTime);
+            String temp = fileNameList.remove();
+            slotNum = StringUtilities.getPrefix(temp);
+            saveTime = StringUtilities.removeFileExtention(StringUtilities.getStringAfterPrefix(temp));
+            try {
+                saveTime = StringUtilities.getExpandedDateFormat(saveTime);
                 parsedFileNames.put(slotNum, saveTime);
-            }catch (ParseException e){
+            } catch (ParseException e) {
                 Gdx.app.log("SaveLoadUI::parseFileNames", e.getMessage());
             }
         }
-
         return parsedFileNames;
     }
+
+
 
     @Override
     public void generateUI() {
@@ -88,11 +89,11 @@ public class SaveLoadUI extends BaseLayout {
             uiArea.addActor(saveSlot3);
         }
         if (save == null) {
-            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"));
+            LoadSlot loadSlot1 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("1"), "1");
             loadSlot1.spritePos(100, -5);
-            LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"));
+            LoadSlot loadSlot2 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("2"), "2");
             loadSlot2.spritePos(300, -5);
-            LoadSlot loadSlot3 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"));
+            LoadSlot loadSlot3 = new LoadSlot(slotIdle, slotHover, game, this.parsedFileNames.get("3"), "3");
             loadSlot3.spritePos(600, -5);
             uiArea.addActor(loadSlot1);
             uiArea.addActor(loadSlot2);
