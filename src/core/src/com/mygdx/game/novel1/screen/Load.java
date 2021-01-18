@@ -72,7 +72,7 @@ public class Load implements Screen {
         Gdx.app.log("Load::retrieveSaveData", "checking file path and name: " + saveFileName);
         Json json = new Json();
         try{
-            String jsonFileContents = new String(Files.readAllBytes(java.nio.file.Paths.get(saveFileName)));
+            String jsonFileContents = new String(Files.readAllBytes(Paths.get(saveFileName)));
             return json.fromJson(SaveDataCollection.class, jsonFileContents);
         }catch(IOException e) {
             Gdx.app.log("Load::retrieveSavedData", e.getMessage());

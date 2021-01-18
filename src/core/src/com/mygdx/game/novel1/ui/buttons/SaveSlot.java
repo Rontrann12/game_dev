@@ -46,8 +46,7 @@ public class SaveSlot extends BaseButton {
                     this.id,
                     StringUtilities.getCompactDateFormat(this.saveDate));
 
-            save.saveState(fileName.replace(Separators.KEYVALUE, Separators.EMPTY)
-                    .replace(Separators.SPACE, Separators.UNDERSCORE));
+            save.saveState(fileName);
 
 
         } catch (ClassCastException e) {
