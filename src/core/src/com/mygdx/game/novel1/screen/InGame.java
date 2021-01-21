@@ -42,11 +42,50 @@ public class InGame implements Screen {
     private Sprite backgroundSprite;
     private String[] options;
 
+
+    /*
+    TODO - group common code in both constructors and call this() to remove redundancy
+     */
     public InGame(final NovelOne game, SaveDataCollection savedState) {
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
+        this.charactersInScene = new HashMap<>();
+        this.characterRenderGroup = new Group();
+        this.newScriptName = "";
+
+        this.configPath = savedState.currentScriptConfig;
+        this.tracker = new ScriptTracker(savedState.snapShots);
+        this.visibleCharacters = savedState.visibleCharacters;
+        this.disableControls = savedState.controlsDisabled;
+        this.options = savedState.options;
+        configure();
+
+        this.multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(
+                new InputAdapter() {
+                    @Override
+                    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+                        manageInput();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean keyDown(int keyCode) {
+                        if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
+                            manageInput();
+                        }
+                        return true;
+                    }
+                }
+        );
+
+        this.stage.addActor(this.characterRenderGroup);
+        this.uiHandler.generateUI();
+        manageInput();
     }
 
     public InGame(final NovelOne game, final String configPath) {
@@ -56,6 +95,7 @@ public class InGame implements Screen {
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
         charactersInScene = new HashMap<>();
+        this.tracker = new ScriptTracker();
         configure();
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
         characterRenderGroup = new Group();
@@ -182,7 +222,7 @@ public class InGame implements Screen {
                 ConfigReader.getSoundList()
         );
 
-        tracker = new ScriptTracker(assets.getScript());
+        this.tracker.setScript(assets.getScript());
         this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());

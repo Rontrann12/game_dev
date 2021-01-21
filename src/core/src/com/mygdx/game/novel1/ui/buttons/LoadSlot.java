@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
 import com.mygdx.game.novel1.constants.AssetPaths;
+import com.mygdx.game.novel1.screen.InGame;
 import com.mygdx.game.novel1.screen.Load;
 import com.mygdx.game.novel1.typ.SaveDataCollection;
 import com.mygdx.game.novel1.utils.AudioHandler;
@@ -44,8 +45,8 @@ public class LoadSlot extends BaseButton {
 
             Load load = (Load) game.getScreen();
             SaveDataCollection saveDataTest = load.retrieveSavedData(fileName);
-            Gdx.app.log("LoadSlot::action", "checking contents after reading from json: " + saveDataTest.currentScriptConfig);
-//            game.setScreen(new InGame(game, load.retrieveSavedData(fileName)));
+            Gdx.app.log("LoadSlot::action", "checking contents after reading from json: " + saveDataTest.snapShots.remove(0).getCharacter());
+            game.setScreen(new InGame(game, saveDataTest));
         } catch (ParseException e) {
             Gdx.app.log("LoadSlot::action", e.getMessage());
         } catch (ClassCastException e) {

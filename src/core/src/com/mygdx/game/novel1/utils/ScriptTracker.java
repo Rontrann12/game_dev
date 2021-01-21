@@ -5,6 +5,7 @@ import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
+
 import java.util.*;
 
 public class ScriptTracker {
@@ -19,11 +20,32 @@ public class ScriptTracker {
     private String newScriptName = "";
     private String[] choices = null;
 
-    public ScriptTracker(ArrayDeque<String> script) {
+    public ScriptTracker() {
         this.scriptHistory = new ArrayList<>();
-        this.script = script;
         this.historyIndex = -1;
         this.activeCharacters = new LinkedHashMap<>();
+    }
+
+    public ScriptTracker(ArrayList<SnapShot> snapShots) {
+        this.scriptHistory = snapShots;
+        this.historyIndex = scriptHistory.size();
+        this.activeCharacters = new LinkedHashMap<>();
+
+    }
+
+    /*
+     * TODO - to be removed
+     *
+     */
+//    public ScriptTracker(ArrayDeque<String> script) {
+//        this.scriptHistory = new ArrayList<>();
+//        this.script = script;
+//        this.historyIndex = -1;
+//        this.activeCharacters = new LinkedHashMap<>();
+//    }
+
+    public void setScript(ArrayDeque<String> script) {
+        this.script = script;
     }
 
     /**

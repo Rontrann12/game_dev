@@ -92,7 +92,6 @@ public class Save implements Screen {
         Gdx.app.log("Save::saveState", inGameScreen.getSaveData().toString());
         SaveDataCollection data = this.inGameScreen.getSaveData();
 
-
         Json json = new Json();
         String dataSerialized = json.toJson(data);
         Gdx.app.log("Save::saveState", "checking save data serialization: " + dataSerialized);
@@ -104,9 +103,7 @@ public class Save implements Screen {
                     FileTypes.SAVE);
             Gdx.app.log("Save::saveState", "path of file: " + filePath);
 
-
             File file = new File(filePath);
-
             file.createNewFile();
 
             FileWriter writer = new FileWriter(file);
