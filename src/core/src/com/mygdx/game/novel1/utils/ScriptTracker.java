@@ -26,10 +26,14 @@ public class ScriptTracker {
         this.activeCharacters = new LinkedHashMap<>();
     }
 
-    public ScriptTracker(ArrayList<SnapShot> snapShots) {
+    public ScriptTracker(ArrayList<SnapShot> snapShots, ArrayDeque<String> script) {
         this.scriptHistory = snapShots;
+        this.script = script;
         this.historyIndex = scriptHistory.size();
-        this.activeCharacters = new LinkedHashMap<>();
+        SnapShot latestSnapShot = this.scriptHistory.get(historyIndex -1);
+        this.currentMusic = latestSnapShot.getBGMCommand();
+        this.currentSpeaker = latestSnapShot.getCharacter();
+        this.activeCharacters = latestSnapShot.getAction();
 
     }
 
@@ -45,6 +49,13 @@ public class ScriptTracker {
 //    }
 
     public void setScript(ArrayDeque<String> script) {
+        //updates script based on history index
+        /*
+        cant skip like this since this will be popping each line from script
+         need to skip based on snap shots instead
+         Or just add the current script status to the save file instead
+         */
+
         this.script = script;
     }
 
@@ -54,15 +65,17 @@ public class ScriptTracker {
      * @return
      */
     public SnapShot getNextLine() {
-
+        Gdx.app.log("ScriptTracker::getNextLine", "checking history index: " + historyIndex);
         SnapShot snap;
         if (historyIndex < scriptHistory.size() - 1) {
             historyIndex++;
             snap = scriptHistory.get(historyIndex);
+            Gdx.app.log("ScriptTracker::getNextLine", "going to earlier messages");
 
         } else {
             snap = getNewLineFromScript();
             logScriptEvent(snap);
+            Gdx.app.log("ScriptTracker::getNextLine", "getting brand new line");
         }
 
         return snap;
@@ -102,6 +115,10 @@ public class ScriptTracker {
      */
     public ArrayList<SnapShot> getHistory() {
         return this.scriptHistory;
+    }
+
+    public ArrayDeque<String> getRemainingScript() {
+        return this.script;
     }
 
     public String getNewScriptName() {

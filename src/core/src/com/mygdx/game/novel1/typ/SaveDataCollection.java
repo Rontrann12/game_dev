@@ -19,6 +19,7 @@ public class SaveDataCollection {
     //
 
     public ArrayList<SnapShot> snapShots;
+    public ArrayDeque<String> script;
     public String currentScriptConfig;
     public LinkedHashMap<String,String> visibleCharacters;
     public boolean controlsDisabled;
@@ -32,12 +33,14 @@ public class SaveDataCollection {
     }
 
     public SaveDataCollection(ArrayList<SnapShot> snapShots,
+                              ArrayDeque<String> script,
                               String currentScriptConfig,
                               LinkedHashMap<String,String> visibleCharacters,
                               boolean controlsDisabled,
                               String[] options){
 
         this.snapShots = snapShots;
+        this.script = script;
         this.currentScriptConfig = currentScriptConfig;
         this.visibleCharacters = visibleCharacters;
         this.controlsDisabled = controlsDisabled;

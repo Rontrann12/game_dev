@@ -56,7 +56,7 @@ public class InGame implements Screen {
         this.newScriptName = "";
 
         this.configPath = savedState.currentScriptConfig;
-        this.tracker = new ScriptTracker(savedState.snapShots);
+        this.tracker = new ScriptTracker(savedState.snapShots, savedState.script);
         this.visibleCharacters = savedState.visibleCharacters;
         this.disableControls = savedState.controlsDisabled;
         this.options = savedState.options;
@@ -204,6 +204,7 @@ public class InGame implements Screen {
 
     public SaveDataCollection getSaveData() {
         return new SaveDataCollection(this.tracker.getHistory(),
+                this.tracker.getRemainingScript(),
                 this.configPath,
                 this.visibleCharacters,
                 this.disableControls,
@@ -222,7 +223,7 @@ public class InGame implements Screen {
                 ConfigReader.getSoundList()
         );
 
-        this.tracker.setScript(assets.getScript());
+        //this.tracker.setScript(assets.getScript());
         this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
