@@ -56,10 +56,11 @@ public class InGame implements Screen {
         this.newScriptName = "";
 
         this.configPath = savedState.currentScriptConfig;
-        this.tracker = new ScriptTracker(savedState.snapShots, savedState.script);
+        this.tracker = new ScriptTracker(savedState.snapShots, savedState.script, savedState.options);
         this.visibleCharacters = savedState.visibleCharacters;
         this.disableControls = savedState.controlsDisabled;
         this.options = savedState.options;
+
         configure();
 
         this.multiplexer = new InputMultiplexer();
@@ -85,7 +86,11 @@ public class InGame implements Screen {
 
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        manageInput();
+        this.uiHandler.nextLine(tracker.getLatestSnapShot().getDialogue());
+
+        if(this.options != null){
+            this.uiHandler.presentChoices(this.options);
+        }
     }
 
     public InGame(final NovelOne game, final String configPath) {
@@ -129,9 +134,10 @@ public class InGame implements Screen {
 
     }
 
+
     private void manageInput() {
         try {
-            Gdx.app.log("InGame::InGame", "input detected");
+            Gdx.app.log("InGame::mangeInput", "input detected");
             if (!disableControls) {
                 if (uiHandler.textBoxReady()) {
                     uiHandler.nextLine(stepForward());
@@ -223,7 +229,7 @@ public class InGame implements Screen {
                 ConfigReader.getSoundList()
         );
 
-        //this.tracker.setScript(assets.getScript());
+        this.tracker.setScript(assets.getScript());
         this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());

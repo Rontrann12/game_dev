@@ -24,17 +24,25 @@ public class ScriptTracker {
         this.scriptHistory = new ArrayList<>();
         this.historyIndex = -1;
         this.activeCharacters = new LinkedHashMap<>();
+        this.script = null;
     }
-
-    public ScriptTracker(ArrayList<SnapShot> snapShots, ArrayDeque<String> script) {
+    /*
+    TODO - still need to make sure that music and sound is properly loaded
+     */
+    public ScriptTracker(ArrayList<SnapShot> snapShots, ArrayDeque<String> script, String[] choices) {
         this.scriptHistory = snapShots;
         this.script = script;
         this.historyIndex = scriptHistory.size();
-        SnapShot latestSnapShot = this.scriptHistory.get(historyIndex -1);
+        SnapShot latestSnapShot = this.scriptHistory.get(historyIndex-1);
         this.currentMusic = latestSnapShot.getBGMCommand();
         this.currentSpeaker = latestSnapShot.getCharacter();
         this.activeCharacters = latestSnapShot.getAction();
+        this.choices = choices;
 
+    }
+
+    public SnapShot getLatestSnapShot() {
+        return this.scriptHistory.get(historyIndex-1);
     }
 
     /*
@@ -49,14 +57,9 @@ public class ScriptTracker {
 //    }
 
     public void setScript(ArrayDeque<String> script) {
-        //updates script based on history index
-        /*
-        cant skip like this since this will be popping each line from script
-         need to skip based on snap shots instead
-         Or just add the current script status to the save file instead
-         */
-
-        this.script = script;
+        if(this.script == null){
+            this.script = script;
+        }
     }
 
     /**
@@ -65,7 +68,7 @@ public class ScriptTracker {
      * @return
      */
     public SnapShot getNextLine() {
-        Gdx.app.log("ScriptTracker::getNextLine", "checking history index: " + historyIndex);
+        Gdx.app.log("ScriptTracker::getNextLine", "checking history index: " + historyIndex + ". checking size: " + scriptHistory.size());
         SnapShot snap;
         if (historyIndex < scriptHistory.size() - 1) {
             historyIndex++;
