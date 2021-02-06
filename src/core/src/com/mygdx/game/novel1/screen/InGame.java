@@ -86,7 +86,9 @@ public class InGame implements Screen {
 
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        this.uiHandler.nextLine(tracker.getLatestSnapShot().getDialogue());
+        SnapShot latestSnapShot = tracker.getLatestSnapShot();
+        AudioHandler.handleMusicCommand(latestSnapShot.getBGMCommand());
+        this.uiHandler.nextLine(latestSnapShot.getDialogue());
 
         if(this.options != null){
             this.uiHandler.presentChoices(this.options);
