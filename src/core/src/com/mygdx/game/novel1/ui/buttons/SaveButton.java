@@ -1,9 +1,11 @@
 package com.mygdx.game.novel1.ui.buttons;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.screen.Save;
 import com.mygdx.game.novel1.utils.AudioHandler;
@@ -29,6 +31,7 @@ public class SaveButton extends BaseButton {
 
     @Override
     public void action(NovelOne game) {
-        game.setScreen(new Save(game));
+        Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.setScreen(new Save(game, pixmap));
     }
 }

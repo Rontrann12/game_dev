@@ -3,13 +3,14 @@ package com.mygdx.game.novel1.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.mygdx.game.novel1.constants.ConfigValues;
 import com.mygdx.game.novel1.constants.ScriptCues;
 
 import java.util.HashMap;
 
 public class AudioHandler {
-    private static float bgmVolume = 0.0f;
-    private static float sfxVolume = 0.0f;
+    private static float bgmVolume = ConfigValues.BGM_VOLUME;
+    private static float sfxVolume = ConfigValues.SFX_VOLUME;
     private static Music currentMusic;
     private static HashMap<String, Sound> soundsList = new HashMap();
     private static HashMap<String, Music> musicList = new HashMap();

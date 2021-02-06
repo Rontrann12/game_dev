@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.screen.InGame;
 import com.mygdx.game.novel1.utils.AudioHandler;
 
@@ -37,6 +36,6 @@ public class StartButton extends BaseButton {
 
     @Override
     public void action(NovelOne game) {
-        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + "script1"));
+        game.setScreen(new InGame(game, AssetPaths.CONFIGS_PATH + "script1"));
     }
 }

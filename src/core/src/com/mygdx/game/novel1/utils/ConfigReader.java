@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.novel1.constants.ConfigKeys;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.constants.Separators;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +27,7 @@ public class ConfigReader {
      */
     public static void readNewConfiguration(String path) {
 
-        String separator = Separators.KEYVALUE + Separators.SPACE;
+        String separator = Separators.KEY_SPACE;
 
         try {
             File file = new File(path);
@@ -60,7 +60,7 @@ public class ConfigReader {
                         sounds = new ArrayDeque<>(Arrays.asList(dataSection.split((Separators.DATAFIELDS + Separators.SPACE))));
                         break;
                     case SCRIPT_PATH_MODE:
-                        scriptPath = Paths.SCRIPTS_PATH + dataSection;
+                        scriptPath = AssetPaths.SCRIPTS_PATH + dataSection;
                         break;
                 }
             }
@@ -154,7 +154,7 @@ public class ConfigReader {
 
     private static String[] parseDataField(String data) {
 
-        int separatorIndex = data.indexOf(Separators.KEYVALUE + Separators.SPACE);
+        int separatorIndex = data.indexOf(Separators.KEY_SPACE);
         String dataField = data.substring(separatorIndex);
 
         int dataSeparatorIndex = dataField.indexOf(Separators.DATAFIELDS + Separators.SPACE);

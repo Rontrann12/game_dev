@@ -10,11 +10,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.novel1.NovelOne;
 import com.mygdx.game.novel1.constants.FileTypes;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.utils.AudioHandler;
 import com.mygdx.game.novel1.utils.StringUtilities;
 
@@ -29,10 +28,10 @@ abstract class BaseButton extends Actor{
     private final Sprite hover;
     public final NovelOne game;
     private final BitmapFont font;
-    private final String label;
+    protected String label;
     protected String buttonClick = "Click";
 
-    public BaseButton(final TextureRegion idleButton, final TextureRegion hoverButton, final NovelOne game, final String name){
+    public BaseButton(final TextureRegion idleButton, final TextureRegion hoverButton, final NovelOne game, String name){
         this.idle = new Sprite(idleButton);
         this.hover = new Sprite(hoverButton);
         this.sprite = this.idle;
@@ -41,11 +40,17 @@ abstract class BaseButton extends Actor{
         setTouchable(Touchable.enabled);
         this.game = game;
         this.font = new BitmapFont();
-        this.label = name;
+
+
+        String displayName = name;
+        if(name == null){
+            displayName = "";
+        }
+        this.label = displayName;
 
         AssetManager manager = new AssetManager();
 
-        String clickFilePath = StringUtilities.generateFileName(Paths.SFX_PATH, "click", FileTypes.AUDIO);
+        String clickFilePath = StringUtilities.generateFileName(AssetPaths.SFX_PATH, "click", FileTypes.AUDIO);
         manager.load(clickFilePath, Sound.class);
         manager.finishLoading();
         AudioHandler.addSound(buttonClick, (Sound) manager.get(clickFilePath));
@@ -55,12 +60,10 @@ abstract class BaseButton extends Actor{
         addListener( new ClickListener() {
            @Override
            public void enter(InputEvent event,float x, float y, int pointer, Actor fromActor){
-                Gdx.app.log(name, "Mouse pointer entered button detected");
                 sprite = hover;
            }
            @Override
             public void exit(InputEvent event,float x, float y, int pointer, Actor fromActor) {
-               Gdx.app.log(name, "Mouse pointer exited button detected");
                sprite = idle;
            }
         });

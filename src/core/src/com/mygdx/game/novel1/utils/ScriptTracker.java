@@ -5,10 +5,11 @@ import com.mygdx.game.novel1.constants.ScriptCues;
 import com.mygdx.game.novel1.constants.Separators;
 import com.mygdx.game.novel1.typ.SnapShot;
 import com.mygdx.game.novel1.typ.SpeakerMap;
+
 import java.util.*;
 
 public class ScriptTracker {
-    private ArrayList<SnapShot> scriptLogger;
+    private ArrayList<SnapShot> scriptHistory;
     private ArrayDeque<String> script;
     private String currentMusic = null;
     private String currentSpeaker = null;
@@ -19,11 +20,46 @@ public class ScriptTracker {
     private String newScriptName = "";
     private String[] choices = null;
 
-    public ScriptTracker(ArrayDeque<String> script) {
-        this.scriptLogger = new ArrayList<>();
-        this.script = script;
+    public ScriptTracker() {
+        this.scriptHistory = new ArrayList<>();
         this.historyIndex = -1;
         this.activeCharacters = new LinkedHashMap<>();
+        this.script = null;
+    }
+    /*
+    TODO - still need to make sure that music and sound is properly loaded
+     */
+    public ScriptTracker(ArrayList<SnapShot> snapShots, ArrayDeque<String> script, String[] choices) {
+        this.scriptHistory = snapShots;
+        this.script = script;
+        this.historyIndex = scriptHistory.size();
+        SnapShot latestSnapShot = this.scriptHistory.get(historyIndex-1);
+        this.currentMusic = latestSnapShot.getBGMCommand();
+        this.currentSpeaker = latestSnapShot.getCharacter();
+        this.activeCharacters = latestSnapShot.getAction();
+        this.choices = choices;
+
+    }
+
+    public SnapShot getLatestSnapShot() {
+        return this.scriptHistory.get(historyIndex-1);
+    }
+
+    /*
+     * TODO - to be removed
+     *
+     */
+//    public ScriptTracker(ArrayDeque<String> script) {
+//        this.scriptHistory = new ArrayList<>();
+//        this.script = script;
+//        this.historyIndex = -1;
+//        this.activeCharacters = new LinkedHashMap<>();
+//    }
+
+    public void setScript(ArrayDeque<String> script) {
+        if(this.script == null){
+            this.script = script;
+        }
     }
 
     /**
@@ -32,15 +68,17 @@ public class ScriptTracker {
      * @return
      */
     public SnapShot getNextLine() {
-
+        Gdx.app.log("ScriptTracker::getNextLine", "checking history index: " + historyIndex + ". checking size: " + scriptHistory.size());
         SnapShot snap;
-        if (historyIndex < scriptLogger.size() - 1) {
+        if (historyIndex < scriptHistory.size() - 1) {
             historyIndex++;
-            snap = scriptLogger.get(historyIndex);
+            snap = scriptHistory.get(historyIndex);
+            Gdx.app.log("ScriptTracker::getNextLine", "going to earlier messages");
 
         } else {
             snap = getNewLineFromScript();
             logScriptEvent(snap);
+            Gdx.app.log("ScriptTracker::getNextLine", "getting brand new line");
         }
 
         return snap;
@@ -58,13 +96,13 @@ public class ScriptTracker {
                 ", action: " + snapshot.getAction().size());
 
         SnapShot copy = new SnapShot(snapshot);
-        scriptLogger.add(copy);
+        scriptHistory.add(copy);
         historyIndex++;
     }
 
     public SnapShot traceScriptBackwards() {
         historyIndex--;
-        SnapShot snapshot = scriptLogger.get(historyIndex);
+        SnapShot snapshot = scriptHistory.get(historyIndex);
         Gdx.app.log("ScriptTracker::traceScriptBackwards", "line: " + snapshot.getDialogue() +
                 ", music: " + snapshot.getBGMCommand() +
                 ", sound: " + snapshot.getSound() +
@@ -74,11 +112,16 @@ public class ScriptTracker {
         return snapshot;
     }
 
+
     /**
      * returns the history taken from the logger
      */
-    public void getHistory() {
+    public ArrayList<SnapShot> getHistory() {
+        return this.scriptHistory;
+    }
 
+    public ArrayDeque<String> getRemainingScript() {
+        return this.script;
     }
 
     public String getNewScriptName() {

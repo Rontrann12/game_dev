@@ -8,33 +8,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.mygdx.game.novel1.NovelOne;
-import com.mygdx.game.novel1.constants.Paths;
+import com.mygdx.game.novel1.constants.AssetPaths;
 import com.mygdx.game.novel1.effects.ScreenFade;
-import com.mygdx.game.novel1.typ.AssetsDTO;
-import com.mygdx.game.novel1.typ.SnapShot;
-import com.mygdx.game.novel1.typ.SpeakerMap;
+import com.mygdx.game.novel1.typ.*;
+import com.mygdx.game.novel1.typ.Character;
 import com.mygdx.game.novel1.ui.layouts.InGameUI;
 import com.mygdx.game.novel1.utils.*;
-import com.mygdx.game.novel1.typ.Character;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
-/**
- * TODO - create new class and separate character sprite handling code
- * TODO - add to configs to also get the next scenes
- * TODO - add to configs to get contain script path information
- * TODO - script tracker needs to properly handle end of script and either end game for configure new scene
- * TODO - Find a way to differentiate between script files as they will be sharing the same directory
- * TODO - Need to handle options in script and reactions to choices
- * <p>
- * TODO - test configReader::readNewConfiguration
- */
 
 public class InGame implements Screen {
 
@@ -42,7 +28,7 @@ public class InGame implements Screen {
     private final Batch batch;
     private final Stage stage;
     private final InGameUI uiHandler;
-    private String configPath = Paths.TEST_CONFIG_PATH;
+    private String configPath = AssetPaths.TEST_CONFIG_PATH;
     private HashMap<String, Character> charactersInScene;
     private ArrayDeque<String> script;
     private Group characterRenderGroup;
@@ -54,18 +40,28 @@ public class InGame implements Screen {
     private String newScriptName;
     private ScreenFade screenFade;
     private Sprite backgroundSprite;
+    private String[] options;
 
-    public InGame(final NovelOne game, final String configPath) {
-        Gdx.app.log("InGame::Constructor", "creating new InGame screen");
-        this.configPath = configPath;
+
+    /*
+    TODO - group common code in both constructors and call this() to remove redundancy
+     */
+    public InGame(final NovelOne game, SaveDataCollection savedState) {
         this.game = game;
         this.stage = new Stage(game.viewport);
         this.batch = stage.getBatch();
-        charactersInScene = new HashMap<>();
-        configure();
         this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
-        characterRenderGroup = new Group();
-        newScriptName = "";
+        this.charactersInScene = new HashMap<>();
+        this.characterRenderGroup = new Group();
+        this.newScriptName = "";
+
+        this.configPath = savedState.currentScriptConfig;
+        this.tracker = new ScriptTracker(savedState.snapShots, savedState.script, savedState.options);
+        this.visibleCharacters = savedState.visibleCharacters;
+        this.disableControls = savedState.controlsDisabled;
+        this.options = savedState.options;
+
+        configure();
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -88,12 +84,62 @@ public class InGame implements Screen {
                 }
         );
 
-        Gdx.input.setInputProcessor(multiplexer);
+        this.stage.addActor(this.characterRenderGroup);
+        this.uiHandler.generateUI();
+        SnapShot latestSnapShot = tracker.getLatestSnapShot();
+        AudioHandler.handleMusicCommand(latestSnapShot.getBGMCommand());
+        this.uiHandler.nextLine(latestSnapShot.getDialogue());
+
+        if(this.options != null){
+            this.uiHandler.presentChoices(this.options);
+        }
     }
+
+    public InGame(final NovelOne game, final String configPath) {
+        Gdx.app.log("InGame::Constructor", "creating new InGame screen");
+        this.configPath = configPath;
+        this.game = game;
+        this.stage = new Stage(game.viewport);
+        this.batch = stage.getBatch();
+        charactersInScene = new HashMap<>();
+        this.tracker = new ScriptTracker();
+        configure();
+        this.uiHandler = new InGameUI(stage, game, new SpeakerMap(), this);
+        characterRenderGroup = new Group();
+        newScriptName = "";
+        this.options = null;
+
+        this.multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(
+                new InputAdapter() {
+                    @Override
+                    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+                        manageInput();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean keyDown(int keyCode) {
+                        if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
+                            manageInput();
+                        }
+                        return true;
+                    }
+                }
+        );
+
+        this.stage.addActor(this.characterRenderGroup);
+        this.uiHandler.generateUI();
+        manageInput();
+
+    }
+
 
     private void manageInput() {
         try {
-            Gdx.app.log("InGame::InGame", "input detected");
+            Gdx.app.log("InGame::mangeInput", "input detected");
             if (!disableControls) {
                 if (uiHandler.textBoxReady()) {
                     uiHandler.nextLine(stepForward());
@@ -115,7 +161,7 @@ public class InGame implements Screen {
 
         SnapShot snapshot = tracker.getNextLine();
         newScriptName = tracker.getNewScriptName();
-        String[] options = tracker.getChoices();
+        options = tracker.getChoices();
 
         Gdx.app.log("InGame::stepForward", "choices:" + options);
         if (options != null) {
@@ -164,6 +210,17 @@ public class InGame implements Screen {
         uiHandler.nextLine(stepForward());
     }
 
+    public SaveDataCollection getSaveData() {
+        return new SaveDataCollection(this.tracker.getHistory(),
+                this.tracker.getRemainingScript(),
+                this.configPath,
+                this.visibleCharacters,
+                this.disableControls,
+                this.options);
+    }
+
+
+
     private void configure() {
         ConfigReader.readNewConfiguration(configPath);
         AssetsDTO assets = AssetReader.getAllAssets(
@@ -174,7 +231,7 @@ public class InGame implements Screen {
                 ConfigReader.getSoundList()
         );
 
-        tracker = new ScriptTracker(assets.getScript());
+        this.tracker.setScript(assets.getScript());
         this.background = assets.getBackgroundTextures();
         AudioHandler.addSound(assets.getSounds());
         AudioHandler.addMusic(assets.getTracks());
@@ -256,12 +313,6 @@ public class InGame implements Screen {
     @Override
     public void show() {
 
-        this.stage.addActor(this.characterRenderGroup);
-        this.uiHandler.generateUI();
-        int numActors = this.stage.getActors().size;
-        Gdx.app.log("InGame::show", "Getting actors from stage: " + numActors);
-
-
         this.backgroundSprite = new Sprite(background);
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -269,13 +320,16 @@ public class InGame implements Screen {
         ScreenFade screenFade = new ScreenFade();
         stage.addActor(screenFade);
         Gdx.app.log("InGame::show", "after fade");
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
     public void dispose() {
         AudioHandler.clearMusic();
         AudioHandler.clearSounds();
-        game.setScreen(new InGame(game, Paths.CONFIGS_PATH + newScriptName));
+        if(!newScriptName.isEmpty()){
+            game.setScreen(new InGame(game, AssetPaths.CONFIGS_PATH + newScriptName));
+        }
     }
 
 
@@ -297,6 +351,7 @@ public class InGame implements Screen {
 
     @Override
     public void hide() {
+        Gdx.app.log("InGame::hide", "no longer current screen");
     }
 
 

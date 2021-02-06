@@ -1,5 +1,5 @@
 uicomponents.png
-size: 1800, 390
+size: 1650, 605
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -19,14 +19,14 @@ back_idle
   index: -1
 base_hover
   rotate: false
-  xy: 0, 26
+  xy: 750, 91
   size: 900, 64
   orig: 900, 64
   offset: 0, 0
   index: -1
 button_idle
   rotate: false
-  xy: 900, 26
+  xy: 0, 241
   size: 900, 64
   orig: 900, 64
   offset: 0, 0
@@ -101,6 +101,20 @@ save_idle
   orig: 62, 20
   offset: 0, 0
   index: -1
+saveSlot_hover
+  rotate: false
+  xy: 1052, 0
+  size: 165, 91
+  orig: 165, 91
+  offset: 0, 0
+  index: -1
+saveSlot_idle
+  rotate: false
+  xy: 1217, 0
+  size: 165, 91
+  orig: 165, 91
+  offset: 0, 0
+  index: -1
 settings_hover
   rotate: false
   xy: 692, 0
@@ -117,8 +131,15 @@ settings_idle
   index: -1
 textbox
   rotate: false
-  xy: 0, 90
+  xy: 0, 305
   size: 1600, 300
   orig: 1600, 300
+  offset: 0, 0
+  index: -1
+title
+  rotate: false
+  xy: 0, 91
+  size: 750, 150
+  orig: 750, 150
   offset: 0, 0
   index: -1

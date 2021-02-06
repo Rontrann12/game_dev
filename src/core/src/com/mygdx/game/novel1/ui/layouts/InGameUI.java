@@ -43,7 +43,7 @@ public class InGameUI extends BaseLayout {
         Group miniButtons = new Group();
 
 
-        TextureRegion textBoxImage = new TextureRegion(texture, 0, 90, 1600, 300);
+        TextureRegion textBoxImage = new TextureRegion(texture, 0, 305, 1600, 300);
         this.box = new Dialogue(textBoxImage, speakerLine.getCharacter(), speakerLine.getLine());
 
         TextureRegion backHover = new TextureRegion(texture, 0, 0, 62, 20);

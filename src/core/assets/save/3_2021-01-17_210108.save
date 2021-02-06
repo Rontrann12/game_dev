@@ -1,0 +1,120 @@
+{
+snapShots: [
+	{
+		dialogue: {
+			character: null
+			line: I grab a coffee and arrived at my desk just in time
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: null
+			line: I see that others from my team had just arrived as well
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: null
+			line: "Alright, yesterday, I was almost able to get the reactor online"
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: null
+			line: Let"s finish that up today
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: null
+			line: I start typing away at my computer
+		}
+		music: beneath_the_mask
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: null
+			line: "From the corner of my eye, I see someone from management approach"
+		}
+		music: beneath_the_mask
+		sound: footsteps_walking
+		character: Thought
+		action: {}
+	}
+	{
+		dialogue: {
+			character: Management
+			line: "\"Team, meet Shaina\""
+		}
+		music: beneath_the_mask
+		character: Management
+		action: {
+			Shaina: Shaina_smile
+		}
+	}
+	{
+		dialogue: {
+			character: Management
+			line: "\"She just completed state training in Nuclear Engineering and will be working with you all starting today\""
+		}
+		music: beneath_the_mask
+		character: Management
+		action: {
+			Shaina: Shaina_smile
+		}
+	}
+	{
+		dialogue: {
+			character: Team
+			line: "\"Welcome to the Team Shaina\""
+		}
+		music: beneath_the_mask
+		character: Team
+		action: {
+			Shaina: Shaina_smile
+		}
+	}
+	{
+		dialogue: {
+			character: Ron
+			line: "\"Welcome to the Team Shaina\""
+		}
+		music: beneath_the_mask
+		character: Ron
+		action: {
+			Shaina: Shaina_smile
+		}
+	}
+	{
+		dialogue: {
+			character: Shaina
+			line: "\"Thank you!\""
+		}
+		music: beneath_the_mask
+		character: Shaina
+		action: {
+			Shaina: Shaina_wink_talking
+		}
+	}
+]
+currentScriptConfig: scenes/configs2/script3
+visibleCharacters: {
+	Shaina: Shaina_wink_talking
+}
+controlsDisabled: false
+options: null
+}

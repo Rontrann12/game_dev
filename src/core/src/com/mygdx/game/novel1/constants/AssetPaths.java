@@ -1,6 +1,6 @@
 package com.mygdx.game.novel1.constants;
 
-public class Paths {
+public class AssetPaths {
 
     public final static String IMAGE_PATH = "img/";
     public final static String BGM_PATH = "audio/bgm/";
@@ -11,4 +11,6 @@ public class Paths {
     public final static String SCRIPTS_PATH = "scenes/scripts2/";
     public final static String CHARACTERS_PATH = "img/characters/";
     public final static String BACKGROUNDS_PATH = "img/backgrounds/";
+    public final static String SCREENSHOTS_PATH = "img/screenshots/";
+    public final static String SAVE_PATH = "save/";
 }
