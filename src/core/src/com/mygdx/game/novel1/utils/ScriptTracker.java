@@ -45,16 +45,6 @@ public class ScriptTracker {
         return this.scriptHistory.get(historyIndex-1);
     }
 
-    /*
-     * TODO - to be removed
-     *
-     */
-//    public ScriptTracker(ArrayDeque<String> script) {
-//        this.scriptHistory = new ArrayList<>();
-//        this.script = script;
-//        this.historyIndex = -1;
-//        this.activeCharacters = new LinkedHashMap<>();
-//    }
 
     public void setScript(ArrayDeque<String> script) {
         if(this.script == null){
@@ -254,7 +244,6 @@ public class ScriptTracker {
 
         if (StringUtilities.isContainer(line, ScriptCues.END_SCRIPT_CONTAINER, ScriptCues.END_SCRIPT_CONTAINER)) {
             return StringUtilities.getContainedContent(line, ScriptCues.END_SCRIPT_CONTAINER, ScriptCues.END_SCRIPT_CONTAINER, true);
-
         }
         return "";
     }

@@ -21,7 +21,6 @@ import java.util.*;
 import static com.badlogic.gdx.Input.Keys.SPACE;
 
 
-
 public class InGame implements Screen {
 
     private final NovelOne game;
@@ -30,7 +29,6 @@ public class InGame implements Screen {
     private final InGameUI uiHandler;
     private String configPath = AssetPaths.TEST_CONFIG_PATH;
     private HashMap<String, Character> charactersInScene;
-    private ArrayDeque<String> script;
     private Group characterRenderGroup;
     private Texture background;
     private ScriptTracker tracker;
@@ -55,42 +53,15 @@ public class InGame implements Screen {
         this.characterRenderGroup = new Group();
         this.newScriptName = "";
 
-        this.configPath = savedState.currentScriptConfig;
-        this.tracker = new ScriptTracker(savedState.snapShots, savedState.script, savedState.options);
-        this.visibleCharacters = savedState.visibleCharacters;
-        this.disableControls = savedState.controlsDisabled;
-        this.options = savedState.options;
-
-        configure();
-
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(
-                new InputAdapter() {
-                    @Override
-                    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-                        manageInput();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean keyDown(int keyCode) {
-                        if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
-                            manageInput();
-                        }
-                        return true;
-                    }
-                }
-        );
+        multiplexer.addProcessor(initializeInputs());
 
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
-        SnapShot latestSnapShot = tracker.getLatestSnapShot();
-        AudioHandler.handleMusicCommand(latestSnapShot.getBGMCommand());
-        this.uiHandler.nextLine(latestSnapShot.getDialogue());
+        restore(savedState);
 
-        if(this.options != null){
+        if (this.options != null) {
             this.uiHandler.presentChoices(this.options);
         }
     }
@@ -111,24 +82,7 @@ public class InGame implements Screen {
 
         this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(
-                new InputAdapter() {
-                    @Override
-                    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-                        manageInput();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean keyDown(int keyCode) {
-                        if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
-                            manageInput();
-                        }
-                        return true;
-                    }
-                }
-        );
+        multiplexer.addProcessor(initializeInputs());
 
         this.stage.addActor(this.characterRenderGroup);
         this.uiHandler.generateUI();
@@ -136,6 +90,118 @@ public class InGame implements Screen {
 
     }
 
+    /**
+     * This is to be called when the player has selected an option after being presented with a list of choices
+     *
+     * @param choice
+     */
+    public void handleChoiceSelection(String choice) {
+        this.disableControls = false;
+        tracker.handleScriptBranching(choice);
+        uiHandler.removeChoices();
+        uiHandler.nextLine(stepForward());
+    }
+
+    public SaveDataCollection getSaveData() {
+        return new SaveDataCollection(this.tracker.getHistory(),
+                this.tracker.getRemainingScript(),
+                this.configPath,
+                this.visibleCharacters,
+                this.disableControls,
+                this.options);
+    }
+
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        this.stage.act(Gdx.graphics.getDeltaTime());
+
+        Gdx.graphics.setContinuousRendering(true);
+
+        removeExitedCharacters();
+        updateVisibleCharacters();
+
+        batch.begin();
+        backgroundSprite.draw(batch);
+        batch.end();
+
+        this.stage.draw();
+
+        /*
+            Removes the character from the render group after animations are done
+         */
+        Iterator<Actor> it = characterRenderGroup.getChildren().iterator();
+        while (it.hasNext()) {
+            Character temp = (Character) it.next();
+            if (!temp.isPresent() && temp.animationComplete()) {
+                temp.remove();
+            }
+        }
+
+        if (!newScriptName.equals("") && this.screenFade.isComplete()) {
+            dispose();
+        }
+    }
+
+    @Override
+    public void show() {
+
+        this.backgroundSprite = new Sprite(background);
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        Gdx.app.log("InGame::show", "before fade");
+        ScreenFade screenFade = new ScreenFade();
+        stage.addActor(screenFade);
+        Gdx.app.log("InGame::show", "after fade");
+        Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    @Override
+    public void dispose() {
+        AudioHandler.clearMusic();
+        AudioHandler.clearSounds();
+        if (!newScriptName.isEmpty()) {
+            game.setScreen(new InGame(game, AssetPaths.CONFIGS_PATH + newScriptName));
+        }
+    }
+
+
+    @Override
+    public void resize(int width, int height) {
+
+        this.game.viewport.update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+        Gdx.app.log("InGame::hide", "no longer current screen");
+    }
+
+    private void restore(SaveDataCollection state) {
+        this.configPath = state.currentScriptConfig;
+        this.tracker = new ScriptTracker(state.snapShots, state.script, state.options);
+        this.visibleCharacters = state.visibleCharacters;
+        this.disableControls = state.controlsDisabled;
+        this.options = state.options;
+
+        configure();
+
+        SnapShot latestSnapShot = tracker.getLatestSnapShot();
+        AudioHandler.handleMusicCommand(latestSnapShot.getBGMCommand());
+        this.uiHandler.nextLine(latestSnapShot.getDialogue());
+    }
 
     private void manageInput() {
         try {
@@ -150,6 +216,25 @@ public class InGame implements Screen {
         } catch (EmptyStackException e) {
             Gdx.app.log("InGame::InGame", e.getMessage());
         }
+    }
+
+    private InputAdapter initializeInputs() {
+        return new InputAdapter() {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+                manageInput();
+                return true;
+            }
+
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == SPACE || keyCode == Input.Buttons.LEFT) {
+                    manageInput();
+                }
+                return true;
+            }
+        };
     }
 
     /**
@@ -198,29 +283,6 @@ public class InGame implements Screen {
         }
     }
 
-    /**
-     * This is to be called when the player has selected an option after being presented with a list of choices
-     *
-     * @param choice
-     */
-    public void handleChoiceSelection(String choice) {
-        this.disableControls = false;
-        tracker.handleScriptBranching(choice);
-        uiHandler.removeChoices();
-        uiHandler.nextLine(stepForward());
-    }
-
-    public SaveDataCollection getSaveData() {
-        return new SaveDataCollection(this.tracker.getHistory(),
-                this.tracker.getRemainingScript(),
-                this.configPath,
-                this.visibleCharacters,
-                this.disableControls,
-                this.options);
-    }
-
-
-
     private void configure() {
         ConfigReader.readNewConfiguration(configPath);
         AssetsDTO assets = AssetReader.getAllAssets(
@@ -249,11 +311,11 @@ public class InGame implements Screen {
         for (Actor entry : characterRenderGroup.getChildren()) {
             Character character = (Character) entry;
             if (!visibleCharacters.containsKey(character.getName())) {
-                if(character.isPresent()){
+                if (character.isPresent()) {
                     Gdx.app.log("InGame::render", "adding character");
                     character.setFadeOut();
                     character.setIsPresent(false);
-                    Gdx.app.log("InGame::removeExitedCharacters", "removing " +character.getName() + " from screen");
+                    Gdx.app.log("InGame::removeExitedCharacters", "removing " + character.getName() + " from screen");
                 }
             }
         }
@@ -276,83 +338,4 @@ public class InGame implements Screen {
             uiHandler.positionCharacterSprites(visibleCharacters, charactersInScene);
         }
     }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        this.stage.act(Gdx.graphics.getDeltaTime());
-
-        Gdx.graphics.setContinuousRendering(true);
-
-        removeExitedCharacters();
-        updateVisibleCharacters();
-
-        batch.begin();
-        backgroundSprite.draw(batch);
-        batch.end();
-
-        this.stage.draw();
-
-        /*
-            Removes the character from the render group after animations are done
-         */
-        Iterator<Actor> it = characterRenderGroup.getChildren().iterator();
-        while(it.hasNext()) {
-            Character temp = (Character) it.next();
-            if(!temp.isPresent() && temp.animationComplete()){
-                temp.remove();
-            }
-        }
-
-        if (!newScriptName.equals("") && this.screenFade.isComplete()) {
-            dispose();
-        }
-    }
-
-    @Override
-    public void show() {
-
-        this.backgroundSprite = new Sprite(background);
-        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        Gdx.app.log("InGame::show", "before fade");
-        ScreenFade screenFade = new ScreenFade();
-        stage.addActor(screenFade);
-        Gdx.app.log("InGame::show", "after fade");
-        Gdx.input.setInputProcessor(multiplexer);
-    }
-
-    @Override
-    public void dispose() {
-        AudioHandler.clearMusic();
-        AudioHandler.clearSounds();
-        if(!newScriptName.isEmpty()){
-            game.setScreen(new InGame(game, AssetPaths.CONFIGS_PATH + newScriptName));
-        }
-    }
-
-
-    @Override
-    public void resize(int width, int height) {
-
-        this.game.viewport.update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-        Gdx.app.log("InGame::hide", "no longer current screen");
-    }
-
-
 }
